@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { ScreensLogin, ScreensSignUp, ScreensForgotPassword, ScreensEnterOTP, ScreensCheck, ScreensSuccessfull, ScreensResetPassword } from '../screens'
+import { StyleSheet, Text, View } from 'react-native';
+import { ScreensLogin, ScreensWelcome1, ScreensWelcome2, ScreensSignUp, ScreensForgotPassword, ScreensEnterOTP, ScreensCheck, ScreensSuccessfull, ScreensResetPassword } from '../screens'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -9,7 +9,9 @@ const Stack = createStackNavigator();
 export default function Account() {
   return (
     < NavigationContainer >
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Welcome1" component={ScreensWelcome1} />
+        <Stack.Screen name="Welcome2" component={ScreensWelcome2} />
         <Stack.Screen name="Login" component={ScreensLogin} />
         <Stack.Screen name="SignUp" component={ScreensSignUp} />
         <Stack.Screen name="ForgotPassword" component={ScreensForgotPassword} />

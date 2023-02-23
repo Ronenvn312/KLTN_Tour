@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, Animated, Dimensions } from 'react-native';
-import { useRef, useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Animated } from 'react-native';
+import { useRef, useEffect } from 'react';
 
 export default function Welcome2({ navigation }) {
 

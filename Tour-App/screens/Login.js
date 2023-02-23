@@ -1,8 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ImageBackground } from 'react-native';
-import { useState } from 'react';
+import { logIN, logOut } from '../redux/actions/UserAction'
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Login({ navigation }) {
+
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    console.log(user)
+
+    const handleLogIn = () => {
+        const newUser = {
+            username: 'Hieu',
+            password: '123456'
+        }
+        const action = logIN(newUser);
+        dispatch(action);
+    }
+
     return (
         <ImageBackground source={require('../assets/bg_login.png')} style={styles.container}>
             <StatusBar style="auto" />
@@ -11,13 +27,13 @@ export default function Login({ navigation }) {
                 <Image style={styles.logo} source={require('../assets/logo.png')} />
                 <TextInput style={styles.input} placeholder='Tên đăng nhập' />
                 <TextInput style={styles.input} placeholder='Mật khẩu' secureTextEntry={true} />
-                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{height:'10%', width:'30%', alignSelf: 'flex-end', marginRight: '10%', marginTop:'2%'}}>
-                    <Text style={{  marginTop: '3%', color: '#918AB1' }}>Quên mật khẩu</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ height: '10%', width: '30%', alignSelf: 'flex-end', marginRight: '10%', marginTop: '2%' }}>
+                    <Text style={{ marginTop: '3%', color: '#918AB1' }}>Quên mật khẩu</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={{ flex: 1, alignItems: 'center' }}>
-                <TouchableOpacity style={styles.tou_login}>
+                <TouchableOpacity style={styles.tou_login} onPress={handleLogIn}>
                     <Text style={styles.textLogin}>ĐĂNG NHẬP</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 14, marginTop: '15%' }}>____________ Hoặc tiếp tục với ____________</Text>
