@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ImageBackground } from 'react-native';
 
-export default function Successfull() {
+export default function Successfull({navigation}) {
     return (
         <ImageBackground source={require('../assets/bg_login.png')} style={styles.container}>
             <StatusBar style="auto" />
@@ -14,7 +14,7 @@ export default function Successfull() {
                 <Text style={{ alignSelf: 'center', width: '80%', textAlign: 'center', fontSize: 20, fontWeight: '300' }}>Đặt lại mật khẩu thành công</Text>
             </View>
             <View style={{ flex: 5 }}>
-                <TouchableOpacity style={styles.tou_OTP}>
+                <TouchableOpacity style={styles.tou_OTP} onPress={()=> navigation.navigate('Login')}>
                     <Text style={styles.textOTP}>OKAY</Text>
                 </TouchableOpacity>
             </View>
