@@ -1,0 +1,115 @@
+.page-home {
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.tav-bar {
+    display: flex;
+    flex: 0.01;
+    background-color: black;
+}
+
+.container-home {
+    display: flex;
+    flex: 0.99;
+    flex-direction: row;
+    background-color: azure;
+    justify-content: center;
+}
+
+.left-contain {
+    display: flex;
+    flex: 0.12;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    border-right: 2px solid;
+    background-image: url('../assets/bgr.png');
+
+}
+
+.right-contain {
+    padding-left: 10px;
+    display: flex;
+    flex: 0.88;
+    flex-direction: column;
+   }
+
+.custom-toolbar {
+    margin-left: 5px;
+    display: flex;
+    flex: 0.8;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+
+}
+
+.btn-menu {
+    width: 50px;
+    height: 30px;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.img-wel {
+    width: 30px;
+    height: 20px;
+}
+
+.title-page {
+    padding-left: 20px;
+    color: aliceblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.right-widget {
+    display: flex;
+    flex: 0.2;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.link-about {
+    color: white;
+    font-weight: '400';
+    font-size: '14px';
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: '3px';
+}
+.user-name {
+    font-size: 20px;
+    color: white;
+}
+.user-email {
+    color: white;
+}
+.user-avatar {
+    margin: 10px;
+    border-radius: 100px;
+    width: 40%;
+    height: 40%;
+}
+.list-group {
+    margin-top: 10px;
+    float: left;
+    text-align: left;
+    width: 100%;
+    background: none;
+}
+.action-menu {
+    background: none;
+}
+.btn-about {
+    color: white;
+}
+.btn_Them {
+    width: 300px;
+}
