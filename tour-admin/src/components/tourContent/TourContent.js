@@ -32,8 +32,7 @@ export default function TourContent() {
     return (
         <div className='tour-content'>
              <h4 style={{ borderBottom: '1px solid' }}>DANH SÁCH TOUR DU LỊCH</h4>
-            <Button className='btn_Them' variant="info" onClick={() => handShowPopupThem()}>THÊM</Button>{' '}
-            <Button variant="primary" onClick={()=> navigate('/map')}>Map</Button>{' '}
+            {/* <Button className='btn_Them' variant="info" onClick={() => handShowPopupThem()}>THÊM</Button>{' '} */}
             <div className='content-root'>
                 <div className='content-left'>
                     <table className="table">
@@ -164,6 +163,7 @@ export default function TourContent() {
                                 id="disabled-custom-switch"
                             />
                         </Form.Group>
+                 
                         <Form.Group style={{ paddingLeft: 200 }}>
                             <Button variant="primary">Thêm</Button>{' '}
                          

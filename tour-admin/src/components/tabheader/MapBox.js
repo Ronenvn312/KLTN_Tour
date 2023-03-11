@@ -3,7 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 import Map, { FullscreenControl, GeolocateControl, Marker, NavigationControl, Popup, ScaleControl } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
-
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Button from 'react-bootstrap/Button';
+import './MapBox.css'
 function MapBox() {
 
   const [lng, setLng] = useState(106.68921221955645)
@@ -80,6 +84,109 @@ function MapBox() {
       <FullscreenControl />
       <ScaleControl />
       <GeolocateControl />
+      <div className="form-them">
+        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control'>
+          <Form.Group className='title-them-tour'>
+            <h3 className='label-title-tour'>Thông tin tour</h3>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className='label-ten-tour'>Tên tour:</Form.Label>
+            <Form.Control
+              name='email'
+              // value={" Tour Nha Trang 36h"}
+              // onChange={e => handleChange(e)}
+              type="email" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className='label-loai-tour'>Thể loại:</Form.Label>
+            <Form.Control
+              name='email'
+              contentEditable={"true"}
+              // value={" Tour Nha Trang 36h"}
+              // onChange={e => handleChange(e)}
+              type="text" placeholder="VD: Gia đình, tổ chức, hẹn hò, thư dãn, tổ chức tiệc,..." required />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
+            <Form.Select aria-label="Default select example">
+              <option>Số ngày </option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="9">2 tuần</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
+            <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
+              <Form.Control
+                as="textarea"
+                placeholder="Leave a comment here"
+                style={{ height: '100px' }}
+              />
+            </FloatingLabel>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label className='label-login'>Địa chỉ :</Form.Label>
+            <Form.Control
+              name='email'
+              // value={" Tour Nha Trang 36h"}
+              // onChange={e => handleChange(e)}
+              type="email" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
+          </Form.Group>
+          <Form.Group style={{ marginTop: 10 }}>
+            <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
+            <Form.Group>
+              <Form.Label className='label-loai-tour'>longitude:</Form.Label>
+              <Form.Control
+                name='email'
+                value={lng}
+                // onChange={e => handleChange(e)}
+                type="text" placeholder="VD: 100.1" required />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label className='label-loai-tour'>latitude:</Form.Label>
+              <Form.Control
+                name='email'
+                value={lat}
+                // onChange={e => handleChange(e)}
+                type="text" placeholder="VD: 10.0001" required />
+            </Form.Group>
+          </Form.Group>
+          <Form.Group>
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Xu hướng"
+            />
+            <Form.Check
+              type="switch"
+              label="phổ biến"
+              id="disabled-custom-switch"
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
+            <Form.Control
+              name='email'
+              // value={" Tour Nha Trang 36h"}
+              // onChange={e => handleChange(e)}
+              type="text" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
+          </Form.Group>
+          <Form.Group style={{ paddingLeft: 200 }}>
+            <Button variant="primary">Thêm</Button>{' '}
+
+            {/* <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '} */}
+          </Form.Group>
+        </Form>
+      </div>
     </Map>
   );
 }
