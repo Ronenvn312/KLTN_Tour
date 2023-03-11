@@ -5,6 +5,12 @@ import './Tabheader.css'
 import ListGroup from 'react-bootstrap/ListGroup';
 import Popup from '../Popup/Popup';
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
+
+import TourContent from '../tourContent/TourContent';
+import MapBox from './MapBox';
 export const items = [
   {
     text: 'Dashboard',
@@ -49,11 +55,30 @@ export const Tabheader = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState(true);
+
   const [showInfoPopup, setshowInfoPopup] = useState(false)
+  const [values, setValues] = useState({ email: "", password: "" })
+  const [showErroPassword, setshowErroPassword] = useState(false);
+  const [showErroEmail, setshowErroEmail] = useState(false);
+  const [showMapPopup, setshowMapPopup] = useState(false)
+  const toggleshowErroPassword = () => setshowErroPassword(!showErroPassword);
+  const toggleshowErroEmail = () => setshowErroEmail(!showErroEmail);
+
+  const [showTours, setShowTours] = useState(true)
+  const [showThemTours, setShowThemTours] = useState(false)
 
   const handleClick = () => {
     setExpanded(!expanded);
   };
+  // click item DASHBOARD
+  const handShowActionThemTour = () => {
+    setShowTours(false)
+    setShowThemTours(true)
+  }
+  const handShowAllTour = () => {
+    setShowTours(true)
+    setShowThemTours(false)
+  }
 
   const onSelect = (e) => {
     navigate(e.itemTarget.props.route);
@@ -65,52 +90,106 @@ export const Tabheader = (props) => {
       return currentPath.text;
     }
   };
-
+  // Click show popup doi mat khau
+  const handShowPopupDoiMK = async () => {
+    setshowInfoPopup(!showInfoPopup)
+  }
+  // Click show popup doi mat khau
+  const handShowMapPopup = async () => {
+    setshowMapPopup(!showMapPopup)
+  }
+  //hand Click show Alert 
   const alertClicked = () => {
     alert('You clicked the third ListGroupItem');
   };
+  const [validated, setValidated] = useState(false);
 
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    navigate("/home")
+
+    setValidated(true);
+  };
+
+  //event get values
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value })
+  }
   return (
-    <div className='left-contain'>
-      <div className='left-header-contain'>
-        <div className='user-container' >
-          <img className='user-avatar' src={require('../../assets/user-avatar.jpg')} alt="user avatar" />
-          <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
-          <div className="user-email">datnguyen9g@gmail.com</div>
-          <button type="button" class="btn btn-danger" onClick={() => navigate("/")}>Logout</button>
-        </div>
-
-      </div>
-      <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
-        <ListGroup.Item style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link1">
-          Bảng điều khiển
-        </ListGroup.Item>
-        <ListGroup.Item style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link2">
-          Hiệu suất và bán hàng
-        </ListGroup.Item>
-        <ListGroup.Item style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#link'>
-          Sản phẩm
-        </ListGroup.Item>
-        <ListGroup.Item onClick={() => setshowInfoPopup(!showInfoPopup)}  style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
-          Cập nhật tài khoản
-        </ListGroup.Item>
-      </ListGroup>
-      <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
-        <div className='user_popup_header' style={{ flex: 1, fontSize: 20, margin: 5, fontWeight: 'bold' }}>Thông tin tài khoản</div>
-        <div className='user_popup_body' style={{ display: 'flex', flexDirection: 'column', flex: 1, height: 500 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', flexFlow: 'column wrap  ', flex: 0.7, marginTop: 50 }}>
-            <input style={{ padding: 10 }} type="file" className="filetype" id="group_image" />
-            <h3 style={{ padding: 10 }} >Hello</h3>
-            <p style={{ padding: 10 }}>Ngày đăng ký</p>
-            <p style={{ padding: 10 }}>Email</p>
+    <div className='container-home'>
+      <div className='left-contain'>
+        <div className='left-header-contain'>
+          <div className='user-container' >
+            <img className='user-avatar' src={require('../../assets/user-avatar.jpg')} alt="user avatar" />
+            <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
+            <div className="user-email">datnguyen9g@gmail.com</div>
+            <button type="button" class="btn btn-danger" onClick={() => navigate("/")}>Logout</button>
           </div>
         </div>
-        <div className='delete_popup_footer'>
-          <button className='negative_btn' >Update</button>
-          <button className='negative_btn' onClick={() => setshowInfoPopup(false)}>Đóng</button>
-          <button className='negative_btn' style={{ backgroundColor: 'red', color: 'white' }} onClick={() => navigate('/login')}>Đăng xuất</button>
-        </div>
-      </Popup>
+        <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
+          <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link1">
+            Bảng điều khiển
+          </ListGroup.Item>
+          <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link2">
+            Thêm Tour
+          </ListGroup.Item>
+          <ListGroup.Item onClick={() => handShowMapPopup()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#link'>
+            Sản phẩm
+          </ListGroup.Item>
+          <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
+            Cập nhật tài khoản
+          </ListGroup.Item>
+        </ListGroup>
+        <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
+          <h5>Đổi mật khẩu</h5>
+          <Form className='group-control' noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
+            <Form.Group id='form-group' className="mb-3" controlId="formBasicEmail">
+              <Form.Label className='label-login'>Old Password</Form.Label>
+              <Form.Control
+                name='email'
+                value={values.email}
+                onChange={e => handleChange(e)}
+                type="email" placeholder="Enter old password" required />
+
+            </Form.Group>
+            <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
+              <Form.Label className='label-login'>New Password</Form.Label>
+              <Form.Control
+                name='password'
+                value={values.password}
+                onChange={e => handleChange(e)}
+                type="password" placeholder="Password" required />
+              <Form.Control.Feedback type="invalid">
+                Please provide a password
+              </Form.Control.Feedback>
+
+            </Form.Group>
+            <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
+              <Form.Check
+                className='label-login' type="checkbox" label="Check me out" />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Cập nhật
+            </Button>
+          </Form>
+        </Popup>
+      </div>
+      <div className='right-contain' style={{ display: 'flex' }}>
+        {
+          showTours ?
+            <TourContent /> : ""
+        }
+
+        {
+          showThemTours ?
+           <MapBox/>
+            : ""
+        }
+      </div>
     </div>
 
   );

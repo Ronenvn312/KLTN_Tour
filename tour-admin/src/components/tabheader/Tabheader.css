@@ -3,27 +3,90 @@
     flex-direction: column;
     flex: 1;
 }
+
 .custom-toolbar {
     display: flex;
     flex: 0.2;
     flex-direction: row;
     padding: 10px;
 }
+
 .menu {
     width: 200px;
     flex-direction: column;
 }
+
 .right-widget {
     flex: 0.9;
     justify-content: flex-end;
     padding-right: 6%;
 }
+
 .left-contain {
     background-color: white;
 }
+
 .item-group {
     background: none;
     font-weight: bold;
     font-size: 20px;
     font-family: cursive;
+}
+
+
+.container-home {
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+    flex-direction: row;
+    background-color: azure;
+    justify-content: center;
+}
+
+.left-contain {
+    flex: 0.12;
+    height: 100%;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    border-right: 2px solid;
+}
+
+.right-contain {
+    display: flex;
+    padding-left: 10px;
+    flex: 0.88;
+    height: 100vh;
+}
+.right-contain .App {
+    width: 600px;
+    height: 600px;
+    /* overflow: hidden; */
+}
+.list-group {
+    margin-top: 10px;
+    float: left;
+    text-align: left;
+    width: 100%;
+    background: none;
+}
+
+.user-name {
+    font-size: 20px;
+    color: white;
+}
+
+.user-email {
+    color: white;
+}
+
+.user-avatar {
+    margin: 10px;
+    border-radius: 100px;
+    width: 40%;
+    height: 40%;
+}
+
+.btn_Them {
+    width: 300px;
 }

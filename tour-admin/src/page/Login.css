@@ -3,17 +3,20 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-  
+
 }
+
 .Login-left {
     display: flex;
     flex: 0.3;
     height: max-content;
     flex-direction: column;
     justify-content: center;
-    min-height: 100vh; 
+    min-height: 100vh;
     padding: 20px;
-    align-items: center;}
+    align-items: center;
+}
+
 .Login-right {
     display: flex;
     flex: 0.7;
@@ -21,20 +24,23 @@
     justify-content: center;
     text-align: center;
     min-height: 100vh;
-    background-image: url('../assets/hoian.jpg') ;
+    background-image: url('../assets/hoian.jpg');
 }
+
 .Login-title {
     font-size: 56px;
     color: rgb(0, 113, 211);
     font-weight: 300;
 
 }
+
 .Login-group {
     align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .button-login {
     width: 60%;
     height: 10%;
@@ -48,14 +54,18 @@
     margin-left: 10px;
     cursor: pointer;
 }
-.img-wel {
+
+/* .img-wel {
+    display: flex;
     flex: 0.1;
     width: 30%;
-    height: 80% ;
-}
+    height: 80%;
+} */
+
 .Logo-left {
     flex: 0.05;
 }
+
 .group-control {
     padding: 10px;
     display: flex;
@@ -68,6 +78,7 @@
     width: 20%;
     height: 20%;
 }
+
 .label-login {
     float: left;
 
@@ -86,4 +97,3 @@
       transform: rotate(90deg);
     }
   } */
-  

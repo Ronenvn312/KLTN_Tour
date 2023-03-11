@@ -53,7 +53,7 @@ function Login() {
             <Form.Label className='label-login'>Email address</Form.Label>
             <Form.Control
               name='email'
-              value={values.email}
+              value={"admin"}
               onChange={e => handleChange(e)}
               type="email" placeholder="Enter email" required />
             <Form.Control.Feedback type="invalid">
@@ -72,7 +72,7 @@ function Login() {
             <Form.Label className='label-login'>Password</Form.Label>
             <Form.Control
               name='password'
-              value={values.password}
+              value={"admin"}
               onChange={e => handleChange(e)}
               type="password" placeholder="Password" required />
             <Form.Control.Feedback type="invalid">

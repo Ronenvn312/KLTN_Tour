@@ -67,16 +67,8 @@ function Home(props) {
           <Button variant="link" className='btn-about' style={{ color: 'white' }}>About</Button>
         </div>
       </div>
+      <Tabheader />
 
-      <div className='container-home'>
-        {disableMenu ?
-          <Tabheader /> : ""}
-        <div className='right-contain'>
-          <h4 style={{ borderBottom: '1px solid' }}>DANH SÁCH TOUR DU LỊCH</h4>
-          <Button className='btn_Them' variant="info">THÊM</Button>{' '}
-          <TourContent />
-        </div>
-      </div>
     </div>
   )
 }

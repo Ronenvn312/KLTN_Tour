@@ -4,6 +4,7 @@
     min-height: 100vh;
     flex-direction: column;
     justify-content: start;
+    /* overflow: hidden; */
 }
 
 .tav-bar {
@@ -18,25 +19,28 @@
     flex-direction: row;
     background-color: azure;
     justify-content: center;
+    overflow: hidden;
 }
 
 .left-contain {
     display: flex;
     flex: 0.12;
+    min-height: 100vh;
     flex-direction: column;
     text-align: center;
     align-items: center;
     border-right: 2px solid;
-    background-image: url('../assets/bgr.png');
-
+    background-color: rgb(130, 152, 145);
 }
 
 .right-contain {
-    padding-left: 10px;
+    width: 100vw;
     display: flex;
     flex: 0.88;
     flex-direction: column;
-   }
+    /* overflow: hidden; */
+    /* flex-direction: row; */
+}
 
 .custom-toolbar {
     margin-left: 5px;
@@ -84,19 +88,23 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     margin-top: '3px';
 }
+
 .user-name {
     font-size: 20px;
     color: white;
 }
+
 .user-email {
     color: white;
 }
+
 .user-avatar {
     margin: 10px;
     border-radius: 100px;
     width: 40%;
     height: 40%;
 }
+
 .list-group {
     margin-top: 10px;
     float: left;
@@ -104,12 +112,15 @@
     width: 100%;
     background: none;
 }
+
 .action-menu {
     background: none;
 }
+
 .btn-about {
     color: white;
 }
+
 .btn_Them {
     width: 300px;
 }
