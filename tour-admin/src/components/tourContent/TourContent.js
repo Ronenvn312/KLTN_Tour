@@ -31,56 +31,58 @@ export default function TourContent() {
     }, [])
     return (
         <div className='tour-content'>
-             <h4 style={{ borderBottom: '1px solid' }}>DANH SÁCH TOUR DU LỊCH</h4>
+            <h4 style={{ borderBottom: '1px solid' }}>DANH SÁCH TOUR DU LỊCH</h4>
             {/* <Button className='btn_Them' variant="info" onClick={() => handShowPopupThem()}>THÊM</Button>{' '} */}
             <div className='content-root'>
                 <div className='content-left'>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Tên </th>
-                                <th scope="col">ảnh</th>
-                                <th scope="col">mô tả</th>
-                                <th scope="col">phổ biến</th>
-                                <th scope="col">xu hướng</th>
-                                <th scope="col">Tác vụ</th>
+                    <div id="table-scroll">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên </th>
+                                    <th scope="col">ảnh</th>
+                                    <th scope="col">mô tả</th>
+                                    <th scope="col">phổ biến</th>
+                                    <th scope="col">xu hướng</th>
+                                    <th scope="col">Tác vụ</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {resultData.map((item, index) => {
-                                return <tr key={item.id}>
-                                    <th scope="row">{index + 1}</th>
-                                    <td> {item.tenTour}</td>
-                                    <td>
-                                        <img className='image-item' src={item.hinhAnh[0]} />
-                                    </td>
-                                    <td>
-                                        <p>Thông tin: {item.thongTin}</p>
-                                        <p>id: {item.document_id}</p>
-                                        <p>Thể loại: {item.theLoai}</p>
-                                        <p>Số ngày: {item.soNgay}</p>
-                                        <p>Vị trí: {item.viTri}</p>
-                                        <p>Đánh giá: {item.danhGia}</p>
-                                        <p>longitude: {item.longitude}</p>
-                                        <p>latitude: {item.latitude}</p>
-                                    </td>
-                                    <td>{item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
-                                    <td>{item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
-                                    <td>
-                                        <Button variant="success" onClick={() => handleResultData()}>UPDATE</Button>{' '}
-                                        <Button variant="danger">DELETE</Button>{' '}
-                                    </td>
                                 </tr>
-                            })
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody style={{ height: '500px', overflow: 'scroll' }}>
+                                {resultData.map((item, index) => {
+                                    return <tr key={item.id}>
+                                        <th scope="row">{index + 1}</th>
+                                        <td> {item.tenTour}</td>
+                                        <td>
+                                            <img className='image-item' src={item.hinhAnh[0]} />
+                                        </td>
+                                        <td>
+                                            <p>Thông tin: {item.thongTin}</p>
+                                            <p>id: {item.document_id}</p>
+                                            <p>Thể loại: {item.theLoai}</p>
+                                            <p>Số ngày: {item.soNgay}</p>
+                                            <p>Vị trí: {item.viTri}</p>
+                                            <p>Đánh giá: {item.danhGia}</p>
+                                            <p>longitude: {item.longitude}</p>
+                                            <p>latitude: {item.latitude}</p>
+                                        </td>
+                                        <td>{item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
+                                        <td>{item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
+                                        <td>
+                                            <Button variant="success" onClick={() => handleResultData()}>UPDATE</Button>{' '}
+                                            <Button variant="danger">DELETE</Button>{' '}
+                                        </td>
+                                    </tr>
+                                })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
-                <div style={{display:'flex', flexDirection: 'row', flex: 1, justifyContent: 'flex-start'}}>
+                <div style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'flex-start' }}>
                     <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control'>
                         <Form.Group className='title-them-tour'>
                             <h3 className='label-title-tour'>Thông tin tour</h3>
@@ -163,10 +165,10 @@ export default function TourContent() {
                                 id="disabled-custom-switch"
                             />
                         </Form.Group>
-                 
+
                         <Form.Group style={{ paddingLeft: 200 }}>
                             <Button variant="primary">Thêm</Button>{' '}
-                         
+
                             <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '}
                         </Form.Group>
                     </Form>

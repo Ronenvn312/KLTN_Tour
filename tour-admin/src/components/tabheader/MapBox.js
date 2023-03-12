@@ -8,12 +8,22 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import './MapBox.css'
+import axios from "axios";
 function MapBox() {
 
   const [lng, setLng] = useState(106.68921221955645)
   const [lat, setLat] = useState(10.772420997560602)
   const [showPopup, setShowPopup] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
+  //info Add Tour 
+  const [tenTour, setTenTour] = useState('')
+  const [theLoai, setTheLoai] = useState('')
+  const [soNgay, setSoNgay] = useState()
+  const [thongTinCT, setThongTinCT] = useState('')
+  const [diaChi, setDiaChi] = useState('')
+  const [xuHuong, setXuHuong] = useState()
+  const [phoBien, setPhoBien] = useState()
+  const [hinhAnh, setHinhAnh] = useState()
   const data = {
     longitude: lng,
     latitude: lat,
@@ -24,7 +34,66 @@ function MapBox() {
   const handleShowPopup = () => {
     setShowPopup(true);
   }
-
+  const handleChangeTenTour = (e) => {
+    let tenTour = e.target.value
+    setTenTour(tenTour)
+    // console.log(tenTour)
+  }
+  const handleChangeTheLoai = (e) => {
+    let theLoai = e.target.value
+    setTheLoai(theLoai)
+    // console.log(theLoai)
+  }
+  const handleChangeSoNgay = (e) => {
+    let soNgay = e.target.value
+    setSoNgay(soNgay)
+    // console.log(soNgay)
+  }
+  const handleChangeThongTin = (e) => {
+    let thongTin = e.target.value
+    setThongTinCT(thongTin)
+    // console.log(thongTin)
+  }
+  const handleChangeDiaChi = (e) => {
+    let diaChi = e.target.value
+    setDiaChi(diaChi);
+    // console.log(diaChi)
+  }
+  const handleChangeHinhAnh = (e) => {
+    let hinhAnh = e.target.value
+    setHinhAnh(hinhAnh)
+    // console.log(hinhAnh)
+  }
+  const handleChangeCheckPhoBien = (e) => {
+    let isChecked = e.target.checked;
+    setPhoBien(isChecked)
+    // console.log(isChecked)
+  }
+  const handleChangeCheckXuHuong = (e) => {
+    let isChecked = e.target.checked;
+    setXuHuong(isChecked)
+    // console.log(isChecked)
+  }
+  const tour = {
+    "tenTour": tenTour,
+    "thongTin": thongTinCT,
+    "viTri": diaChi,
+    "soNgay": soNgay,
+    "hinhAnh": [
+      hinhAnh,
+    ],
+    "theLoai": theLoai,
+    "danhGia": "4",
+    "phoBien": phoBien,
+    "xuHuong": xuHuong,
+    "longitude": lng,
+    "latitude": lat
+  }
+  const handSubmit = async () => {
+    console.log("successful")
+    const result = axios.post(`http://localhost:8080/tour/insert`, tour)
+    console.log(result)
+  }
   return (
     <Map
       mapboxAccessToken='pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg'
@@ -85,17 +154,17 @@ function MapBox() {
       <ScaleControl />
       <GeolocateControl />
       <div className="form-them">
-        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control'>
+        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={()=> handSubmit()}>
           <Form.Group className='title-them-tour'>
             <h3 className='label-title-tour'>Thông tin tour</h3>
           </Form.Group>
           <Form.Group>
             <Form.Label className='label-ten-tour'>Tên tour:</Form.Label>
             <Form.Control
-              name='email'
+              name='tenTour'
               // value={" Tour Nha Trang 36h"}
-              // onChange={e => handleChange(e)}
-              type="email" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
+              onChange={e => handleChangeTenTour(e)}
+              type="text" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
           </Form.Group>
           <Form.Group>
             <Form.Label className='label-loai-tour'>Thể loại:</Form.Label>
@@ -103,12 +172,14 @@ function MapBox() {
               name='email'
               contentEditable={"true"}
               // value={" Tour Nha Trang 36h"}
-              // onChange={e => handleChange(e)}
+              onChange={e => handleChangeTheLoai(e)}
               type="text" placeholder="VD: Gia đình, tổ chức, hẹn hò, thư dãn, tổ chức tiệc,..." required />
           </Form.Group>
           <Form.Group>
             <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
-            <Form.Select aria-label="Default select example">
+            <Form.Select
+              onChange={e => handleChangeSoNgay(e)}
+              aria-label="Default select example">
               <option>Số ngày </option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -126,6 +197,7 @@ function MapBox() {
             {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
             <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
               <Form.Control
+                onChange={e => handleChangeThongTin(e)}
                 as="textarea"
                 placeholder="Leave a comment here"
                 style={{ height: '100px' }}
@@ -138,15 +210,15 @@ function MapBox() {
             <Form.Control
               name='email'
               // value={" Tour Nha Trang 36h"}
-              // onChange={e => handleChange(e)}
-              type="email" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
+              onChange={e => handleChangeDiaChi(e)}
+              type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
           </Form.Group>
           <Form.Group style={{ marginTop: 10 }}>
             <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
             <Form.Group>
               <Form.Label className='label-loai-tour'>longitude:</Form.Label>
               <Form.Control
-                name='email'
+                name='longitude'
                 value={lng}
                 // onChange={e => handleChange(e)}
                 type="text" placeholder="VD: 100.1" required />
@@ -154,7 +226,7 @@ function MapBox() {
             <Form.Group>
               <Form.Label className='label-loai-tour'>latitude:</Form.Label>
               <Form.Control
-                name='email'
+                name='latitude'
                 value={lat}
                 // onChange={e => handleChange(e)}
                 type="text" placeholder="VD: 10.0001" required />
@@ -165,11 +237,13 @@ function MapBox() {
               type="switch"
               id="custom-switch"
               label="Xu hướng"
+              onChange={e => handleChangeCheckXuHuong(e)}
             />
             <Form.Check
               type="switch"
               label="phổ biến"
               id="disabled-custom-switch"
+              onChange={e => handleChangeCheckPhoBien(e)}
             />
           </Form.Group>
           <Form.Group>
@@ -177,11 +251,11 @@ function MapBox() {
             <Form.Control
               name='email'
               // value={" Tour Nha Trang 36h"}
-              // onChange={e => handleChange(e)}
-              type="text" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
+              onChange={e => handleChangeHinhAnh(e)}
+              type="text" placeholder="VD: " required />
           </Form.Group>
           <Form.Group style={{ paddingLeft: 200 }}>
-            <Button variant="primary">Thêm</Button>{' '}
+            <Button type="submit" variant="primary">Thêm</Button>{' '}
 
             {/* <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '} */}
           </Form.Group>

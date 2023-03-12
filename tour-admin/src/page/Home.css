@@ -19,7 +19,7 @@
     flex-direction: row;
     background-color: azure;
     justify-content: center;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .left-contain {

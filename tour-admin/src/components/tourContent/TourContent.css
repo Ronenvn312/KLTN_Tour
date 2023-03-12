@@ -22,10 +22,37 @@
 }
 
 .locate_popub {
-   /* background-color: antiquewhite; */
-   position: absolute;
+    /* background-color: antiquewhite; */
+    position: absolute;
 }
-.content-left {
+
+/* .content-left {
+    position: relative;
     flex: 1;
     width: 85vw;
-}
+} */
+
+.content-left {
+    position:relative;
+  }
+  #table-scroll {
+    height:910px;
+    overflow:auto;  
+    margin-top:20px;
+  }
+  .content-left table {
+    width:100%;
+  
+  }
+  .content-left table * {
+    /* background:yellow; */
+    color:black;
+  }
+  .content-left table thead th .text {
+    position:absolute;   
+    top:-20px;
+    z-index:2;
+    height:20px;
+    width:35%;
+    border:1px solid red;
+  }
