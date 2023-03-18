@@ -6,49 +6,8 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TourContent from '../components/tourContent/TourContent';
-export const items = [
-  {
-    text: 'Dashboard',
-    selected: true,
-    route: '/home/dashboard',
-    icon: 'k-i-grid'
-  },
-  {
-    text: 'Performance and sales',
-    selected: false,
-    route: '/home/performance-and-sales',
-    icon: 'k-icon k-i-notification k-i-globe'
-  },
-  {
-    text: 'Products',
-    selected: false,
-    route: '/home/products',
-    icon: 'k-icon k-i-aggregate-fields',
-  },
-  { separator: true },
-  {
-    text: 'Settings',
-    selected: false,
-    route: '/home/account',
-    icon: 'k-icon k-i-gear'
-  },
-  {
-    route: '/home/billing',
-    disabled: true,
-  },
-  {
-    route: '/home/notifications',
-    disabled: true,
-  },
-  {
-    route: '/home/about',
-    disabled: true,
-  },
-];
 function Home(props) {
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const [expanded, setExpanded] = React.useState(true);
   const [disableMenu, setDisableMenu] = useState(true);
   const onClickMenuBar = async () => {
     setDisableMenu(!disableMenu);
@@ -64,7 +23,9 @@ function Home(props) {
           <h3 className='title-page'>Trang chủ</h3>
         </div>
         <div className="right-widget">
-          <Button variant="link" className='btn-about' style={{ color: 'white' }}>About</Button>
+          <Button variant="link" className='btn-about' style={{ color: 'white' }}>
+            <img style={{width: 30, height: 30, marginRight: 10}} src={require('./../assets/icon_thongbao.png')}/>
+            About</Button>
         </div>
       </div>
       <Tabheader />

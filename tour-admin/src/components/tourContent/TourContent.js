@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import './TourContent.css'
 import axios from 'axios'
 import Popup from '../Popup/Popup';
@@ -26,30 +27,46 @@ export default function TourContent() {
     const handShowPopupLocate = async () => {
         setshowLocatePopup(!showLocatePopup)
     }
+
     useEffect(() => {
         handleResultData();
     }, [])
     return (
         <div className='tour-content'>
-            <h4 style={{ borderBottom: '1px solid' }}>DANH SÁCH TOUR DU LỊCH</h4>
+
             {/* <Button className='btn_Them' variant="info" onClick={() => handShowPopupThem()}>THÊM</Button>{' '} */}
-            <div className='content-root'>
+            <div className='content-root' style={{ display: 'flex', flexDirection: 'column' }}>
+                <div >
+                    <h4 className='title_danhsach'>DANH SÁCH TOUR DU LỊCH</h4>
+                    <Form style={{ width: '60%' }} className='group-control'>
+                        <Form.Group style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Form.Control
+                                name='search'
+                                // value={" Tour Nha Trang 36h"}
+                                // onChange={e => handleChange(e)}
+                                type="text" placeholder="VD: Thành phố Hồ Chí Minh" required />
+                            <Button variant="outline-secondary" style={{ marginLeft: 10, width: 200}}>
+                                <img style={{width: 30, height: 30}} src={require('./../../assets/search_icon.png')} />
+                            </Button>
+                        </Form.Group>
+                    </Form>
+                </div>
                 <div className='content-left'>
                     <div id="table-scroll">
-                        <table className="table">
-                            <thead>
+                        <Table striped bordered hover size="sm">
+                            <thead className='thead_table'>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Tên </th>
-                                    <th scope="col">ảnh</th>
-                                    <th scope="col">mô tả</th>
-                                    <th scope="col">phổ biến</th>
-                                    <th scope="col">xu hướng</th>
-                                    <th scope="col">Tác vụ</th>
+                                    <th className='col_stt' scope="col">#</th>
+                                    <th className='col_info' scope="col">Tên Tour</th>
+                                    <th className='col_info' scope="col">Ảnh</th>
+                                    <th className='col_info' scope="col">Mô tả</th>
+                                    <th className='col_info' scope="col">Địa chỉ</th>
+                                    <th className='col_info' scope="col">Xu hướng</th>
+                                    <th className='col_info' scope="col">Tác vụ</th>
 
                                 </tr>
                             </thead>
-                            <tbody style={{ height: '500px', overflow: 'scroll' }}>
+                            <tbody className='tbody_table' style={{ height: '500px', overflow: 'scroll' }}>
                                 {resultData.map((item, index) => {
                                     return <tr key={item.document_id}>
                                         <th scope="row">{index + 1}</th>
@@ -57,27 +74,40 @@ export default function TourContent() {
                                         <td>
                                             <img className='image-item' src={item.hinhAnh[0]} />
                                         </td>
-                                        <td>
-                                            <p>Thông tin: {item.thongTin}</p>
+                                        <td className='col_mota' style={{ textAlign: 'start' }}>
                                             <p>id: {item.document_id}</p>
+                                            <p>Thông tin: {item.thongTin}</p>
                                             <p>Thể loại: {item.theLoai}</p>
                                             <p>Số ngày: {item.soNgay}</p>
-                                            <p>Vị trí: {item.viTri}</p>
+                                        </td>
+                                        <td style={{ textAlign: 'start' }}>
+                                            <p>Địa chỉ: {item.viTri}</p>
                                             <p>Đánh giá: {item.danhGia}</p>
                                             <p>longitude: {item.longitude}</p>
-                                            <p>latitude: {item.latitude}</p>
-                                        </td>
-                                        <td>{item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
-                                        <td>{item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
+                                            <p>latitude: {item.latitude}</p></td>
                                         <td>
-                                            <Button variant="success" onClick={() => handleResultData()}>SỬA</Button>{' '}
-                                            <Button variant="danger">XÓA</Button>{' '}
+                                            Phổ biến: {item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}
+                                            <br />
+                                            Xu hướng: {item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <Button type='button' variant="outline-warning" className='btn_sua' onClick={() => handleResultData()}>
+
+                                                SỬA
+                                                <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/icon_sua.png')} alt='icon-locate' />
+                                            </Button>{' '}
+                                            <br />
+                                            <Button type='button' variant="outline-danger" className='btn_xoa' >
+                                                XÓA
+                                                <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
+                                            </Button>{' '}
+                                            <br />
+                                            <Button type='button' variant="outline-info" className='bnt_them_hd' >THÊM HOẠT ĐỘNG</Button>{' '}
                                         </td>
                                     </tr>
                                 })
                                 }
                             </tbody>
-                        </table>
+                        </Table>
                     </div>
                 </div>
             </div>

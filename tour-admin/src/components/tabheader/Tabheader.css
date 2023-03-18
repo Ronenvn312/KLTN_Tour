@@ -54,7 +54,7 @@
 
 .right-contain {
     display: flex;
-    padding-left: 10px;
+    /* padding-left: 10px; */
     flex: 0.88;
     height: 100vh;
 }

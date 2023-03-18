@@ -11,46 +11,6 @@ import Form from 'react-bootstrap/Form';
 
 import TourContent from '../tourContent/TourContent';
 import MapBox from './MapBox';
-export const items = [
-  {
-    text: 'Dashboard',
-    selected: true,
-    route: '/home/dashboard',
-    icon: 'k-i-grid'
-  },
-  {
-    text: 'Performance and sales',
-    selected: false,
-    route: '/home/performance-and-sales',
-    icon: 'k-icon k-i-notification k-i-globe'
-  },
-  {
-    text: 'Products',
-    selected: false,
-    route: '/home/products',
-    icon: 'k-icon k-i-aggregate-fields',
-  },
-  { separator: true },
-  {
-    text: 'Settings',
-    selected: false,
-    route: '/home/account',
-    icon: 'k-icon k-i-gear'
-  },
-  {
-    route: '/home/billing',
-    disabled: true,
-  },
-  {
-    route: '/home/notifications',
-    disabled: true,
-  },
-  {
-    route: '/home/about',
-    disabled: true,
-  },
-];
-
 export const Tabheader = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,12 +44,6 @@ export const Tabheader = (props) => {
     navigate(e.itemTarget.props.route);
   };
 
-  const setSelectedItem = (pathName) => {
-    let currentPath = items.find((item) => item.route === pathName);
-    if (currentPath.text) {
-      return currentPath.text;
-    }
-  };
   // Click show popup doi mat khau
   const handShowPopupDoiMK = async () => {
     setshowInfoPopup(!showInfoPopup)
