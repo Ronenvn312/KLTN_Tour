@@ -8,6 +8,7 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import './MapBox.css'
+import { AddressAutofill } from '@mapbox/search-js-react';
 import axios from "axios";
 function MapBox() {
 
@@ -94,6 +95,26 @@ function MapBox() {
     const result = axios.post(`http://localhost:8080/tour/insert`, tour)
     console.log(result)
   }
+  const handDiaChiThanhToaDo = async () => {
+    let arrNewAddress = []
+    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${diaChi}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
+      .then(function (response) {
+        console.log(response)
+        arrNewAddress.push({
+          lng: response.data.features[0].center[0],
+          lat: response.data.features[0].center[1]
+        })
+        setLat(arrNewAddress[0].lat)
+        setLng(arrNewAddress[0].lng)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      .then(() => {
+
+      })
+    console.log(arrNewAddress)
+  }
   return (
     <Map
       mapboxAccessToken='pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg'
@@ -114,6 +135,7 @@ function MapBox() {
         latitude: lat,
         zoom: 10,
       }}
+      
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
       <Marker
@@ -154,7 +176,7 @@ function MapBox() {
       <ScaleControl />
       <GeolocateControl />
       <div className="form-them">
-        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={()=> handSubmit()}>
+        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={() => handSubmit()}>
           <Form.Group className='title-them-tour'>
             <h3 className='label-title-tour'>Thông tin tour</h3>
           </Form.Group>
@@ -171,7 +193,6 @@ function MapBox() {
             <Form.Control
               name='email'
               contentEditable={"true"}
-              // value={" Tour Nha Trang 36h"}
               onChange={e => handleChangeTheLoai(e)}
               type="text" placeholder="VD: Gia đình, tổ chức, hẹn hò, thư dãn, tổ chức tiệc,..." required />
           </Form.Group>
@@ -207,61 +228,68 @@ function MapBox() {
 
           <Form.Group>
             <Form.Label className='label-login'>Địa chỉ :</Form.Label>
+            <AddressAutofill
+              options={{
+                language: 'vi'
+               }}
+              accessToken="pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg">
+            <input
+              name="address" placeholder="Address" type="text"
+              autoComplete="street-address"
+            />
+          </AddressAutofill>
+          <Button onClick={() => handDiaChiThanhToaDo()} type="button" variant="primary">Search</Button>{' '}
+        </Form.Group>
+        <Form.Group style={{ marginTop: 10 }}>
+          <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
+          <Form.Group>
+            <Form.Label className='label-loai-tour'>longitude:</Form.Label>
             <Form.Control
-              name='email'
-              // value={" Tour Nha Trang 36h"}
-              onChange={e => handleChangeDiaChi(e)}
-              type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-          </Form.Group>
-          <Form.Group style={{ marginTop: 10 }}>
-            <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
-            <Form.Group>
-              <Form.Label className='label-loai-tour'>longitude:</Form.Label>
-              <Form.Control
-                name='longitude'
-                value={lng}
-                // onChange={e => handleChange(e)}
-                type="text" placeholder="VD: 100.1" required />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label className='label-loai-tour'>latitude:</Form.Label>
-              <Form.Control
-                name='latitude'
-                value={lat}
-                // onChange={e => handleChange(e)}
-                type="text" placeholder="VD: 10.0001" required />
-            </Form.Group>
+              name='longitude'
+              value={lng}
+              // onChange={e => handleChange(e)}
+              type="text" placeholder="VD: 100.1" required />
           </Form.Group>
           <Form.Group>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              label="Xu hướng"
-              onChange={e => handleChangeCheckXuHuong(e)}
-            />
-            <Form.Check
-              type="switch"
-              label="phổ biến"
-              id="disabled-custom-switch"
-              onChange={e => handleChangeCheckPhoBien(e)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
+            <Form.Label className='label-loai-tour'>latitude:</Form.Label>
             <Form.Control
-              name='email'
-              // value={" Tour Nha Trang 36h"}
-              onChange={e => handleChangeHinhAnh(e)}
-              type="text" placeholder="VD: " required />
+              name='latitude'
+              value={lat}
+              // onChange={e => handleChange(e)}
+              type="text" placeholder="VD: 10.0001" required />
           </Form.Group>
-          <Form.Group style={{ paddingLeft: 200 }}>
-            <Button type="submit" variant="primary">Thêm</Button>{' '}
+        </Form.Group>
+        <Form.Group>
+          <Form.Check
+            type="switch"
+            id="custom-switch"
+            label="Xu hướng"
+            onChange={e => handleChangeCheckXuHuong(e)}
+          />
+          <Form.Check
+            type="switch"
+            label="phổ biến"
+            id="disabled-custom-switch"
+            onChange={e => handleChangeCheckPhoBien(e)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
+          <Form.Control
+            name='email'
+            // value={" Tour Nha Trang 36h"}
+            onChange={e => handleChangeHinhAnh(e)}
+            type="text" placeholder="VD: " required />
+        </Form.Group>
+        <Form.Group style={{ paddingLeft: 200 }}>
+          <Button type="submit" variant="primary">Thêm</Button>{' '}
 
-            {/* <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '} */}
-          </Form.Group>
-        </Form>
-      </div>
-    </Map>
+          {/* <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '} */}
+        </Form.Group>
+
+      </Form>
+    </div>
+    </Map >
   );
 }
 

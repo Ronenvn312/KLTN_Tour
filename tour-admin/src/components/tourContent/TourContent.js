@@ -13,7 +13,7 @@ export default function TourContent() {
     const navigate = useNavigate()
     const [resultData, setResultData] = useState([]);
     const handleResultData = async () => {
-        axios.get('http://localhost:8080/tour/findAll')
+        axios.get('http://localhost:8080/tour/findAlls')
             .then((result) => {
                 setResultData(result.data)
                 console.log(result)
@@ -51,7 +51,7 @@ export default function TourContent() {
                             </thead>
                             <tbody style={{ height: '500px', overflow: 'scroll' }}>
                                 {resultData.map((item, index) => {
-                                    return <tr key={item.id}>
+                                    return <tr key={item.document_id}>
                                         <th scope="row">{index + 1}</th>
                                         <td> {item.tenTour}</td>
                                         <td>
@@ -70,8 +70,8 @@ export default function TourContent() {
                                         <td>{item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
                                         <td>{item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</td>
                                         <td>
-                                            <Button variant="success" onClick={() => handleResultData()}>UPDATE</Button>{' '}
-                                            <Button variant="danger">DELETE</Button>{' '}
+                                            <Button variant="success" onClick={() => handleResultData()}>SỬA</Button>{' '}
+                                            <Button variant="danger">XÓA</Button>{' '}
                                         </td>
                                     </tr>
                                 })
