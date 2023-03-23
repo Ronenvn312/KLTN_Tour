@@ -32,6 +32,12 @@ function MapBox() {
     state: true,
     image: 'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/da-nang-4-ngay-3-dem-handetour.webp?alt=media&token=3053069d-bbd6-47f0-9bba-1589b2f9026e'
   }
+  // Popup them
+  // const [isThemPopup, setIsThemPopup] = useState(false)
+  // const handlePopupThem = () => {
+  //   setIsThemPopup(!)
+  // }
+   //
   const handleShowPopup = () => {
     setShowPopup(true);
   }
@@ -134,7 +140,7 @@ function MapBox() {
         zoom: 10,
       }}
       mapStyle="mapbox://styles/mapbox/streets-v12"
-      
+
     >
       <Marker
         longitude={lng}
@@ -173,9 +179,9 @@ function MapBox() {
       <FullscreenControl />
       <ScaleControl />
       <GeolocateControl
-          positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation={true}
-        />
+        positionOptions={{ enableHighAccuracy: true }}
+        trackUserLocation={true}
+      />
       <div className="form-them">
         <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={() => handSubmit()}>
           <Form.Group className='title-them-tour'>

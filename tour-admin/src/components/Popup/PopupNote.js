@@ -1,9 +1,9 @@
 import React from 'react'
 import clsx from "clsx"
-import "./popup.css"
+import "./popupNote.css"
 import { motion } from "framer-motion"
 
-function Popup(props) {
+function PopupNote(props) {
   return (props.trigger) ? (
     <div className='popup_container'>
         <motion.div animate={{ scale: 1 }} initial={{ scale: 0 }} className={clsx("popup-inner", {
@@ -17,4 +17,4 @@ function Popup(props) {
   ) : ""
 }
 
-export default Popup
+export default PopupNote

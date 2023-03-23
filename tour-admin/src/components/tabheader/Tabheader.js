@@ -3,7 +3,7 @@ import { useLocation, useNavigate, Outlet, Link } from 'react-router-dom';
 import Alert from '../dashboard/Alert';
 import './Tabheader.css'
 import ListGroup from 'react-bootstrap/ListGroup';
-import Popup from '../Popup/Popup';
+import Popup from '../Popup/PopupInfo';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -40,10 +40,6 @@ export const Tabheader = (props) => {
     setShowThemTours(false)
   }
 
-  const onSelect = (e) => {
-    navigate(e.itemTarget.props.route);
-  };
-
   // Click show popup doi mat khau
   const handShowPopupDoiMK = async () => {
     setshowInfoPopup(!showInfoPopup)
@@ -53,9 +49,7 @@ export const Tabheader = (props) => {
     setshowMapPopup(!showMapPopup)
   }
   //hand Click show Alert 
-  const alertClicked = () => {
-    alert('You clicked the third ListGroupItem');
-  };
+
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
@@ -78,10 +72,10 @@ export const Tabheader = (props) => {
       <div className='left-contain'>
         <div className='left-header-contain'>
           <div className='user-container' >
-            <img className='user-avatar' src={require('../../assets/user-avatar.jpg')} alt="user avatar" />
+            <img className='user-avatar' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/profire.jpg?alt=media&token=36f9f734-d5a5-46fd-897f-d7406be4a3dd'} alt="user avatar" />
             <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
             <div className="user-email">datnguyen9g@gmail.com</div>
-            <button type="button" class="btn btn-danger" onClick={() => navigate("/")}>Logout</button>
+            <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Logout</button>
           </div>
         </div>
         <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
@@ -98,6 +92,7 @@ export const Tabheader = (props) => {
             Cập nhật tài khoản
           </ListGroup.Item>
         </ListGroup>
+        {/* Popup for action đổi mật khẩu */}
         <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
           <h5>Đổi mật khẩu</h5>
           <Form className='group-control' noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
@@ -132,6 +127,7 @@ export const Tabheader = (props) => {
           </Form>
         </Popup>
       </div>
+      {/* right content in Bảng điều khiển */}
       <div className='right-contain' style={{ display: 'flex' }}>
         {
           showTours ?
@@ -141,6 +137,7 @@ export const Tabheader = (props) => {
         {
           showThemTours ?
            <MapBox/>
+           
             : ""
         }
       </div>

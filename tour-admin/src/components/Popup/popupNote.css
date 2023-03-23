@@ -1,5 +1,5 @@
 .popup_container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -11,9 +11,11 @@
 
 .popup-inner {
     background: #fff;
-    width: 1200px;
-    height: 900px;
-    border-radius: 4px;
+    width: 100%;
+    max-width: 520px;
+    width: 520px;
+    height: auto;
+    border-radius: 20px;
     margin: auto;
 } 
 
