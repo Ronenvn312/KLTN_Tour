@@ -55,9 +55,6 @@ export default function PlannedTour({ navigation }) {
                         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Vịnh Hạ Long</Text>
                         <Text style={{ fontSize: 18, color: 'grey' }}>TP Hạ Long, Quảng Ninh</Text>
                     </View>
-                    <View style={{ alignSelf: 'center', width: width * 0.25 }}>
-                        <Button onPress={handleClick} title={active ? 'Bắt đầu' : 'Kết thúc'} color={active ? '' : 'red'} />
-                    </View>
                 </View>
                 <View style={{ flex: 6 }}>
                     <ListActivity />

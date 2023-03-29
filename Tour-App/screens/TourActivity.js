@@ -3,7 +3,6 @@ import { StatusBar } from 'expo-status-bar';
 import { useState, useMemo } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 import ListActivity from '../components/ListActivity';
-import { Button } from '@rneui/themed';
 
 const img = [
     'https://heritagecruises.com/wp-content/uploads/2021/05/File1-768x437.jpg',
@@ -56,9 +55,6 @@ export default function TourActivity({ navigation }) {
                     <View style={{}}>
                         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Ngắm bình minh</Text>
                         <Text style={{ fontSize: 18, color: 'grey' }}>Hòn Trống Mái</Text>
-                    </View>
-                    <View style={{ width: width * 0.25, marginTop: height * 0.01 }}>
-                        <Button onPress={handleClick} title={active ? 'Bắt đầu' : 'Kết thúc'} color={active ? '' : 'red'} />
                     </View>
                 </View>
                 <View style={{ flex: 3, backgroundColor: '#f9f9f9', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
