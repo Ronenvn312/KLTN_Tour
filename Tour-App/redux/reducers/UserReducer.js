@@ -1,6 +1,6 @@
 const initialUser = {
-    isLogIn: false,
-    firstLogIn:true,
+    isLogIn: true,
+    firstLogIn:false,
     user: {
         username: '',
         password: '',

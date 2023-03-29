@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { MainTabbar } from '../tab';
-import { ScreensTourDetail,ScreensSearch_Filter, ScreensGGMap, ScreensPlannedTour, ScreensTourActivity} from '../screens';
+import { ScreensTourDetail,ScreensSearch_Filter, ScreensGGMap, ScreensPlannedTour, ScreensTourActivity, ScreensPlayVideo} from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,7 @@ export default function Main() {
         <Stack.Screen name="GGMap" component={ScreensGGMap} />
         <Stack.Screen name="PlannedTour" component={ScreensPlannedTour} />
         <Stack.Screen name="TourActivity" component={ScreensTourActivity} />
+        <Stack.Screen name="PlayVideo" component={ScreensPlayVideo} />
       </Stack.Navigator>
     </NavigationContainer>
   );
