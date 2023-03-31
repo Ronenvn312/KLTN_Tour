@@ -11,22 +11,17 @@ import Form from 'react-bootstrap/Form';
 
 import TourContent from '../tourContent/TourContent';
 import MapBox from './MapBox';
+import Thongke from '../thongke/Thongke';
 export const Tabheader = (props) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [expanded, setExpanded] = useState(true);
 
   const [showInfoPopup, setshowInfoPopup] = useState(false)
   const [values, setValues] = useState({ email: "", password: "" })
-  const [showErroPassword, setshowErroPassword] = useState(false);
-  const [showErroEmail, setshowErroEmail] = useState(false);
   const [showMapPopup, setshowMapPopup] = useState(false)
-  const toggleshowErroPassword = () => setshowErroPassword(!showErroPassword);
-  const toggleshowErroEmail = () => setshowErroEmail(!showErroEmail);
-
   const [showTours, setShowTours] = useState(true)
   const [showThemTours, setShowThemTours] = useState(false)
-
+  const [showThongKe, setShowThongKe] = useState(false)
   const handleClick = () => {
     setExpanded(!expanded);
   };
@@ -39,7 +34,11 @@ export const Tabheader = (props) => {
     setShowTours(true)
     setShowThemTours(false)
   }
-
+  const handShowThongKe = () => {
+    setShowThongKe(true)
+    setShowThemTours(false)
+    setShowTours(false)
+  }
   // Click show popup doi mat khau
   const handShowPopupDoiMK = async () => {
     setshowInfoPopup(!showInfoPopup)
@@ -75,22 +74,31 @@ export const Tabheader = (props) => {
             <img className='user-avatar' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/profire.jpg?alt=media&token=36f9f734-d5a5-46fd-897f-d7406be4a3dd'} alt="user avatar" />
             <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
             <div className="user-email">datnguyen9g@gmail.com</div>
-            <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Logout</button>
+
           </div>
         </div>
         <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
           <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link1">
+            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/design.png')} alt="use" />
             Bảng điều khiển
           </ListGroup.Item>
           <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link2">
+            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
             Thêm Tour
           </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowMapPopup()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#link'>
-            Sản phẩm
+          <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#link'>
+            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
+            Thống kê
           </ListGroup.Item>
           <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
+            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
+            Danh sách đặt tour
+          </ListGroup.Item>
+          <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
+            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
             Cập nhật tài khoản
           </ListGroup.Item>
+          <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Đăng xuất</button>
         </ListGroup>
         {/* Popup for action đổi mật khẩu */}
         <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
@@ -128,16 +136,19 @@ export const Tabheader = (props) => {
         </Popup>
       </div>
       {/* right content in Bảng điều khiển */}
-      <div className='right-contain' style={{ display: 'flex' }}>
+      <div className='right-contain' >
         {
           showTours ?
             <TourContent /> : ""
         }
-
         {
           showThemTours ?
-           <MapBox/>
-           
+            <MapBox />
+            : ""
+        }
+        {
+          showThongKe ?
+            <Thongke />
             : ""
         }
       </div>

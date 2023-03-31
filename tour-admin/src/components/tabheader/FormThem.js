@@ -204,23 +204,25 @@ function FormThem(props) {
             <Form.Group className='title-them-tour'>
               <h5 className='label-title-tour'>Thông tin tour</h5>
             </Form.Group>
-            <Form.Group>
-              <Form.Label className='label-ten-tour'>Tiêu đề hoạt động:</Form.Label>
+            <Form.Group style={{height: '50px'}}>
+              <Form.Label style={{height: '15px'}} className='label-ten-tour'>Tiêu đề hoạt động:</Form.Label>
               <Form.Control
                 name='tenhd'
+                style={{height: '28px'}}
                 // value={" Tour Nha Trang 36h"}
                 onChange={e => handleChangeTieuDe(e)}
                 type="text" placeholder="tiêu đề" required />
             </Form.Group>
-            <Form.Group>
-              <Form.Label className='label-loai-tour'>Thời gian:</Form.Label>
+            <Form.Group style={{height: '50px'}}>
+              <Form.Label style={{height: '15px'}} className='label-loai-tour'>Thời gian:</Form.Label>
               <Form.Control
                 name='thoigian'
                 contentEditable={"true"}
+                style={{height: '28px'}}
                 onChange={e => handleChangeThoiGian(e)}
                 type="text" placeholder="VD: 8:00:00 AM" required />
             </Form.Group>
-            <Form.Group>
+            <Form.Group >
               {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
               <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
                 <Form.Control
@@ -231,21 +233,22 @@ function FormThem(props) {
                 />
               </FloatingLabel>
             </Form.Group>
-            <Form.Group>
-              <Form.Label className='label-login'>Địa chỉ :</Form.Label>
+            <Form.Group style={{height: '80px'}}>
+              <Form.Label style={{height: '15px'}} className='label-login'>Địa chỉ :</Form.Label>
               <AddressAutofill
                 options={{
                   language: 'vi',
-                  country: "us"
+                  country: "vn"
                 }}
                 accessToken="pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg">
                 <Form.Control
+                style={{height: '30px'}}
                   name='email'
                   value={diaChi}
                   onChange={e => handleChangeDiaChi(e)}
                   autoComplete="strees-address"
                   type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                <Button onClick={() => handDiaChiThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
+                <Button style={{height: '34px', paddingTop: 4, marginTop: 3}}  onClick={() => handDiaChiThanhToaDo()} type="button" variant="warning">Tìm kiếm</Button>{' '}
               </AddressAutofill>
 
             </Form.Group>

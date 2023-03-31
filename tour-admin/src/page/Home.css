@@ -11,6 +11,8 @@
     display: flex;
     flex: 0.01;
     background-color: #6f42c1;
+    border-bottom: 1px solid;
+    border-color: white;
 }
 
 .container-home {
@@ -22,16 +24,6 @@
     /* overflow: hidden; */
 }
 
-.left-contain {
-    display: flex;
-    flex: 0.12;
-    min-height: 100vh;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    border-right: 2px solid;
-    background-color: rgba(156, 32, 32, 0.452);
-}
 
 .right-contain {
     width: 100vw;
@@ -45,13 +37,13 @@
 .custom-toolbar {
     margin-left: 5px;
     display: flex;
-    flex: 0.8;
+    flex: 0.9;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     justify-content: flex-start;
 
 }
+
 
 .btn-menu {
     width: 50px;
@@ -75,9 +67,9 @@
 
 .right-widget {
     display: flex;
-    flex: 0.2;
+    flex: 0.1;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 }
 

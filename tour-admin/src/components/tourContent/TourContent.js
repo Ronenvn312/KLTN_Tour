@@ -19,6 +19,8 @@ export default function TourContent() {
     const [tourAlter, setTourAlter] = useState(null)
     const [tourcheckeds, setTourCheckeds] = useState([])
     const [isDeletePopup, setIsDeletePopup] = useState(false)
+    const [searchResult, setSearchResult] = useState([])
+    const [searchValue, setSearchValue] = useState()
     // const { setTourChecked } = useContext(AppContext)
     const handleResultData = async () => {
         const result = await axios.get('http://localhost:8080/tour/findAlls')
@@ -37,7 +39,7 @@ export default function TourContent() {
 
     }
     const handShowPopupXoa = () => {
-            setIsDeletePopup(!isDeletePopup)
+        setIsDeletePopup(!isDeletePopup)
 
     }
     const handleDeleteTour = async () => {
@@ -67,6 +69,22 @@ export default function TourContent() {
         }
         console.log(tourcheckeds)
     }
+    // onChange value search tour
+    const handleSearchTour = async (e) => {
+        const result = await axios.get(`http://localhost:8080/tour/searchs`, {
+            params: {
+                tourName: e.target.value
+            }
+        })
+        setSearchValue(e.target.value)
+        if (result != null) {
+            // console.log(result.data)
+            setSearchResult(result.data)
+        }
+        else {
+            console.log("No data filter!")
+        }
+    }
     useEffect(() => {
         handleResultData();
     }, [tourAlter])
@@ -74,7 +92,7 @@ export default function TourContent() {
         <div className='tour-content'>
 
             {/* <Button className='btn_Them' variant="info" onClick={() => handShowPopupThem()}>THÊM</Button>{' '} */}
-            <div className='content-root' style={{ display: 'flex', flexDirection: 'column', }}>
+            <div className='content-root' >
                 <div >
                     <h4 className='title_danhsach'>DANH SÁCH TOUR DU LỊCH</h4>
                     <Form style={{ width: '100%', height: 60 }} className='group-control'>
@@ -82,7 +100,7 @@ export default function TourContent() {
                             <Form.Control
                                 name='search'
                                 // value={" Tour Nha Trang 36h"}
-                                // onChange={e => handleChange(e)}
+                                onChange={e => handleSearchTour(e)}
                                 style={{ width: 800 }}
                                 type="text" placeholder="VD: Thành phố Hồ Chí Minh" required />
                             <Button variant="outline-secondary" style={{ marginLeft: 10, width: 80 }}>
@@ -106,8 +124,26 @@ export default function TourContent() {
                                 onClick={() => handShowPopupThem()}
                                 type='button' style={{ height: 45 }} variant="outline-info" className='bnt_them_hd' >THÊM HOẠT ĐỘNG</Button>{' '}
                         </Form.Group>
-
                     </Form>
+                    <div className='search-result'>
+                        {
+                            searchValue != "" ?
+                                searchResult.map((item, index) => {
+                                    return <div key={index} className='search-item'>
+                                        <div style={{
+                                            height: 100,
+                                            width: 100,
+                                            backgroundImage: `url(${item.hinhAnh[0]})`,
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundSize: 'cover',
+                                            padding: '10px'
+                                        }} >
+                                        </div>
+                                        <p>{item.tenTour}</p>
+                                    </div>
+                                }) : ""
+                        }
+                    </div>
                 </div>
                 <div className='content-left'>
                     <div id="table-scroll">
@@ -126,12 +162,14 @@ export default function TourContent() {
                             <tbody className='tbody_table' style={{ height: '500px', overflow: 'scroll' }}>
                                 {resultData.map((item, index) => {
                                     return <tr key={item.document_id}>
-                                        <th style={{textAlign: 'center'}} scope="row">{index + 1}
-                                            <input style={{ width: 25, height: 25, marginLeft: 4 }} type="checkbox" value={item} onClick={e => handClickCheckBox(e, item)}  />
+                                        <th style={{ textAlign: 'center', color: 'white', backgroundColor: 'white' }} scope="row"> <p style={{ color: 'black' }}>{index + 1}</p>
+                                            <input style={{ width: 25, height: 25 }} type="checkbox" value={item} onClick={e => handClickCheckBox(e, item)} />
                                         </th>
-                                        <td> {item.tenTour}</td>
+                                        <td><p>{item.tenTour}</p></td>
                                         <td>
-                                            <img className='image-item' src={item.hinhAnh[0]} />
+                                            <div style={{ height: '250px', backgroundImage: `url(${item.hinhAnh[0]})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', padding: '10px' }} >
+
+                                            </div>
                                         </td>
                                         <td className='col_mota' style={{ textAlign: 'start' }}>
                                             <p>id: {item.document_id}</p>
@@ -142,9 +180,8 @@ export default function TourContent() {
                                             <p>longitude: {item.longitude}</p>
                                             <p>latitude: {item.latitude}</p></td>
                                         <td>
-                                            Phổ biến: {item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}
-                                            <br />
-                                            Xu hướng: {item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}
+                                            <p>Phổ biến: {item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />} </p>
+                                            <p>Xu hướng: {item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />} </p>
                                             <p>Đánh giá: {item.danhGia}</p>
                                         </td>
 

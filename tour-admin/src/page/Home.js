@@ -23,9 +23,10 @@ function Home(props) {
           <h3 className='title-page'>Trang chủ</h3>
         </div>
         <div className="right-widget">
-          <Button variant="link" className='btn-about' style={{ color: 'white' }}>
-            <img style={{width: 30, height: 30, marginRight: 10}} src={require('./../assets/icon_thongbao.png')}/>
-            About</Button>
+          <Button variant="link" className='btn-about' style={{ color: 'white', flex: 1, width: '100%', display: 'flex' }}>
+            <img style={{ width: 30, height: 30, marginRight: 10 }} src={require('./../assets/icon_thongbao.png')} />
+            About
+          </Button>
         </div>
       </div>
       <Tabheader />

@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast';
+import axios from 'axios'
 function Login() {
   const navigate = useNavigate()
   const [values, setValues] = useState({ email: "", password: "" })
@@ -24,25 +25,36 @@ function Login() {
   //     localStorage.setItem("currentUser", JSON.stringify(values));
   //     navigate('/home')
   //   }
-
-  // }
+  // const handlogin
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit =(event) => {
+
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-    navigate("/home")
-
-    setValidated(true);
+    else {
+     axios.get(`http://localhost:8080/taikhoan/loggin`, {
+        params: {
+          username: values.email
+        }
+      }).then((result) => {
+        console.log(result.data)
+      }).catch((error) => console.log(error))
+      navigate("/home")
+    }
   };
   //event get values
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value })
-  }
+    if (values.email.length < 6 || values.password.length < 4) {
+      setValidated(true);
+    }
 
+  }
   return (
     <div className='Login'>
       <div className='Login-left'>
@@ -53,31 +65,31 @@ function Login() {
             <Form.Label className='label-login'>Email address</Form.Label>
             <Form.Control
               name='email'
-              value={"admin"}
+              value={values.email}
               onChange={e => handleChange(e)}
-              type="email" placeholder="Enter email" required />
-            <Form.Control.Feedback type="invalid">
+              type="text" placeholder="Enter email" required />
+            {/* <Form.Control.Feedback type="invalid">
               Please provide a email
-            </Form.Control.Feedback>
-              {
-                values.email.lenght <6 ? <Form.Control.Feedback type="invalid">
+            </Form.Control.Feedback> */}
+            {
+              values.email.length < 6 ? <Form.Control.Feedback type="invalid">
                 'Please email lenght longer than 6'
-              </Form.Control.Feedback> :""
-              }
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
+              </Form.Control.Feedback> : ""
+            }
+
           </Form.Group>
           <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
             <Form.Label className='label-login'>Password</Form.Label>
             <Form.Control
               name='password'
-              value={"admin"}
+              value={values.password}
               onChange={e => handleChange(e)}
               type="password" placeholder="Password" required />
-            <Form.Control.Feedback type="invalid">
-              Please provide a password
-            </Form.Control.Feedback>
+            {values.password.length < 6 ?
+              <Form.Control.Feedback type="invalid">
+                Please provide a password longer than 6
+              </Form.Control.Feedback> : ""
+            }
 
           </Form.Group>
           <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
