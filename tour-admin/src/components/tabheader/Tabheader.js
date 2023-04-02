@@ -2,16 +2,14 @@ import * as React from 'react';
 import { useLocation, useNavigate, Outlet, Link } from 'react-router-dom';
 import Alert from '../dashboard/Alert';
 import './Tabheader.css'
+import ScreenThongKe from '../ScreenThongKe/ScreenThongKe';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Popup from '../Popup/PopupInfo';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
-
 import TourContent from '../tourContent/TourContent';
 import MapBox from './MapBox';
-import Thongke from '../thongke/Thongke';
 export const Tabheader = (props) => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
@@ -29,10 +27,12 @@ export const Tabheader = (props) => {
   const handShowActionThemTour = () => {
     setShowTours(false)
     setShowThemTours(true)
+    setShowThongKe(false)
   }
   const handShowAllTour = () => {
     setShowTours(true)
     setShowThemTours(false)
+    setShowThongKe(false)
   }
   const handShowThongKe = () => {
     setShowThongKe(true)
@@ -74,7 +74,7 @@ export const Tabheader = (props) => {
             <img className='user-avatar' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/profire.jpg?alt=media&token=36f9f734-d5a5-46fd-897f-d7406be4a3dd'} alt="user avatar" />
             <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
             <div className="user-email">datnguyen9g@gmail.com</div>
-
+            <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Đăng xuất</button>
           </div>
         </div>
         <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
@@ -84,7 +84,7 @@ export const Tabheader = (props) => {
           </ListGroup.Item>
           <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link2">
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
-            Thêm Tour
+            Thông tin Tour
           </ListGroup.Item>
           <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#link'>
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
@@ -92,14 +92,18 @@ export const Tabheader = (props) => {
           </ListGroup.Item>
           <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
-            Danh sách đặt tour
-          </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
-            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
             Cập nhật tài khoản
           </ListGroup.Item>
-          <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Đăng xuất</button>
+        
         </ListGroup>
+        {/* Danh sách tour được cập nhật gần đây */}
+        <div>
+          <p style={{color: 'white'}}>tours cập nhật gần đây  </p>
+          <hr style={{color: 'white'}}></hr>
+          <div>
+
+          </div>
+        </div>
         {/* Popup for action đổi mật khẩu */}
         <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
           <h5>Đổi mật khẩu</h5>
@@ -148,7 +152,7 @@ export const Tabheader = (props) => {
         }
         {
           showThongKe ?
-            <Thongke />
+            <ScreenThongKe />
             : ""
         }
       </div>

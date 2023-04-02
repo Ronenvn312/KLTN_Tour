@@ -1,9 +1,48 @@
 .form-them {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
     position: absolute;
     top: 10px;
     left: 10px;
     background: rgba(0, 0, 0, .25);
     border-radius: 10px;
-  
     z-index: 1;
   } 
+.form-them-list-tour {
+  flex: 0.5;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(185, 136, 231, 0.712);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  color: white;
+  padding: 10px;
+  /* font-size: 15px; */
+}
+.title-ds-tour {
+  flex: 0.06;
+}
+.ds-tour {
+  overflow-y: auto;
+  flex: 0.94;
+}
+.item-tour {
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  margin-top: 5px;
+  background-color: rgba(128, 128, 128, 0.308);
+  border-radius: 10px;
+}
+.item-ten-tour {
+  padding-left: 10px;
+  font-size: 14px;
+  max-width: 200px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+.item-tour:hover {
+  background-color: rgba(128, 128, 128, 0.815);
+}

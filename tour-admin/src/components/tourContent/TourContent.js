@@ -25,6 +25,7 @@ export default function TourContent() {
     const handleResultData = async () => {
         const result = await axios.get('http://localhost:8080/tour/findAlls')
         if (result) {
+            localStorage.setItem("dsTour", JSON.stringify(result.data))
             setResultData(result.data)
             console.log(result)
         } else {
@@ -106,12 +107,12 @@ export default function TourContent() {
                             <Button variant="outline-secondary" style={{ marginLeft: 10, width: 80 }}>
                                 <img style={{ width: 30, height: 30 }} src={require('./../../assets/search_icon.png')} />
                             </Button>
-                            <Button
+                            {/* <Button
 
                                 type='button' variant="outline-warning" className='btn_sua'>
                                 SỬA
                                 <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/icon_sua.png')} alt='icon-locate' />
-                            </Button>{' '}
+                            </Button>{' '} */}
                             <br />
                             <Button
                                 onClick={() => handShowPopupXoa()}

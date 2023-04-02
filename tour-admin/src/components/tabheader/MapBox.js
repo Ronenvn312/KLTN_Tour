@@ -25,6 +25,22 @@ function MapBox() {
   const [xuHuong, setXuHuong] = useState()
   const [phoBien, setPhoBien] = useState()
   const [hinhAnh, setHinhAnh] = useState()
+  const [showForm, setShowForm] = useState(false)
+  const [tour, setTour] = useState({
+    "tenTour": tenTour,
+    "thongTin": thongTinCT,
+    "viTri": diaChi,
+    "soNgay": soNgay,
+    "hinhAnh": [
+      hinhAnh,
+    ],
+    "theLoai": theLoai,
+    "danhGia": "4",
+    "phoBien": phoBien,
+    "xuHuong": xuHuong,
+    "longitude": lng,
+    "latitude": lat
+  })
   const data = {
     longitude: lng,
     latitude: lat,
@@ -37,7 +53,19 @@ function MapBox() {
   // const handlePopupThem = () => {
   //   setIsThemPopup(!)
   // }
-   //
+  //
+  const dsTour = localStorage.getItem("dsTour")
+  const [listTour, setListTour] = useState([])
+
+  const handleShowListTour = () => {
+    if (dsTour != null) {
+      const list = JSON.parse(dsTour);
+      setListTour(list)
+    }
+  }
+  useEffect(() => {
+    handleShowListTour()
+  }, [])
   const handleShowPopup = () => {
     setShowPopup(true);
   }
@@ -81,20 +109,10 @@ function MapBox() {
     setXuHuong(isChecked)
     // console.log(isChecked)
   }
-  const tour = {
-    "tenTour": tenTour,
-    "thongTin": thongTinCT,
-    "viTri": diaChi,
-    "soNgay": soNgay,
-    "hinhAnh": [
-      hinhAnh,
-    ],
-    "theLoai": theLoai,
-    "danhGia": "4",
-    "phoBien": phoBien,
-    "xuHuong": xuHuong,
-    "longitude": lng,
-    "latitude": lat
+   //event get values
+   const handleChange = (event) => {
+    setTour({ ...tour, [event.target.name]: event.target.value })
+
   }
   const handSubmit = async () => {
     console.log("successful")
@@ -120,6 +138,16 @@ function MapBox() {
 
       })
     console.log(arrNewAddress)
+  }
+  const handleClickThemTour = () => {
+    setTenTour("")
+    setTheLoai("")
+    setSoNgay("")
+    setThongTinCT("")
+    setDiaChi("")
+    setHinhAnh("")
+    setShowForm(true)
+   
   }
   return (
     <Map
@@ -183,7 +211,45 @@ function MapBox() {
         trackUserLocation={true}
       />
       <div className="form-them">
-        <Form style={{ backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={() => handSubmit()}>
+        <div className="form-them-list-tour">
+          <h3 className="title-ds-tour">Danh sách tour: </h3>
+          <div className='item-tour' onClick={() => handleClickThemTour()}>
+                  <div style={{
+                    display:"flex",
+                    height: 50,
+                    width: 50,
+                    backgroundColor: "gray",
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    // padding: '10px'
+                    justifyContent: "center"
+                  }} >
+                    <h1 style={{
+                    textAlign: 'center'}}>+</h1>
+                  </div>
+                  <p className="item-ten-tour">Thêm tour</p>
+                </div>
+          <div className="ds-tour">
+            {
+              listTour.map((item, index) => {
+                return <div key={index} className='item-tour'>
+                  <div style={{
+                    height: 50,
+                    width: 50,
+                    backgroundImage: `url(${item.hinhAnh[0]})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    // padding: '10px'
+                  }} >
+                  </div>
+                  <p className="item-ten-tour">{item.tenTour}</p>
+                </div>
+              })
+            }
+          </div>
+        </div>
+
+        <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={() => handSubmit()}>
           <Form.Group className='title-them-tour'>
             <h3 className='label-title-tour'>Thông tin tour</h3>
           </Form.Group>
@@ -191,14 +257,15 @@ function MapBox() {
             <Form.Label className='label-ten-tour'>Tên tour:</Form.Label>
             <Form.Control
               name='tenTour'
-              // value={" Tour Nha Trang 36h"}
+              value={tenTour}
               onChange={e => handleChangeTenTour(e)}
               type="text" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
           </Form.Group>
           <Form.Group>
             <Form.Label className='label-loai-tour'>Thể loại:</Form.Label>
             <Form.Control
-              name='email'
+              name='theLoai'
+              value={theLoai}
               contentEditable={"true"}
               onChange={e => handleChangeTheLoai(e)}
               type="text" placeholder="VD: Gia đình, tổ chức, hẹn hò, thư dãn, tổ chức tiệc,..." required />
@@ -206,6 +273,8 @@ function MapBox() {
           <Form.Group>
             <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
             <Form.Select
+            name="soNgay"
+            value={soNgay}
               onChange={e => handleChangeSoNgay(e)}
               aria-label="Default select example">
               <option>Số ngày </option>
@@ -225,6 +294,8 @@ function MapBox() {
             {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
             <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
               <Form.Control
+              name="thongTin"
+              value={thongTinCT}
                 onChange={e => handleChangeThongTin(e)}
                 as="textarea"
                 placeholder="Leave a comment here"
@@ -242,7 +313,7 @@ function MapBox() {
               }}
               accessToken="pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg">
               <Form.Control
-                name='email'
+                name='viTri'
                 value={diaChi}
                 onChange={e => handleChangeDiaChi(e)}
                 autoComplete="strees-address"
@@ -287,8 +358,8 @@ function MapBox() {
           <Form.Group>
             <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
             <Form.Control
-              name='email'
-              // value={" Tour Nha Trang 36h"}
+              name='hinhAnh'
+              value={hinhAnh}
               onChange={e => handleChangeHinhAnh(e)}
               type="text" placeholder="VD: " required />
           </Form.Group>

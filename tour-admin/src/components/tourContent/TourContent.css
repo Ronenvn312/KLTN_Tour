@@ -161,6 +161,7 @@
   z-index: 1;
   max-height: 350px;
   overflow: auto;
+  
 }
 
 .search-item {
@@ -170,7 +171,7 @@
   align-items: center;
   height: 100px;
   margin: 5px;
-  
+  cursor: pointer;
 }
 
 .image-item {
