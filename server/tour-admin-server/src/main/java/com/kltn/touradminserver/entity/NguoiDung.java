@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminUser {
-	private String document_id;
+public class NguoiDung {
+	private String document_id;// username của tk
 	private String ten;
 	private String diaChi;
 	private String email;
