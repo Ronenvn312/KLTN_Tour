@@ -1,6 +1,8 @@
 package com.kltn.touradminserver.controller;
 
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,41 +16,76 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kltn.touradminserver.entity.AdminUser;
-import com.kltn.touradminserver.service.AdminServiceImp;
+import com.kltn.touradminserver.dto.TaiKhoanAdminUserDTO;
+import com.kltn.touradminserver.entity.NguoiDung;
+import com.kltn.touradminserver.service.NguoiDungServiceImp;
+import com.kltn.touradminserver.service.TaiKhoanServiceImp;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+	static Logger logger = Logger.getLogger(AdminController.class.getName());
 	@Autowired
-	private AdminServiceImp adminService;
-
-	public AdminController(AdminServiceImp adminService) {
-		this.adminService = adminService;
+	private NguoiDungServiceImp nguoiDungService;
+	@Autowired
+	private TaiKhoanServiceImp tkDB;
+	public AdminController(NguoiDungServiceImp nguoiDungService) {
+		this.nguoiDungService = nguoiDungService;
 	}
+	// Đk tài khoản đầu vào là một lớp dto chứa 2 object là tk và thông tin tài khoản
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/create")
-	public String createAdmin(@RequestBody AdminUser admin) throws InterruptedException, ExecutionException {
-		return adminService.createAdmin(admin);
+	public boolean insertNguoiDung(@RequestBody TaiKhoanAdminUserDTO tk_user_dto) throws InterruptedException, ExecutionException {
+		if(tkDB.getTK(tk_user_dto.getTk().getUserName()) != null)
+		{
+			logger.log(Level.SEVERE, "Erro tao tai khoan: tên tài khoản đã tồn tại!");
+			return false;
+		}
+		try {
+			tkDB.insertTK(tk_user_dto.getTk());
+			nguoiDungService.insertNguoiDung(tk_user_dto);
+			return true;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erro tao tai khoan:"+e);
+			logger.log(Level.SEVERE, "tai khoan:"+tk_user_dto);
+			return false;
+		}
 	}
+	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/get")
-	public AdminUser getAdmin(@RequestParam String document_id) throws InterruptedException, ExecutionException {
-		return adminService.getAdmin(document_id);
+	public NguoiDung getNguoiDung(@RequestParam String document_id) throws InterruptedException, ExecutionException {
+		NguoiDung nd =  nguoiDungService.getNguoiDung(document_id);
+		if (nd != null) {
+			return nd;
+		}
+		logger.log(Level.WARNING, "Không tìm thấy người dùng có id: "+document_id);
+		return null;
 	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/update")
-	public String updateAdmin(@RequestBody AdminUser admin) throws InterruptedException, ExecutionException {
-		return adminService.updateAdmin(admin);
+	public boolean updateNguoiDung(@RequestBody NguoiDung nguoiDung) throws InterruptedException, ExecutionException {
+		String res =  nguoiDungService.updateNguoiDung(nguoiDung);
+		if (res != null) {
+			return true;
+		}
+		logger.log(Level.WARNING, "ERRO: Lỗi cập nhật thông tin : "+ nguoiDung);
+		return false;
 	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete")
-	public String deleteAdmin(@RequestParam String document_id) {
-		return adminService.deleteAdmin(document_id);
-	}
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/test")
-	public ResponseEntity<String> testGetEntity() {
-		return ResponseEntity.ok("Test Respository");
+	public boolean deleteNguoiDung(@RequestParam String document_id) throws InterruptedException, ExecutionException {
+		if(nguoiDungService.getNguoiDung(document_id) == null)
+		{
+			logger.log(Level.SEVERE, "Erro xóa tai khoan: tài khoản không tồn tại!");
+			return false;
+		}
+		try {
+			 nguoiDungService.deleteNguoiDung(document_id);
+			 return true;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erro xóa người dùng:"+e);
+			 return false;
+		}
 	}
 }

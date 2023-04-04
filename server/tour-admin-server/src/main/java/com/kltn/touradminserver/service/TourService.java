@@ -3,6 +3,7 @@ package com.kltn.touradminserver.service;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.kltn.touradminserver.entity.HoatDong;
 import com.kltn.touradminserver.entity.Tour;
 
 

@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ImageBackground, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const starImageFilled = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_filled.png';
 const starImageCorner = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_corner.png';
@@ -8,30 +10,44 @@ const starImageCorner = 'https://raw.githubusercontent.com/AboutReact/samplereso
 export default function ListFilter() {
     const navigation = useNavigation();
 
-    const data = [1, 2, 3, 4, 5, 6]
+    const [list, setList] = useState();
+
+    useEffect(() => {
+        axios.get(`http://192.168.1.4:8080/tour/findAll`)
+            .then(res => {
+                setList(res.data)
+                console.log(list)
+                console.log(list[0].danhGia)
+            })
+            .catch(error => console.log(error));
+    }, []);
+
     const maxRating = [1, 2, 3, 4, 5]
 
     return (
         <View>
             <StatusBar style="auto" />
             <FlatList
-                data={data}
+                data={list}
                 renderItem={({ item }) =>
                     <TouchableOpacity style={styles.tou} onPress={() => navigation.navigate('TourDetail')}>
-                        <Image style={styles.ima} />
+                        <Image style={styles.ima} source={{uri : item.hinhAnh[0]}}/>
                         <View style={styles.vie}>
-                            <Text style={styles.title}>Phố cổ Hội An</Text>
-                            <Text style={styles.location}>Hội An, Quảng Nam</Text>
-                            <View style={{ flexDirection: 'row', marginTop: '10%' }}>
-                                {maxRating.map((item, key) => {
+                            <Text style={styles.title}>{item.tenTour}</Text>
+                            <View style={{flexDirection:'row', marginTop:'5%'}}>
+                                <Image style={{height:20, width:20, marginLeft:5}} source={require('../assets/loca_icon.png')}/>
+                                <Text style={styles.location}>{item.viTri}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', marginTop: '8%', alignSelf:'flex-end' }}>
+                                {maxRating.map((i, key) => {
                                     return (
                                         <View
-                                            activeOpacity={0.7}
-                                            key={item}>
+                                            activeOpacity={0.5}
+                                            key={i}>
                                             <Image
                                                 style={styles.starImageStyle}
                                                 source={
-                                                    item <= 4.6
+                                                    i <= item.danhGia
                                                         ? { uri: starImageFilled }
                                                         : { uri: starImageCorner }
                                                 }
@@ -75,8 +91,6 @@ const styles = StyleSheet.create({
     },
     ima: {
         flex: 3,
-        // height:'90%',
-        // width:'40%',
         backgroundColor: 'grey',
         borderRadius: 15,
         margin: '2%'
@@ -88,17 +102,20 @@ const styles = StyleSheet.create({
     vie: {
         flex: 3,
         marginLeft: '3%',
-        marginTop: '5%'
+        marginTop: '3%'
     },
     title: {
         fontSize: 18,
         width: '100%',
-        fontWeight: '500'
+        fontWeight: '500',
+        maxHeight:50,
     },
     location: {
         fontSize: 15,
         width: '100%',
-        color: 'grey'
+        color: 'grey',
+        maxHeight:40,
+        marginLeft:'5%'
     },
     starImageStyle: {
         width: 20,

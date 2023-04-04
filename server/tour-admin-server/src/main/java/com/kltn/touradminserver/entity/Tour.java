@@ -17,6 +17,7 @@ public class Tour implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 9220956547091492679L;
+	@DocumentId
 	private String document_id;
 	private String tenTour;
 	private String thongTin;
@@ -24,7 +25,9 @@ public class Tour implements Serializable{
 	private int soNgay;
 	private List<String> hinhAnh;
 	private String theLoai;
-	private String danhGia;
+	private double danhGia;
 	private boolean phoBien;
 	private boolean xuHuong;
+	private double longitude;
+	private double latitude;
 }

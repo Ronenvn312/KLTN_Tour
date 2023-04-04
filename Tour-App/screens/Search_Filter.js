@@ -42,27 +42,27 @@ export default function Search_Filter({ navigation, route }) {
 
                 <View style={{ flex: 5, marginTop: '-2%' }}>
                     <Text style={{ fontSize: 22, fontWeight: '500', flex: 1, marginLeft: '7%', marginTop: '-3%' }}>Thể loại</Text>
-                    <View style={{ flexDirection: 'row', flex: 1, marginLeft: '7%', marginTop: '-15%' }}>
+                    <View style={{ flexDirection: 'row', flex: 1, marginLeft: '6%', marginTop: '-15%', marginRight:'2%' }}>
                         <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 0 ? '#93BAE1' : '#fff' }]} onPress={() => setCategory(0)}>
+                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 0 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(0)}>
                                 <Image source={require('../assets/all.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Tất cả</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 1 ? '#93BAE1' : '#fff' }]} onPress={() => setCategory(1)}>
+                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 1 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(1)}>
                                 <Image source={require('../assets/sinhthai.png')} style={{ height: 35, width: 30, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Sinh thái</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 2 ? '#93BAE1' : '#fff' }]} onPress={() => setCategory(2)}>
+                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 2 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(2)}>
                                 <Image source={require('../assets/nhaydu.png')} style={{ height: 30, width: 40, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Thể thao</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 3 ? '#93BAE1' : '#fff' }]} onPress={() => setCategory(3)}>
+                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 3 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(3)}>
                                 <Image source={require('../assets/thangcanh.png')} style={{ height: 40, width: 20, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Thắng cảnh</Text>

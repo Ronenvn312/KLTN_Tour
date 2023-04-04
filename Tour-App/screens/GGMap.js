@@ -14,7 +14,7 @@ const data = [
     { lable: '100m', value: 100 },
     { lable: '200m', value: 200 },
     { lable: '300m', value: 300 },
-    { lable: 'Mặc đinh: 500m', value: 400 },
+    { lable: '500m', value: 500 },
     { lable: '1000m', value: 1000 },
     { lable: '1500m', value: 1500 },
 ];
@@ -30,7 +30,7 @@ export default function TourActivity({ navigation }) {
     const [sound, setSound] = useState();
     const [distance, setDistance] = useState()
     const [di, setD] = useState(500);
-    const [type, setType] = useState();
+    const [type, setType] = useState('audio');
     const [isFocus, setIsFocus] = useState(false);
 
     useEffect(() => {
@@ -136,7 +136,7 @@ export default function TourActivity({ navigation }) {
                     maxHeight={300}
                     labelField="lable"
                     valueField="value"
-                    placeholder={"Khoảng cách"}
+                    placeholder={"500m"}
                     value={di}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
@@ -153,7 +153,7 @@ export default function TourActivity({ navigation }) {
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    placeholder={"Phương tiện"}
+                    placeholder={"Âm thanh"}
                     value={type}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
