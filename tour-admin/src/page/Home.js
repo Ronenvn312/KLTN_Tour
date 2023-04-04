@@ -9,10 +9,14 @@ import TourContent from '../components/tourContent/TourContent';
 function Home(props) {
   const navigate = useNavigate();
   const [disableMenu, setDisableMenu] = useState(true);
+  const [showThongBao, setShowThongBao] = useState(false)
   const onClickMenuBar = async () => {
     setDisableMenu(!disableMenu);
   }
-
+  // click xem thong bao
+  const handShowThongBao = () => {
+    setShowThongBao(!showThongBao)
+  }
   return (
     <div className='page-home' >
       <div className='tav-bar'>
@@ -20,13 +24,35 @@ function Home(props) {
           <button variant="info" className='btn-menu' onClick={() => onClickMenuBar()}>
             <img className='img-wel' src={menu} alt='wel' />
           </button>
-          <h3 className='title-page'>Trang chủ</h3>
+          <h3 style={{paddingTop: 10}} className='title-page'>Dream Trip</h3>
         </div>
         <div className="right-widget">
-          <Button variant="link" className='btn-about' style={{ color: 'white', flex: 1, width: '100%', display: 'flex' }}>
+          <Button onClick={() => handShowThongBao()} variant="link" className='btn-about' style={{ color: 'white', flex: 1, width: '100%', display: 'flex' }}>
             <img style={{ width: 30, height: 30, marginRight: 10 }} src={require('./../assets/icon_thongbao.png')} />
             About
           </Button>
+          <div className='right-widget-info-log'>
+            1
+          </div>
+          {
+            showThongBao ?
+            <div className='right-widget-info-content'>
+            <div key={1} className='info-item'>
+              <div style={{
+                height: 50,
+                width: 70,
+                backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/landmark.jpg?alt=media&token=526132b1-4f03-48c9-a0e1-eb9b74a46579)`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                margin: 5
+              }} >
+              </div>
+              <p>Người dùng tên Đạt đã gửi yêu cầu đặt tour Sài Gòn 7 Ngày</p>
+              <p style={{ color: 'gray', fontWeight: 200, margin: 2, fontStyle: 'inherit' }}>10 giờ trước</p>
+            </div>
+            <p onClick={()=> handShowThongBao()} className='btn-dong-info' >Tắt cửa sổ</p>
+          </div> : ""
+          }
         </div>
       </div>
       <Tabheader />

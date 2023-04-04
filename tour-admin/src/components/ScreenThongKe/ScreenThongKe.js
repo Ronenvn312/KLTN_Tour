@@ -5,7 +5,7 @@ import PieChartExample from './ChartThongKe/PieChartExample.JS'
 export default function ScreenThongKe() {
     const dsTour = localStorage.getItem("dsTour")
     const [listTour, setListTour] = useState([])
-
+    const slTT = 100;
     const handleShowListTour = () => {
         if (dsTour != null) {
             const list = JSON.parse(dsTour);
@@ -14,7 +14,7 @@ export default function ScreenThongKe() {
     }
     useEffect(() => {
         handleShowListTour()
-    }, [listTour])
+    }, [])
     return (
         <div className='thongke-container'>
             <div className='thongke-header'>
@@ -47,7 +47,7 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    1349
+                                    8
                                 </div>
                                 <div className="desc">
                                     Người dùng
@@ -66,7 +66,7 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    1349
+                                    528
                                 </div>
                                 <div className="desc">
                                     Số lượng tương tác trong tháng
@@ -85,7 +85,7 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    1349
+                                    9
                                 </div>
                                 <div className="desc">
                                     Số lượng đặt tour trong tháng
@@ -99,6 +99,7 @@ export default function ScreenThongKe() {
                     </div>
                 </div>
             </div>
+            <hr/>
             {/* END DASHBOARD STATS */}
             <div className='thongke-content'>
                 <div className='thongke-fluid' >
@@ -112,48 +113,25 @@ export default function ScreenThongKe() {
                                 <th> SL tương tác</th>
                             </thead>
                             <tbody className='thongke-table-tbody'>
-                                <tr className='thongke-table-tbody-tr'>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        Tour 01
-                                    </td>
-                                    <td>
-                                        Tour du lịch Khánh Hòa
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                </tr>
-                                <tr className='thongke-table-tbody-tr'>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        Tour 01
-                                    </td>
-                                    <td>
-                                        Tour du lịch Khánh Hòa
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                </tr>
-                                <tr className='thongke-table-tbody-tr'>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        Tour 01
-                                    </td>
-                                    <td>
-                                        Tour du lịch Khánh Hòa
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                </tr>
+                                {
+                                    
+                                    listTour.map((item, index) => {
+                                        return <tr className='thongke-table-tbody-tr'>
+                                            <td>
+                                                {index + 1}
+                                            </td>
+                                            <td>
+                                                {item.document_id}
+                                            </td>
+                                            <td>
+                                                {item.tenTour}
+                                            </td>
+                                            <td>
+                                                {slTT-index}
+                                            </td>
+                                        </tr>
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>

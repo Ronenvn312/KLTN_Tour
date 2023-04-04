@@ -13,7 +13,7 @@ export default function ListFilter() {
     const [list, setList] = useState();
 
     useEffect(() => {
-        axios.get(`http://192.168.1.4:8080/tour/findAll`)
+        axios.get(`http://192.168.1.77:8080/tour/findAlls`)
             .then(res => {
                 setList(res.data)
                 console.log(list)

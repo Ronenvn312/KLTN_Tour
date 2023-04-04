@@ -53,7 +53,9 @@
     border: none;
     cursor: pointer;
 }
-
+.btn-menu:hover {
+    background-color: #6e42c19d;
+}
 .img-wel {
     width: 30px;
     height: 20px;
@@ -115,4 +117,63 @@
 
 .btn_Them {
     width: 300px;
+}
+.right-widget-info-log {
+    display: flex;
+    position: absolute;
+    top: 6px;
+    left: 1639px;
+    background: rgb(255, 0, 0);
+    border-radius: 180px;
+    height: auto;
+    width: 25px;
+    z-index: 1;
+    max-height: 350px;
+    overflow: auto;
+    border: 1px #6f42c1 solid;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.right-widget-info-content {
+    position: absolute;
+    top: 46px;
+    left: 1300px;
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    height: auto;
+    width: 350px;
+    z-index: 1;
+    max-height: 350px;
+    overflow: auto;
+    border: 1px #6f42c1 solid;
+}
+.info-item {
+    display: flex;
+    margin: 5px;
+    border-radius: 10px;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.info-item p {
+    font-size: 12px;
+}
+.info-item:hover {
+    background-color: #6e42c169;
+}
+.btn-dong-info {
+    color: red;
+    font-weight: 200px;
+    margin: 2px;
+    float: right;
+    padding-right: 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.btn-dong-info:hover {
+    font-size: 14px;
+    font-weight: bold;
 }

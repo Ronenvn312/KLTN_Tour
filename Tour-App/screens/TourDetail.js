@@ -1,21 +1,23 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 
-const img = [
-    'https://heritagecruises.com/wp-content/uploads/2021/05/File1-768x437.jpg',
-    'https://heritagecruises.com/wp-content/uploads/2021/05/DJI_0787-768x512.jpg',
-    'https://heritagecruises.com/wp-content/uploads/2020/05/Lan-Ha-Bay-768x511.jpg'
-]
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height
 
-export default function TourDetail({ navigation }) {
+export default function TourDetail({ navigation, route }) {
+
 
     const [imgActive, setImgActive] = useState(0)
-
+    const item = route.params.item
+    const img = [
+        item.hinhAnh[0],
+        'https://heritagecruises.com/wp-content/uploads/2021/05/File1-768x437.jpg',
+        'https://heritagecruises.com/wp-content/uploads/2021/05/DJI_0787-768x512.jpg',
+        'https://heritagecruises.com/wp-content/uploads/2020/05/Lan-Ha-Bay-768x511.jpg'
+    ]
     const onchange = (nativeEvent) => {
         if (nativeEvent) {
             const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
@@ -23,7 +25,12 @@ export default function TourDetail({ navigation }) {
                 setImgActive(slide)
         }
     }
-
+    const handleShowItem = () => {
+        console.log(item)
+    }
+    useEffect(() => {
+        handleShowItem()
+    }, [])
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
@@ -48,7 +55,7 @@ export default function TourDetail({ navigation }) {
 
                 </ScrollView>
                 <View style={{ flexDirection: 'row', position: 'absolute', alignSelf: 'auto', justifyContent: 'center' }}>
-                    <TouchableOpacity style={styles.back} onPress={()=>navigation.goBack()}>
+                    <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
                         <Image source={require('../assets/back_icon1.png')} style={styles.head} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.back}>
@@ -72,29 +79,30 @@ export default function TourDetail({ navigation }) {
             </View>
 
             <View style={styles.top}>
-                <Text style={styles.title}>Vịnh Hạ Long</Text>
+                <Text style={styles.title}>{item.tenTour}</Text>
                 <Text style={styles.price}>Miễn phí</Text>
             </View>
             <View style={{ flex: 10 }}>
-                <Text style={styles.loca}>Quảng Ninh, Việt Nam</Text>
+                <Text style={styles.loca}>Địa chỉ : {item.viTri}</Text>
                 <ScrollView style={styles.main}>
                     <View style={{ height: height * 0.3 }}>
                         <Text>description</Text>
+                        <Text>{item.thongTin}</Text>
                     </View>
                     <View style={{ height: 0.3 * height, width: width * 0.9, alignSelf: 'center', borderRadius: 20, backgroundColor: 'black', overflow: 'hidden' }}>
                         <MapView
                             style={{ height: 0.3 * height, width: width * 0.9 }}
                             region={{
-                                latitude: 20.911093403075455,
-                                longitude: 107.18360655035079,
+                                latitude: item.latitude,
+                                longitude: item.longitude,
                                 latitudeDelta: 0.5,
                                 longitudeDelta: 0.25,
                             }}
                         >
-                            <Marker coordinate={{ latitude: 20.911093403075455, longitude: 107.18360655035079 }} />
+                            <Marker coordinate={{ latitude: item.latitude, longitude: item.longitude }} />
                         </MapView>
                     </View>
-                    <View style={{height:height*0.1}}/>
+                    <View style={{ height: height * 0.1 }} />
                 </ScrollView>
                 <TouchableOpacity style={styles.btn_book}>
                     <Text style={styles.txt_btn}>Đặt chuyến đi</Text>

@@ -13,9 +13,9 @@ export default function ListTour() {
 
     const [list, setList] = useState();
     const maxRating = [1, 2, 3, 4, 5]
-
+ 
     useEffect(() => {
-        axios.get(`http://192.168.1.4:8080/tour/findAll`)
+        axios.get(`http://192.168.1.77:8080/tour/findAlls`)
             .then(res => {
                 setList(res.data)
                 console.log(list)
@@ -32,7 +32,7 @@ export default function ListTour() {
                 renderItem={({ item }) =>
                     <TouchableOpacity
                         style={styles.tou}
-                        onPress={() => navigation.navigate('TourDetail')}
+                        onPress={() => navigation.navigate('TourDetail', {item: item})}
                         source={require('../assets/back_item.png')}
                     >
                         <ImageBackground style={{ height: 200, width: 140, borderRadius: 30 }} source={require('../assets/back_item.png')}>

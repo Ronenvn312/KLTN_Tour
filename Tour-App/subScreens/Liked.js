@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity, View, FlatList, Image, Text } from 'react-native';
-
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 const starImageFilled = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_filled.png';
 const starImageCorner = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_corner.png';
 
@@ -8,18 +9,26 @@ export default function Liked({navigation}) {
 
     const count = [1, 2, 3, 4, 5, 6, 7, 8]
     const maxRating = [1, 2, 3, 4, 5]
-
+    const [list, setList] = useState();
+    useEffect(() => {
+        axios.get(`http://192.168.1.77:8080/tour/findAlls`)
+            .then(res => {
+                setList(res.data)
+                console.log(list)
+            })
+            .catch(error => console.log(error));
+    }, []);
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
             <FlatList
-                data={count}
+                data={list}
                 renderItem={({ item }) =>
                     <TouchableOpacity style={styles.tou} onPress={() => navigation.navigate('TourDetail')}>
-                        <Image style={styles.ima} />
+                        <Image style={styles.ima} source={{ uri: item.hinhAnh[0] }}/>
                         <View style={styles.vie}>
-                            <Text style={styles.title}>Phố cổ Hội An</Text>
-                            <Text style={styles.location}>Hội An, Quảng Nam</Text>
+                            <Text style={styles.title}>{item.tenTour}</Text>
+                            <Text style={styles.location}>{item.viTri}</Text>
                             <View style={{ flexDirection: 'row', marginTop: '10%' }}>
                                 {maxRating.map((item, key) => {
                                     return (
