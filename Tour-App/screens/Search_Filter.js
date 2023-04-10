@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { default as ListFilter } from '../components/ListFilter';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Search_Filter({ navigation, route }) {
+    const [scrollRef, setScrollRef] = useState(0);
 
     const [category, setCategory] = useState(route.params.cate)
-    console.log(category)
 
     const HideKeyboard = ({ children }) => (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -42,32 +42,86 @@ export default function Search_Filter({ navigation, route }) {
 
                 <View style={{ flex: 5, marginTop: '-2%' }}>
                     <Text style={{ fontSize: 22, fontWeight: '500', flex: 1, marginLeft: '7%', marginTop: '-3%' }}>Thể loại</Text>
-                    <View style={{ flexDirection: 'row', flex: 1, marginLeft: '6%', marginTop: '-15%', marginRight:'2%' }}>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 0 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(0)}>
+                    <ScrollView
+                        contentOffset={{ x: scrollRef, y: 0 }}
+                        showsHorizontalScrollIndicator={false}
+                        decelerationRate={'normal'}
+                        horizontal={true}
+                        style={{ flexDirection: 'row', flex: 1, marginLeft: '6%', marginTop: '-15%', marginRight: '2%' }}
+                    >
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 0 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(0)
+                                    setScrollRef(0)
+                                }}
+                            >
                                 <Image source={require('../assets/all.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Tất cả</Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 1 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(1)}>
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 1 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(1)
+                                    setScrollRef(0)
+                                }}
+                            >
                                 <Image source={require('../assets/sinhthai.png')} style={{ height: 35, width: 30, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Sinh thái</Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 2 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(2)}>
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 2 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(2)
+                                    setScrollRef(0)
+                                }}
+                            >
                                 <Image source={require('../assets/nhaydu.png')} style={{ height: 30, width: 40, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Thể thao</Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <TouchableOpacity style={[styles.tou_cate, { backgroundColor: category == 3 ? '#5EC2FF' : '#fff' }]} onPress={() => setCategory(3)}>
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 3 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(3)
+                                    setScrollRef(0)
+                                }}
+                            >
                                 <Image source={require('../assets/thangcanh.png')} style={{ height: 40, width: 20, alignSelf: 'center' }} />
                             </TouchableOpacity>
                             <Text>Thắng cảnh</Text>
                         </View>
-                    </View>
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 4 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(4)
+                                    setScrollRef(90)
+                                }}
+                            >
+                                <Image source={require('../assets/nghiduong.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                            </TouchableOpacity>
+                            <Text>Nghỉ dưỡng</Text>
+                        </View>
+                        <View style={styles.cate_view}>
+                            <TouchableOpacity
+                                style={[styles.tou_cate, { backgroundColor: category == 5 ? '#5EC2FF' : '#fff' }]}
+                                onPress={() => {
+                                    setCategory(5)
+                                    setScrollRef(180)
+                                }}
+                            >
+                                <Image source={require('../assets/sea.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                            </TouchableOpacity>
+                            <Text>Biển</Text>
+                        </View>
+                    </ScrollView>
                     <View style={{ flex: 5 }}>
                         <ListFilter style={{}} />
                     </View>
@@ -99,10 +153,13 @@ const styles = StyleSheet.create({
         marginBottom: '-4%'
     },
     tou_cate: {
-        height: '60%',
+        height: '80%',
         width: '70%',
         backgroundColor: '#fff',
         borderRadius: 15,
         justifyContent: 'center'
+    },
+    cate_view: {
+        height: 80, width: 90, alignItems: 'center'
     }
 });

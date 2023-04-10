@@ -32,34 +32,49 @@ export default function Home({ navigation }) {
                 </View>
 
                 <View style={{ flex: 4, marginLeft: '7%', marginTop: '-2%' }}>
-                    <ScrollView nestedScrollEnabled>
+                    <ScrollView nestedScrollEnabled >
                         <Text style={{ fontSize: 22, fontWeight: '500', flex: 1 }}>Thể loại</Text>
-                        <View style={{ flexDirection: 'row', marginTop: '5%', flex: 1, marginLeft: '-3%' }}>
-                            <View style={{ flex: 1, alignItems: 'center' }}>
+                        <ScrollView
+                            showsHorizontalScrollIndicator={false}
+                            horizontal={true}
+                            style={{ flexDirection: 'row', marginTop: '5%', flex: 1, marginLeft: '-3%' }}>
+                            <View style={styles.cate_view}>
                                 <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 0 })}>
                                     <Image source={require('../assets/all.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
                                 </TouchableOpacity>
                                 <Text>Tất cả</Text>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'center' }}>
+                            <View style={styles.cate_view}>
                                 <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 1 })}>
                                     <Image source={require('../assets/sinhthai.png')} style={{ height: 35, width: 30, alignSelf: 'center' }} />
                                 </TouchableOpacity>
-                                <Text>Sinh thái</Text>
+                                <Text>Thiên nhiên</Text>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'center' }}>
+                            <View style={styles.cate_view}>
                                 <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 2 })}>
                                     <Image source={require('../assets/nhaydu.png')} style={{ height: 30, width: 40, alignSelf: 'center' }} />
                                 </TouchableOpacity>
                                 <Text>Thể thao</Text>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'center' }}>
+                            <View style={styles.cate_view}>
                                 <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 3 })}>
                                     <Image source={require('../assets/thangcanh.png')} style={{ height: 40, width: 20, alignSelf: 'center' }} />
                                 </TouchableOpacity>
-                                <Text>Thắng cảnh</Text>
+                                <Text>Tham quan</Text>
                             </View>
-                        </View>
+                            <View style={styles.cate_view}>
+                                <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 0 })}>
+                                    <Image source={require('../assets/nghiduong.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                                </TouchableOpacity>
+                                <Text>Nghỉ dưỡng</Text>
+                            </View>
+                            <View style={styles.cate_view}>
+                                <TouchableOpacity style={styles.tou_cate} onPress={() => navigation.navigate('Search_Filter', { cate: 0 })}>
+                                    <Image source={require('../assets/sea.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                                </TouchableOpacity>
+                                <Text>Biển</Text>
+                            </View>
+                        </ScrollView>
 
                         <Text style={{ fontSize: 22, fontWeight: '500', flex: 1, marginTop: '7%' }}>Chuyến đi phổ biến </Text>
                         <ListTour />
@@ -101,5 +116,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 15,
         justifyContent: 'center'
+    },
+    cate_view: {
+        height: 80, width: 90, alignItems: 'center'
     }
 });
