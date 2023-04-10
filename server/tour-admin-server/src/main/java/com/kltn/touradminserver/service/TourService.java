@@ -8,10 +8,13 @@ import com.kltn.touradminserver.entity.Tour;
 
 
 public interface TourService {
-	public String insertTour(Tour tour) throws InterruptedException, ExecutionException;
-	public Tour getTour(String document_id) throws InterruptedException, ExecutionException;
-	public String updateTour(Tour tour) throws InterruptedException, ExecutionException;
-	public String deleteTour(String document_id) throws InterruptedException, ExecutionException;
-	public List<Tour> findAlls() throws InterruptedException, ExecutionException;
-	
+	String insertTour(Tour tour) throws InterruptedException, ExecutionException;
+	Tour getTour(String document_id) throws InterruptedException, ExecutionException;
+	String updateTour(Tour tour) throws InterruptedException, ExecutionException;
+	String deleteTour(String document_id) throws InterruptedException, ExecutionException;
+	List<Tour> findAlls() throws InterruptedException, ExecutionException;
+	List<Tour> searchTourByName(String tourName) throws InterruptedException, ExecutionException;
+	List<Tour> findByCategory(String cate) throws ExecutionException, InterruptedException;
+	List<Tour> findTrending() throws ExecutionException, InterruptedException;
+	List<Tour> findPopular() throws ExecutionException, InterruptedException;
 }

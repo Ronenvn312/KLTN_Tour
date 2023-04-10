@@ -33,8 +33,7 @@ public class TourServiceImp implements TourService {
 
 	CollectionReference collectionReference = dbFireStore.collection("tour");
 	Query query = collectionReference.orderBy("tenTour");
-	
-	
+
 	@Override
 	public String insertTour(Tour tour) throws InterruptedException, ExecutionException {
 		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("tour").document().set(tour);
@@ -84,6 +83,44 @@ public class TourServiceImp implements TourService {
 		}).collect(Collectors.toList());
 	}
 
+	@Override
+	public List<Tour> findByCategory(String cate) throws ExecutionException, InterruptedException {
+		QuerySnapshot querySnapshot = query.get().get();
+		List<Tour> tours = new ArrayList<>();
+		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
+			Tour new_tour = tour.toObject(Tour.class);
+			if (new_tour.getTheLoai().toLowerCase().contains(cate.toLowerCase())) {
+				tours.add(new_tour);
+			}
+		}
+		return tours;
+	}
+
+	@Override
+	public List<Tour> findTrending() throws ExecutionException, InterruptedException {
+		Query query = collectionReference.whereEqualTo("xuHuong", true);
+		QuerySnapshot querySnapshot = query.get().get();
+		List<Tour> tours = new ArrayList<>();
+		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
+			Tour new_tour = tour.toObject(Tour.class);
+			tours.add(new_tour);
+		}
+		return tours;
+	}
+
+	@Override
+	public List<Tour> findPopular() throws ExecutionException, InterruptedException {
+		Query query = collectionReference.whereEqualTo("phoBien", true);
+		QuerySnapshot querySnapshot = query.get().get();
+		List<Tour> tours = new ArrayList<>();
+		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
+			Tour new_tour = tour.toObject(Tour.class);
+				tours.add(new_tour);
+		}
+		return tours;
+	}
+
+	@Override
 	public List<Tour> searchTourByName(String tourName) throws InterruptedException, ExecutionException {
 		QuerySnapshot querySnapshot = query.get().get();
 		List<Tour> tours = new ArrayList<>();
