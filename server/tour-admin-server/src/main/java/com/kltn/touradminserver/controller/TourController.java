@@ -103,7 +103,7 @@ public class TourController {
 		if (name == null) {
 			return ResponseEntity.ok().headers(headers).body(dbTour.findByCategory(cate));
 		}
-		if (name.equals("all")) {
+		if (cate.equals("all")) {
 			return ResponseEntity.ok().headers(headers).body(dbTour.searchTourByName(name));
 		}
 		return ResponseEntity.ok().headers(headers).body(dbTour.findByNameAndCate(name, cate));
