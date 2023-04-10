@@ -44,7 +44,7 @@ public class TourController {
 	public Tour getTour(@RequestParam String document_id) throws InterruptedException, ExecutionException {
 		return dbTour.getTour(document_id);
 	}
- 
+
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/update")
 	public String updateTour(@RequestBody Tour tour) throws InterruptedException, ExecutionException {
@@ -63,7 +63,8 @@ public class TourController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Get-Header", "ExampleHeader");
 		return ResponseEntity.ok().headers(headers).body(dbTour.findAlls());
-	}	
+	}
+
 	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
 	@GetMapping("/searchs")
 	public List<Tour> searchTourByName(@RequestParam String tourName) throws InterruptedException, ExecutionException {
@@ -92,6 +93,20 @@ public class TourController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Get-Header", "ExampleHeader");
 		return ResponseEntity.ok().headers(headers).body(dbTour.findPopular());
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+	@GetMapping("/findFilter")
+	public ResponseEntity<List<Tour>> findByNameAndCate(@RequestParam String cate, @RequestParam String name) throws InterruptedException, ExecutionException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Get-Header", "ExampleHeader");
+		if (name == null) {
+			return ResponseEntity.ok().headers(headers).body(dbTour.findByCategory(cate));
+		}
+		if (name.equals("all")) {
+			return ResponseEntity.ok().headers(headers).body(dbTour.searchTourByName(name));
+		}
+		return ResponseEntity.ok().headers(headers).body(dbTour.findByNameAndCate(name, cate));
 	}
 }
 

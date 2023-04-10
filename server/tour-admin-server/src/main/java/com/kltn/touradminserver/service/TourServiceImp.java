@@ -85,6 +85,7 @@ public class TourServiceImp implements TourService {
 
 	@Override
 	public List<Tour> findByCategory(String cate) throws ExecutionException, InterruptedException {
+		Query query = collectionReference.orderBy("theLoai");
 		QuerySnapshot querySnapshot = query.get().get();
 		List<Tour> tours = new ArrayList<>();
 		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
@@ -116,6 +117,21 @@ public class TourServiceImp implements TourService {
 		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
 			Tour new_tour = tour.toObject(Tour.class);
 				tours.add(new_tour);
+		}
+		return tours;
+	}
+
+	@Override
+	public List<Tour> findByNameAndCate(String name, String cate) throws ExecutionException, InterruptedException {
+		QuerySnapshot querySnapshot = query.get().get();
+		List<Tour> tours = new ArrayList<>();
+		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
+			Tour new_tour = tour.toObject(Tour.class);
+			if (new_tour.getTheLoai().toLowerCase().contains(cate.toLowerCase())) {
+				if (new_tour.getTenTour().toLowerCase().contains(name.toLowerCase())) {
+				tours.add(new_tour);
+				}
+			}
 		}
 		return tours;
 	}
