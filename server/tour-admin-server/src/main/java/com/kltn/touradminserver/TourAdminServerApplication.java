@@ -60,6 +60,7 @@ public class TourAdminServerApplication implements Serializable{
 	        corsConfig.applyPermitDefaultValues();
 	        corsConfig.setAllowCredentials(true);
 	        corsConfig.addAllowedMethod("GET");
+            corsConfig.addAllowedMethod("PUT");
 	        corsConfig.addAllowedMethod("PATCH");
 	        corsConfig.addAllowedMethod("POST");
 	        corsConfig.addAllowedMethod("OPTIONS");
