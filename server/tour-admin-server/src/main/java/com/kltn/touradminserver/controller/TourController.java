@@ -100,7 +100,7 @@ public class TourController {
 	public ResponseEntity<List<Tour>> findByNameAndCate(@RequestParam String cate, @RequestParam String name) throws InterruptedException, ExecutionException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Get-Header", "ExampleHeader");
-		if (name == null) {
+		if (name.isEmpty()) {
 			return ResponseEntity.ok().headers(headers).body(dbTour.findByCategory(cate));
 		}
 		if (cate.equals("all")) {
