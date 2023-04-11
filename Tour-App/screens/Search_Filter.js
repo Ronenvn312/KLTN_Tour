@@ -5,7 +5,8 @@ import { useRef, useState } from 'react';
 
 export default function Search_Filter({ navigation, route }) {
     const [scrollRef, setScrollRef] = useState(0);
-
+    const [txtTemp, setTxtTemp] = useState();
+    const [searchName, setSearchName] = useState(route.params.name);
     const [category, setCategory] = useState(route.params.cate)
 
     const HideKeyboard = ({ children }) => (
@@ -15,9 +16,10 @@ export default function Search_Filter({ navigation, route }) {
     );
 
     return (
-        <HideKeyboard>
-            <View style={styles.container} >
-                <StatusBar style="auto" />
+
+        <View style={styles.container} >
+            <StatusBar style="auto" />
+            <HideKeyboard>
                 <View style={styles.header}>
                     <View style={{}}>
                         <View style={{ flexDirection: 'row', marginLeft: '-12%' }}>
@@ -31,103 +33,112 @@ export default function Search_Filter({ navigation, route }) {
                     <Image source={require('../assets/duck.png')} style={{ height: 60, width: 62, borderRadius: 30 }} />
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <View style={styles.view_search}>
-                        <TouchableOpacity style={{ marginLeft: '5%' }}>
+            </HideKeyboard>
+
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+                <View style={styles.view_search}>
+                    <TextInput
+                        style={{ fontSize: 18, marginLeft: '8%' , width:"75%"}}
+                        placeholder={
+                            searchName == "" ? 'Khám phá những điều thú vị' : searchName
+                        }
+                        onChangeText={(text) => setTxtTemp(text)}
+                    />
+                    <HideKeyboard>
+                        <TouchableOpacity style={{ justifyContent:'flex-end' }} onPress={() => setSearchName(txtTemp)}>
                             <Image style={{ height: 30, width: 30 }} source={require('../assets/search_icon.png')} />
                         </TouchableOpacity>
-                        <TextInput style={{ fontSize: 18, marginLeft: '3%' }} placeholder='Khám phá những điều thú vị' />
-                    </View>
-                </View>
-
-                <View style={{ flex: 5, marginTop: '-2%' }}>
-                    <Text style={{ fontSize: 22, fontWeight: '500', flex: 1, marginLeft: '7%', marginTop: '-3%' }}>Thể loại</Text>
-                    <ScrollView
-                        contentOffset={{ x: scrollRef, y: 0 }}
-                        showsHorizontalScrollIndicator={false}
-                        decelerationRate={'normal'}
-                        horizontal={true}
-                        style={{ flexDirection: 'row', flex: 1, marginLeft: '6%', marginTop: '-15%', marginRight: '2%' }}
-                    >
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 0 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(0)
-                                    setScrollRef(0)
-                                }}
-                            >
-                                <Image source={require('../assets/all.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Tất cả</Text>
-                        </View>
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 1 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(1)
-                                    setScrollRef(0)
-                                }}
-                            >
-                                <Image source={require('../assets/sinhthai.png')} style={{ height: 35, width: 30, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Sinh thái</Text>
-                        </View>
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 2 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(2)
-                                    setScrollRef(0)
-                                }}
-                            >
-                                <Image source={require('../assets/nhaydu.png')} style={{ height: 30, width: 40, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Thể thao</Text>
-                        </View>
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 3 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(3)
-                                    setScrollRef(0)
-                                }}
-                            >
-                                <Image source={require('../assets/thangcanh.png')} style={{ height: 40, width: 20, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Thắng cảnh</Text>
-                        </View>
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 4 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(4)
-                                    setScrollRef(90)
-                                }}
-                            >
-                                <Image source={require('../assets/nghiduong.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Nghỉ dưỡng</Text>
-                        </View>
-                        <View style={styles.cate_view}>
-                            <TouchableOpacity
-                                style={[styles.tou_cate, { backgroundColor: category == 5 ? '#5EC2FF' : '#fff' }]}
-                                onPress={() => {
-                                    setCategory(5)
-                                    setScrollRef(180)
-                                }}
-                            >
-                                <Image source={require('../assets/sea.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
-                            </TouchableOpacity>
-                            <Text>Biển</Text>
-                        </View>
-                    </ScrollView>
-                    <View style={{ flex: 5 }}>
-                        <ListFilter style={{}} />
-                    </View>
+                    </HideKeyboard>
                 </View>
             </View>
-        </HideKeyboard>
+
+            <View style={{ flex: 5, marginTop: '-2%' }}>
+                <Text style={{ fontSize: 22, fontWeight: '500', flex: 1, marginLeft: '7%', marginTop: '-3%' }}>Thể loại</Text>
+                <ScrollView
+                    contentOffset={{ x: scrollRef, y: 0 }}
+                    showsHorizontalScrollIndicator={false}
+                    decelerationRate={'normal'}
+                    horizontal={true}
+                    style={{ flexDirection: 'row', flex: 1, marginLeft: '6%', marginTop: '-15%', marginRight: '2%' }}
+                >
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "all" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("all")
+                                setScrollRef(0)
+                            }}
+                        >
+                            <Image source={require('../assets/all.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Tất cả</Text>
+                    </View>
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "Thiên nhiên" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("Thiên nhiên")
+                                setScrollRef(0)
+                            }}
+                        >
+                            <Image source={require('../assets/sinhthai.png')} style={{ height: 35, width: 30, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Thiên nhiên</Text>
+                    </View>
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "Thể thao" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("Thể thao")
+                                setScrollRef(90)
+                            }}
+                        >
+                            <Image source={require('../assets/nhaydu.png')} style={{ height: 30, width: 40, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Thể thao</Text>
+                    </View>
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "Tham quan" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("Tham quan")
+                                setScrollRef(180)
+                            }}
+                        >
+                            <Image source={require('../assets/thangcanh.png')} style={{ height: 40, width: 20, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Thắng cảnh</Text>
+                    </View>
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "Nghỉ dưỡng" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("Nghỉ dưỡng")
+                                setScrollRef(180)
+                            }}
+                        >
+                            <Image source={require('../assets/nghiduong.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Nghỉ dưỡng</Text>
+                    </View>
+                    <View style={styles.cate_view}>
+                        <TouchableOpacity
+                            style={[styles.tou_cate, { backgroundColor: category == "Biển" ? '#5EC2FF' : '#fff' }]}
+                            onPress={() => {
+                                setCategory("Biển")
+                                setScrollRef(180)
+                            }}
+                        >
+                            <Image source={require('../assets/sea.png')} style={{ height: 40, width: 40, alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <Text>Biển</Text>
+                    </View>
+                </ScrollView>
+                <View style={{ flex: 5 }}>
+                    <ListFilter cate={category} name={searchName} />
+                </View>
+            </View>
+        </View>
     );
 }
 

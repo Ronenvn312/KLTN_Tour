@@ -85,11 +85,11 @@ export default function TourDetail({ navigation, route }) {
             <View style={{ flex: 10 }}>
                 <Text style={styles.loca}>Địa chỉ : {item.viTri}</Text>
                 <ScrollView style={styles.main}>
-                    <View style={{ height: height * 0.3 }}>
-                        <Text>description</Text>
-                        <Text>{item.thongTin}</Text>
+                    <View style={{}}>
+                        <Text style={{marginLeft:'8%', fontSize:20, fontWeight:'500'}}>Mô tả chuyến đi</Text>
+                        <Text style={{width:'80%',alignSelf:'center', marginTop:'3%', fontSize:16.5}}>{item.thongTin}</Text>
                     </View>
-                    <View style={{ height: 0.3 * height, width: width * 0.9, alignSelf: 'center', borderRadius: 20, backgroundColor: 'black', overflow: 'hidden' }}>
+                    <View style={{ height: 0.3 * height, width: width * 0.9, alignSelf: 'center', borderRadius: 20, overflow: 'hidden', marginVertical:'5%' }}>
                         <MapView
                             style={{ height: 0.3 * height, width: width * 0.9 }}
                             region={{
@@ -102,11 +102,15 @@ export default function TourDetail({ navigation, route }) {
                             <Marker coordinate={{ latitude: item.latitude, longitude: item.longitude }} />
                         </MapView>
                     </View>
-                    <View style={{ height: height * 0.1 }} />
+
+                    <TouchableOpacity style={styles.btn_book}>
+                        <Text style={styles.txt_btn}>Thêm vào kế hoạch</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.btn_book}>
+                        <Text style={styles.txt_btn}>Đặt chuyến đi</Text>
+                    </TouchableOpacity>
                 </ScrollView>
-                <TouchableOpacity style={styles.btn_book}>
-                    <Text style={styles.txt_btn}>Đặt chuyến đi</Text>
-                </TouchableOpacity>
             </View>
         </View>
     );
@@ -160,19 +164,19 @@ const styles = StyleSheet.create({
         flex: 0.1,
         fontSize: 15,
         fontWeight: '500',
-        left: width * 0.1,
-        color: 'grey'
+        width: '85%',
+        color: 'grey',
+        alignSelf: 'center'
     },
     main: {
         flex: 1,
         // backgroundColor: 'black'
     },
     btn_book: {
-        position: 'absolute',
         backgroundColor: '#4EB8FF',
-        bottom: height * 0.01,
         height: height * 0.065,
         width: width * 0.9,
+        margin:height*0.01,
         alignSelf: 'center',
         borderRadius: 15,
         justifyContent: 'center'
