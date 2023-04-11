@@ -56,17 +56,20 @@ function MapBox() {
   //   setIsThemPopup(!)
   // }
   //
-  const dsTour = localStorage.getItem("dsTour")
   const [listTour, setListTour] = useState([])
 
-  const handleShowListTour = () => {
-    if (dsTour != null) {
-      const list = JSON.parse(dsTour);
-      setListTour(list)
+  const handleResultData = async () => {
+    const result = await axios.get('http://localhost:8080/tour/findAlls')
+    if (result) {
+      localStorage.setItem("dsTour", JSON.stringify(result.data))
+      setListTour(result.data)
+      console.log(result)
+    } else {
+      console.log("không thể load data")
     }
   }
   useEffect(() => {
-    handleShowListTour()
+    handleResultData()
   }, [tour])
   const handleShowPopup = () => {
     setShowPopup(true);
@@ -113,14 +116,7 @@ function MapBox() {
   }
 
   const handSubmit = async () => {
-    console.log("successful")
-    const result = axios.post(`http://localhost:8080/tour/insert`, tour)
-    console.log(result)
-  }
-  //handle Click Cập nhật tour
-  const handleUpdate = () => {
-    const tourupdate = ({
-      "document_id": tourId,
+    const tourinsert = ({
       "tenTour": tenTour,
       "thongTin": thongTinCT,
       "viTri": diaChi,
@@ -136,12 +132,31 @@ function MapBox() {
       "latitude": lat
     })
     console.log("successful")
-    console.log(tourupdate)
-    axios.post(`http://localhost:8080/tour/update`, tourupdate)
-      .then((result) => {
-        console.log(result)
-      })
-      .catch((error) => console.log(error))
+    const result = await axios.post(`http://localhost:8080/tour/insert`, tourinsert)
+    console.log(result)
+  }
+  //handle Click Cập nhật tour
+  const handleUpdate = () => {
+    console.log("Click update")
+    const tourupdate = {
+      "document_id": tourId,
+      "tenTour": tenTour,
+      "thongTin": thongTinCT,
+      "viTri": diaChi,
+      "soNgay": soNgay,
+      "hinhAnh": [
+        hinhAnh,
+      ],
+      "theLoai": theLoai,
+      "danhGia": "4",
+      "phoBien": phoBien,
+      "xuHuong": xuHuong,
+      "longitude": lng,
+      "latitude": lat
+    }
+    axios.put(`http://localhost:8080/tour/update`, tourupdate)
+      .then((result) => console.log("result:" +result))
+      .then((erro) => console.log("Error:"+erro))
 
   }
   //Kết thúc cập nhật
@@ -190,8 +205,7 @@ function MapBox() {
     setPhoBien(item.phoBien)
     setXuHuong(item.xuHuong)
     setShowForm(true)
-    console.log(lng)
-    
+
   }
   const handleClickDongForm = () => {
     setShowForm(!showForm)
