@@ -2,8 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ImageBackground } from 'react-native';
 import { logIN, logOut } from '../redux/actions/UserAction'
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
 export default function Login({ navigation }) {
+    const [username, setUserName] = useState();
+    const [password, setPassword] = useState();
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -12,8 +15,8 @@ export default function Login({ navigation }) {
 
     const handleLogIn = () => {
         const newUser = {
-            username: 'Hieu',
-            password: '123456'
+            username: username,
+            password: password
         }
         const action = logIN(newUser);
         dispatch(action);
@@ -25,10 +28,10 @@ export default function Login({ navigation }) {
 
             <View style={{ flex: 1 }}>
                 <Image style={styles.logo} source={require('../assets/logo.png')} />
-                <TextInput style={styles.input} placeholder='Tên đăng nhập' />
-                <TextInput style={styles.input} placeholder='Mật khẩu' secureTextEntry={true} />
-                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ height: '10%', width: '30%', alignSelf: 'flex-end', marginRight: '10%', marginTop: '2%' }}>
-                    <Text style={{ marginTop: '3%', color: '#918AB1' }}>Quên mật khẩu</Text>
+                <TextInput style={styles.input} placeholder='Tên đăng nhập' onChangeText={(text)=>setUserName(text)}/>
+                <TextInput style={styles.input} placeholder='Mật khẩu' secureTextEntry={true} onChangeText={(text)=>setPassword(text)}/>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ height: '10%', width: '30%', alignSelf: 'flex-end', marginRight: '8%', marginTop: '2%' }}>
+                    <Text style={{ marginTop: '3%', color: '#918AB1',textDecorationLine:'underline', fontStyle:'italic',fontSize:16 }}>Quên mật khẩu?</Text>
                 </TouchableOpacity>
             </View>
 

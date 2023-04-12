@@ -8,14 +8,14 @@ import axios from 'axios';
 const starImageFilled = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_filled.png';
 const starImageCorner = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_corner.png';
 
-export default function ListTour() {
+export default function ListTour(status) {
     const navigation = useNavigation();
 
     const [list, setList] = useState();
     const maxRating = [1, 2, 3, 4, 5]
  
     useEffect(() => {
-        axios.get(`http://192.168.1.77:8080/tour/findAlls`)
+        axios.get(`http://192.168.1.4:8080/tour/${status.status}`)
             .then(res => {
                 setList(res.data)
                 console.log(list)
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '400',
         marginLeft: 5,
-        height:20
+        height:20,
+        maxWidth:100
     },
     starImageStyle: {
         width: 20,
