@@ -138,7 +138,7 @@ function MapBox() {
   //handle Click Cập nhật tour
   const handleUpdate = () => {
     console.log("Click update")
-    const tourupdate = {
+    const tourupdate = ({
       "document_id": tourId,
       "tenTour": tenTour,
       "thongTin": thongTinCT,
@@ -153,7 +153,7 @@ function MapBox() {
       "xuHuong": xuHuong,
       "longitude": lng,
       "latitude": lat
-    }
+    })
     axios.put(`http://localhost:8080/tour/update`, tourupdate)
       .then((result) => console.log("result:" +result))
       .then((erro) => console.log("Error:"+erro))
