@@ -20,11 +20,13 @@
 .Login-right {
     display: flex;
     flex: 0.7;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     min-height: 100vh;
     background-image: url('../assets/hoian.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .Login-title {

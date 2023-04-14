@@ -102,7 +102,7 @@ function Login() {
         </Form>
       </div>
       <div className='Login-right'>
-        <img className='img-wel' src={wel_human} alt='wel' />
+        {/* <img className='img-wel' src={wel_human} alt='wel' /> */}
       </div>
     </div>
   )

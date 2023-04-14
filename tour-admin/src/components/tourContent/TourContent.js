@@ -121,9 +121,7 @@ export default function TourContent() {
                                 <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
                             </Button>{' '}
                             <br />
-                            <Button
-                                onClick={() => handShowPopupThem()}
-                                type='button' style={{ height: 45 }} variant="outline-info" className='bnt_them_hd' >THÊM HOẠT ĐỘNG</Button>{' '}
+                          
                         </Form.Group>
                     </Form>
                     <div className='search-result'>
@@ -187,7 +185,13 @@ export default function TourContent() {
                                         </td>
 
                                         <td className='col_mota' style={{ textAlign: 'start' }}>
-                                            <p>Thể loại: {item.theLoai}</p>
+                                            <p>Thể loại:
+                                                {item.theLoai.map((tl) => {
+                                                    return " "+ tl + ", "
+                                                })
+                                                }
+                                            </p>
+
                                             <p>Số ngày: {item.soNgay}</p>
                                         </td>
                                     </tr>
