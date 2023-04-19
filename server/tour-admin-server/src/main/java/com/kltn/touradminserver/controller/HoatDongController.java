@@ -39,14 +39,14 @@ public class HoatDongController {
 		return true;
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = {"http://localhost:3000", "http:/192.168.1.2:8081"})
 	@GetMapping("/find")
-	public HoatDong getHoatDong(@RequestParam String documnet_id) throws InterruptedException, ExecutionException {
-		HoatDong hd = dbHoatDong.getHoatDong(documnet_id);
-		if (hd != null) {
-			return hd;
+	public List<HoatDong> getHoatDong(@RequestParam String tourID) throws InterruptedException, ExecutionException {
+		List<HoatDong> listHD = dbHoatDong.getHoatDong(tourID);
+		if (listHD != null) {
+			return listHD;
 		}
-		logger.log(Level.WARNING, "Không tìm thấy hoạt động có id: " + documnet_id);
+		logger.log(Level.WARNING, "Không tìm thấy hoạt động nào");
 		return null;
 	}
 

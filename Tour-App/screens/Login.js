@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ImageBackground } from 'react-native';
-import { logIN, logOut } from '../redux/actions/UserAction'
+import { logIN } from '../redux/actions/UserAction'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 

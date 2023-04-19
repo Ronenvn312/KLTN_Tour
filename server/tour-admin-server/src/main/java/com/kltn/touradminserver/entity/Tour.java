@@ -24,7 +24,7 @@ public class Tour implements Serializable{
 	private String viTri;
 	private int soNgay;
 	private List<String> hinhAnh;
-	private String theLoai;
+	private List<String> theLoai;
 	private double danhGia;
 	private boolean phoBien;
 	private boolean xuHuong;
