@@ -18,6 +18,15 @@ function Login() {
 
   const toggleshowErroPassword = () => setshowErroPassword(!showErroPassword);
   const toggleshowErroEmail = () => setshowErroEmail(!showErroEmail);
+    //event get values
+    const [validateEmail, setValidateEmail] = useState({
+      "status": true,
+      "content": ""
+    })
+    const [validatePassword, setValidatePassword] = useState({
+      "status": true,
+      "content": ""
+    })
   //submit login
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -32,11 +41,8 @@ function Login() {
 
   const handleSubmit = async (event) => {
 
+    if (validateEmail == true && validatePassword == true) {
 
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
     }
     else {
       let result = axios.get(`http://localhost:8080/taikhoan/loggin`, {
@@ -47,15 +53,7 @@ function Login() {
       console.log(result)
     }
   };
-  //event get values
-  const [validateEmail, setValidateEmail] = useState({
-    "status": true,
-    "content": ""
-  })
-  const [validatePassword, setValidatePassword] = useState({
-    "status": true,
-    "content": ""
-  })
+
   const handleChangeEmail = (event) => {
     let validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 

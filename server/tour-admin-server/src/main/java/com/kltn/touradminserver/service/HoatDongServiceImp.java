@@ -7,14 +7,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.controller.HoatDongController;
 import com.kltn.touradminserver.entity.HoatDong;
@@ -37,16 +34,15 @@ public class HoatDongServiceImp implements HoatDongService {
 	}
 
 	@Override
-	public HoatDong getHoatDong(String document_id) throws InterruptedException, ExecutionException {
-		DocumentReference documentReference = dbFireStore.collection("hoatDong").document(document_id);
-		ApiFuture<DocumentSnapshot> future = documentReference.get();
-		DocumentSnapshot doc = future.get();
-		HoatDong hd;
-		if (doc.exists()) {
-			hd = doc.toObject(HoatDong.class);
-			return hd;
+	public List<HoatDong> getHoatDong(String tourID) throws InterruptedException, ExecutionException {
+		Query query = dbFireStore.collection("hoatDong").whereEqualTo("tourId", tourID);
+		QuerySnapshot querySnapshot = query.get().get();
+		List<HoatDong> listHd = new ArrayList<>();
+		for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
+			HoatDong Newhd = hd.toObject(HoatDong.class);
+			listHd.add(Newhd);
 		}
-		return null;
+		return listHd;
 	}
 
 	@Override

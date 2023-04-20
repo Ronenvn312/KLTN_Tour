@@ -15,7 +15,7 @@ export default function ListTour(status) {
     const maxRating = [1, 2, 3, 4, 5]
  
     useEffect(() => {
-        axios.get(`http://192.168.1.4:8080/tour/${status.status}`)
+        axios.get(`http://192.168.1.2:8080/tour/${status.status}`)
             .then(res => {
                 setList(res.data)
                 console.log(list)
@@ -23,6 +23,7 @@ export default function ListTour(status) {
             .catch(error => console.log(error));
     }, []);
 
+    console.log(status.status)
     return (
         <View>
             <StatusBar style="auto" />

@@ -63,10 +63,11 @@ export default function TourActivity({ navigation }) {
                 console.log(d +'---'+di + '++++'+ type +'----' + isPlay)
                 setIsPlay(true)
             }
+            console.log(myLocation)
         })();
-    }, [distance]);
-    console.log('Distance:' + distance + 'm')
-    console.log(myLocation)
+    }, []);
+    // console.log('Distance:' + distance + 'm')
+    // console.log(myLocation)
 
     async function playSound() {
         const { sound } = await Audio.Sound.createAsync(require('../assets/sound.mp3'));
@@ -93,7 +94,7 @@ export default function TourActivity({ navigation }) {
     }
 
     
-    console.log(distance +'---'+di + '++++'+ type +'----' + isPlay)
+    // console.log(distance +'---'+di + '++++'+ type +'----' + isPlay)
 
     return (
         <View style={styles.container}>
