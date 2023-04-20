@@ -11,8 +11,8 @@ import java.util.List;
 public class TuongTac {
     @DocumentId
     private String document_id;
-    private String nguoiDungId;
-    private List<String> tourDaThich;
-    private List<String> tourDaDat;
-    private List<String>  tourKeHoach;
+    private String tourId;
+    private List<String> userDaThich;
+    private List<String> userDaDat;
+    private List<String>  userLenKeHoach;
 }

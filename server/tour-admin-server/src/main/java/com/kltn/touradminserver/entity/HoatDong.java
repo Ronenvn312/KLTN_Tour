@@ -11,7 +11,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class HoatDong {
+public class 	HoatDong {
 	@DocumentId
 	private String id;
 	private String thoiGianHD;

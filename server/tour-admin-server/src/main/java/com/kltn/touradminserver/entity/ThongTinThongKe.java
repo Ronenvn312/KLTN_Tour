@@ -15,7 +15,8 @@ public class ThongTinThongKe implements Serializable {
     private String document_id;
     private  String tourId;
     private Date thangNam;
-    private int slTuongTac;
+    private int slThich;
     private int slDatTour;
+    private int slThemKeHoach;
 
 }

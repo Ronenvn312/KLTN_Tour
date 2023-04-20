@@ -3,6 +3,8 @@ package com.kltn.touradminserver.controller;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.kltn.touradminserver.entity.HoatDong;
+import com.kltn.touradminserver.service.HoatDongServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,8 @@ import com.kltn.touradminserver.service.TourServiceImp;
 public class TourController {
 	@Autowired
 	TourServiceImp dbTour;
-
+    @Autowired
+    HoatDongServiceImp hoatDongservice;
 	public TourController(TourServiceImp dbTour) {
 		this.dbTour = dbTour;
 	}
@@ -54,7 +57,16 @@ public class TourController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete")
 	public String deleteTour(@RequestParam String document_id) throws InterruptedException, ExecutionException {
-		return dbTour.deleteTour(document_id);
+        String result = dbTour.deleteTour(document_id);
+        if ( result != null) {
+            List<HoatDong> hoatDongs = hoatDongservice.findAllsByTourId(document_id);
+                for (HoatDong hd:
+                        hoatDongs) {
+                    hoatDongservice.deleteHoatDong(hd.getId());
+                }
+            return result;
+        }
+        return  result;
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")

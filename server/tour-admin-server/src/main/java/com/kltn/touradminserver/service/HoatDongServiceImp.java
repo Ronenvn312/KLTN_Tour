@@ -1,5 +1,6 @@
 package com.kltn.touradminserver.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -26,8 +27,9 @@ public class HoatDongServiceImp implements HoatDongService {
 
 	Logger logger = Logger.getLogger(HoatDongController.class.getName());
 	Firestore dbFireStore = FirestoreClient.getFirestore();
-	@Autowired 
+	@Autowired
 	TourService tourservice;
+
 	@Override
 	public String createHoatDong(HoatDong new_hoat_dong) throws InterruptedException, ExecutionException {
 		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("hoatDong").document().set(new_hoat_dong);
@@ -69,14 +71,22 @@ public class HoatDongServiceImp implements HoatDongService {
 
 	@Override
 	public List<HoatDong> findAllsByTourId(String tourId) throws InterruptedException, ExecutionException {
+		List<HoatDong> result = new ArrayList<HoatDong>();
 		if (tourservice.getTour(tourId) != null) {
-			return dbFireStore.collection("hoatDong").get().get().getDocuments().parallelStream().map(tour -> {
+			List<HoatDong> hoatDongs =  dbFireStore.collection("hoatDong").get().get().getDocuments().parallelStream().map(tour -> {
 				final var tourDocument = tour.toObject(HoatDong.class);
 				if (tourDocument.getTourId().equalsIgnoreCase(tourId)) {
 					return tourDocument;
 				}
 				return null;
 			}).collect(Collectors.toList());
+			for (HoatDong hd: hoatDongs
+				 ) {
+				if(hd != null) {
+					result.add(hd);
+				}
+			}
+			return result;
 		}
 		logger.log(Level.SEVERE, "Không tìm thấy tour có id: " + tourId);
 		return null;

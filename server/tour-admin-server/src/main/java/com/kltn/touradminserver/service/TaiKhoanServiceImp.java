@@ -1,7 +1,11 @@
 package com.kltn.touradminserver.service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
+import com.kltn.touradminserver.entity.Tour;
+import lombok.var;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
@@ -59,6 +63,14 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
 			return null;
 		}
 	
+	}
+
+	@Override
+	public List<TaiKhoan> findAll() throws ExecutionException, InterruptedException {
+		return dbFireStore.collection("taiKhoan").get().get().getDocuments().parallelStream().map(tk -> {
+			final var taiKhoan = tk.toObject(TaiKhoan.class);
+			return taiKhoan;
+		}).collect(Collectors.toList());
 	}
 
 }

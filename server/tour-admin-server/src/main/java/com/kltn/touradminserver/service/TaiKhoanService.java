@@ -1,5 +1,6 @@
 package com.kltn.touradminserver.service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.kltn.touradminserver.entity.NguoiDung;
@@ -14,4 +15,5 @@ public interface TaiKhoanService {
 	public String updateTK(TaiKhoan taiKhoan) throws InterruptedException, ExecutionException;
 
 	public String deleteTK(String userName);
+	public List<TaiKhoan> findAll() throws ExecutionException, InterruptedException;
 }

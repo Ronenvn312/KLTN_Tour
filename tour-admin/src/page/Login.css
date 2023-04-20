@@ -74,6 +74,7 @@
     flex-direction: column;
     justify-content: flex-start;
     float: left;
+    align-items: start;
 }
 
 .icon-footer {

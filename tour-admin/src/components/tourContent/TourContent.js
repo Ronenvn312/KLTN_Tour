@@ -97,7 +97,14 @@ export default function TourContent() {
                 <div >
                     <h4 className='title_danhsach'>DANH SÁCH TOUR DU LỊCH</h4>
                     <Form style={{ width: '100%', height: 60 }} className='group-control'>
-                        <Form.Group style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Form.Group style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Button
+                                onClick={() => handShowPopupXoa()}
+                                type='button' variant="outline-danger" className='btn_xoa' >
+                                Xóa nhiều
+                                <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
+                            </Button>{' '}
+                            <label> Tìm kiếm </label>
                             <Form.Control
                                 name='search'
                                 // value={" Tour Nha Trang 36h"}
@@ -114,14 +121,9 @@ export default function TourContent() {
                                 <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/icon_sua.png')} alt='icon-locate' />
                             </Button>{' '} */}
                             <br />
-                            <Button
-                                onClick={() => handShowPopupXoa()}
-                                type='button' variant="outline-danger" className='btn_xoa' >
-                                XÓA
-                                <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
-                            </Button>{' '}
+
                             <br />
-                          
+
                         </Form.Group>
                     </Form>
                     <div className='search-result'>
@@ -187,7 +189,7 @@ export default function TourContent() {
                                         <td className='col_mota' style={{ textAlign: 'start' }}>
                                             <p>Thể loại:
                                                 {item.theLoai.map((tl) => {
-                                                    return " "+ tl + ", "
+                                                    return " " + tl + ", "
                                                 })
                                                 }
                                             </p>

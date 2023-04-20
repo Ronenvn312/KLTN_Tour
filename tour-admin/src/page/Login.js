@@ -10,7 +10,9 @@ import Toast from 'react-bootstrap/Toast';
 import axios from 'axios'
 function Login() {
   const navigate = useNavigate()
-  const [values, setValues] = useState({ email: "", password: "" })
+  // const [values, setValues] = useState({ email: "", password: "" })
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("")
   const [showErroPassword, setshowErroPassword] = useState(false);
   const [showErroEmail, setshowErroEmail] = useState(false);
 
@@ -28,7 +30,7 @@ function Login() {
   // const handlogin
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit =(event) => {
+  const handleSubmit = async (event) => {
 
 
     const form = event.currentTarget;
@@ -37,58 +39,108 @@ function Login() {
       event.stopPropagation();
     }
     else {
-     axios.get(`http://localhost:8080/taikhoan/loggin`, {
+      let result = axios.get(`http://localhost:8080/taikhoan/loggin`, {
         params: {
-          username: values.email
+          username: email
         }
-      }).then((result) => {
-        console.log(result.data)
-      }).catch((error) => console.log(error))
-      navigate("/home")
+      })
+      console.log(result)
     }
   };
   //event get values
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value })
-    if (values.email.length < 6 || values.password.length < 4) {
-      setValidated(true);
+  const [validateEmail, setValidateEmail] = useState({
+    "status": true,
+    "content": ""
+  })
+  const [validatePassword, setValidatePassword] = useState({
+    "status": true,
+    "content": ""
+  })
+  const handleChangeEmail = (event) => {
+    let validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+    setEmail(event.target.value)
+    if (!event.target.value.match(validRegex)) {
+      setValidateEmail({
+        "status": true,
+        "content": "Email chưa đúng định dạng VD: abc@gmail.com"
+      })
+    }
+    else {
+      setValidateEmail({
+        "status": false,
+        "content": "Nhập hợp lệ!"
+      })
+    }
+  }
+  const handleChangePassword = (event) => {
+    let validPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+    setPassword(event.target.value)
+    if (!event.target.value.match(validPassword)) {
+      setValidatePassword({
+        "status": true,
+        "content": "Phải chứa ít nhất một số và một chữ hoa và chữ thường và ít nhất 8 ký tự trở lên"
+      })
+    } else {
+      setValidatePassword({
+        "status": false,
+        "content": "Nhập hợp lệ!"
+      })
     }
 
   }
+  // const handleValidation = () => {
+
+  // }
   return (
     <div className='Login'>
       <div className='Login-left'>
         <img className='Logo-left' src={logo} alt='' />
         <h1 className='Login-title'>Sign In</h1>
-        <Form className='group-control' noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
-          <Form.Group id='form-group' className="mb-3" controlId="formBasicEmail">
-            <Form.Label className='label-login'>Email address</Form.Label>
-            <Form.Control
-              name='email'
-              value={values.email}
-              onChange={e => handleChange(e)}
-              type="text" placeholder="Enter email" required />
-            {/* <Form.Control.Feedback type="invalid">
-              Please provide a email
-            </Form.Control.Feedback> */}
-            {
-              values.email.length < 6 ? <Form.Control.Feedback type="invalid">
-                'Please email lenght longer than 6'
-              </Form.Control.Feedback> : ""
-            }
 
+        <Form className='group-control' onSubmit={(e) => handleSubmit(e)}>
+          <Form.Label className='label-login'>Email address</Form.Label>
+          <Form.Group id='form-group' controlId="formBasicEmail">
+            <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Form.Control
+                name='email'
+                value={email}
+                onChange={e => handleChangeEmail(e)}
+                type="text" placeholder="Enter email" required />
+
+              {
+                validateEmail.content != "" ? (
+                  validateEmail.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
+                    : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
+                ) : ""
+              }
+            </div>
+            {
+              validateEmail.status ? <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
+                {validateEmail.content}
+              </p> : ""
+            }
           </Form.Group>
+          <Form.Label className='label-login'>Password</Form.Label>
           <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
-            <Form.Label className='label-login'>Password</Form.Label>
-            <Form.Control
-              name='password'
-              value={values.password}
-              onChange={e => handleChange(e)}
-              type="password" placeholder="Password" required />
-            {values.password.length < 6 ?
-              <Form.Control.Feedback type="invalid">
-                Please provide a password longer than 6
-              </Form.Control.Feedback> : ""
+            <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Form.Control
+                name='password'
+                value={password}
+                onChange={e => handleChangePassword(e)}
+                type="password" placeholder="Password" required />
+              {
+                validatePassword.content != "" ? (
+                  validatePassword.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
+                    : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
+                ) : ""
+              }
+            </div>
+
+            {validatePassword.status ?
+              <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
+                {validatePassword.content}
+              </p> : ""
             }
 
           </Form.Group>
@@ -97,7 +149,7 @@ function Login() {
               className='label-login' type="checkbox" label="Check me out" />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            Đăng nhập
           </Button>
         </Form>
       </div>

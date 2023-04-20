@@ -79,7 +79,7 @@ public class HoatDongController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/findbyTourId")
-	public List<HoatDong> findAllHDofTourID(@RequestParam String tourId)
+	public List<HoatDong> findAllHDbyTourID(@RequestParam String tourId)
 			throws InterruptedException, ExecutionException {
 		return dbHoatDong.findAllsByTourId(tourId);
 	}

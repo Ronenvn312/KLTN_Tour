@@ -1,5 +1,6 @@
 package com.kltn.touradminserver.controller;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class TaiKhoanController {
 	// khoản
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/register")
-	public boolean insertNguoiDung(@RequestBody TaiKhoanAdminUserDTO tk_user_dto)
+	public boolean dangKyTaiKhoan(@RequestBody TaiKhoanAdminUserDTO tk_user_dto)
 			throws InterruptedException, ExecutionException {
 		if (taikKhoanServiceImp.getTK(tk_user_dto.getTk().getUserName()) != null) {
 			logger.log(Level.SEVERE, "Erro tao tai khoan: tên tài khoản đã tồn tại!");
@@ -53,6 +54,16 @@ public class TaiKhoanController {
 		}
 	}
 
+//	@CrossOrigin(origins = "http://localhost:3000")
+//	@GetMapping("/get")
+//	public TaiKhoan getTK(@RequestParam String username) throws InterruptedException, ExecutionException {
+//		TaiKhoan tk = taikKhoanServiceImp.getTK(username);
+//		if (tk != null) {
+//			return tk;
+//		}
+//		logger.log(Level.WARNING, "Không tìm thấy tài khoản với username :" + username);
+//		return null;
+//	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/loggin")
 	public TaiKhoan getTK(@RequestParam String username) throws InterruptedException, ExecutionException {
@@ -63,7 +74,6 @@ public class TaiKhoanController {
 		logger.log(Level.WARNING, "Không tìm thấy tài khoản với username :" + username);
 		return null;
 	}
-
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/update")
 	public boolean updateTK(@RequestBody TaiKhoan taiKhoan) throws InterruptedException, ExecutionException {
@@ -85,5 +95,9 @@ public class TaiKhoanController {
 		logger.log(Level.WARNING, "Không thể xóa tài khoản :" + username);
 		return false;
 	}
-
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/findAll")
+	public List<TaiKhoan> findAll() throws InterruptedException, ExecutionException {
+		return  taikKhoanServiceImp.findAll();
+	}
 }

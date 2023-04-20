@@ -12,4 +12,5 @@ public class TaiKhoan {
 	private String password;
 	private boolean status;// mặc định flase --. verify sang true
 	private boolean isAdmin;// amind hay ko
+	private String code;
 }

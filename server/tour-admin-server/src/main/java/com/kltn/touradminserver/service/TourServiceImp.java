@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import com.kltn.touradminserver.entity.HoatDong;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
@@ -68,10 +70,12 @@ public class TourServiceImp implements TourService {
 	}
 
 	@Override
-	public String deleteTour(String document_id) {
+	public String deleteTour(String document_id) throws ExecutionException, InterruptedException {
 
 		ApiFuture<WriteResult> writeResult = dbFireStore.collection("tour").document(document_id).delete();
+		if (writeResult != null)
 		return "Successfully Deleted tour : " + document_id;
+		return null;
 	}
 
 	@Override
@@ -90,8 +94,11 @@ public class TourServiceImp implements TourService {
 		List<Tour> tours = new ArrayList<>();
 		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
 			Tour new_tour = tour.toObject(Tour.class);
-			if (new_tour.getTheLoai().toLowerCase().contains(cate.toLowerCase())) {
-				tours.add(new_tour);
+			for (String theLoai: new_tour.getTheLoai()
+			) {
+				if (theLoai.equalsIgnoreCase(cate.toLowerCase())) {
+					tours.add(new_tour);
+				}
 			}
 		}
 		return tours;
@@ -116,7 +123,7 @@ public class TourServiceImp implements TourService {
 		List<Tour> tours = new ArrayList<>();
 		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
 			Tour new_tour = tour.toObject(Tour.class);
-				tours.add(new_tour);
+			tours.add(new_tour);
 		}
 		return tours;
 	}
@@ -127,9 +134,10 @@ public class TourServiceImp implements TourService {
 		List<Tour> tours = new ArrayList<>();
 		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
 			Tour new_tour = tour.toObject(Tour.class);
-			if (new_tour.getTheLoai().toLowerCase().contains(cate.toLowerCase())) {
-				if (new_tour.getTenTour().toLowerCase().contains(name.toLowerCase())) {
-				tours.add(new_tour);
+			for (String theLoai: new_tour.getTheLoai()
+			) {
+				if (theLoai.equalsIgnoreCase(cate.toLowerCase())) {
+					tours.add(new_tour);
 				}
 			}
 		}

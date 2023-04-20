@@ -13,6 +13,7 @@ import axios from "axios";
 
 // npm install @turf/turf
 import * as turf from '@turf/turf';
+import PopupNote from "../Popup/PopupNote";
 
 // A circle of 5 mile radius of the Empire State Building
 const GEOFENCE = turf.circle([-74.0122106, 40.7467898], 5, { units: 'miles' });
@@ -33,16 +34,19 @@ function MapBox() {
   const [diaChi, setDiaChi] = useState('')
   const [xuHuong, setXuHuong] = useState()
   const [phoBien, setPhoBien] = useState()
-  const [hinhAnh, setHinhAnh] = useState()
+  const [hinhAnh, setHinhAnh] = useState("")
   const [showForm, setShowForm] = useState(false)
+  const [danhGia, setDanhGia0] = useState(5.0)
   const [showFormHoatDong, setShowFormHoatDong] = useState(false)
+  const [isDeletePopup, setIsDeletePopup] = useState(false)
+  const [isDeleteHoatDongPopup, setIsDeleteHoatDongPopup] = useState(false)
   // List the loai
   const [thienNhien, setThienNhien] = useState(false)
   const [theThao, setTheThao] = useState(false)
   const [thamQuan, setThamQuan] = useState(false)
   const [nghiDuong, setNghiDuong] = useState(false)
   const [bien, setBien] = useState(false)
-  // var listTheLoai = theLoai.split(",");
+  const [tourClicked, setTourClicked] = useState({})
   const [tour, setTour] = useState({
     "document_id": tourId,
     "tenTour": tenTour,
@@ -53,12 +57,13 @@ function MapBox() {
       hinhAnh,
     ],
     "theLoai": theLoai,
-    "danhGia": "4",
+    "danhGia": danhGia,
     "phoBien": phoBien,
     "xuHuong": xuHuong,
     "longitude": lng,
     "latitude": lat
   })
+
   const handleShowPopup = () => {
     setShowPopup(true);
   }
@@ -67,11 +72,6 @@ function MapBox() {
     setTenTour(tenTour)
     // console.log(tenTour)
   }
-  // const handleChangeTheLoai = (e) => {
-  //   let theLoai = e.target.value
-  //   setTheLoai(theLoai)
-  //   // console.log(theLoai)
-  // }
   const handleChangeSoNgay = (e) => {
     let soNgay = e.target.value
     setSoNgay(soNgay)
@@ -148,7 +148,7 @@ function MapBox() {
         hinhAnh,
       ],
       "theLoai": theLoai,
-      "danhGia": "4",
+      "danhGia": danhGia,
       "phoBien": phoBien,
       "xuHuong": xuHuong,
       "longitude": lng,
@@ -159,7 +159,7 @@ function MapBox() {
     console.log(result)
   }
   //handle Click Cập nhật tour
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     console.log("Click update")
     const tourupdate = ({
       "document_id": tourId,
@@ -168,20 +168,45 @@ function MapBox() {
       "viTri": diaChi,
       "soNgay": soNgay,
       "hinhAnh": [
-        hinhAnh,
+        hinhAnh
       ],
       "theLoai": theLoai,
-      "danhGia": "4",
-      "phoBien": phoBien,
-      "xuHuong": xuHuong,
-      "longitude": lng,
-      "latitude": lat
+      "danhGia": 4.0,
+      "phoBien": true,
+      "xuHuong": true,
+      "longitude": 106.68921221955645,
+      "latitude": 10.772420997560602
     })
-    axios.put(`http://localhost:8080/tour/update`, tourupdate)
-      .then((result) => console.log("result:" + result))
-      .then((erro) => console.log("Error:" + erro))
+    console.log(tourupdate)
+    const result = await axios.put(`http://localhost:8080/tour/update`, tourupdate)
+    if (result) {
+      console.log(result)
+      handleResultData()
+    } else {
+      console.log("Cập nhật tour thất bại!")
+    }
+  }
+  // xóa tour
+  const deleteTourById = (item) => {
+    axios.delete(`http://localhost:8080/tour/delete`, {
+      params: {
+        document_id: item.document_id
+      }
+    }).then((result) => {
+      console.log(result)
+      handleShowPopupDeleteTour()
+      handleResultData()
+    })
 
   }
+
+  const handleShowPopupDeleteTour = () => {
+    setIsDeletePopup(!isDeletePopup);
+  }
+  const handleShowPopupDeleteHoatDong = () => {
+    setIsDeleteHoatDongPopup(!isDeleteHoatDongPopup);
+  }
+  // Thêm tour
   const handleClickThemTour = () => {
     delete tour.document_id;
     setTourId("")
@@ -198,7 +223,9 @@ function MapBox() {
     setTheThao(false)
     setNghiDuong(false)
     setThienNhien(false)
+    setShowFormHoatDong(false)
   }
+  // Chọn tour
   const handleClickItem = (item) => {
     // tour.document_id = item.document_id
     setTourId(item.document_id)
@@ -207,7 +234,7 @@ function MapBox() {
     setSoNgay(item.soNgay)
     setThongTinCT(item.thongTin)
     setDiaChi(item.viTri)
-    setHinhAnh(item.hinhAnh)
+    setHinhAnh(item.hinhAnh[0])
     setLat(item.latitude)
     setLng(item.longitude)
     setPhoBien(item.phoBien)
@@ -217,7 +244,9 @@ function MapBox() {
     setShowFormHoatDong(false)
     handleSetTheLoai(item.theLoai)
     console.log(item)
+    setTourClicked(item)
   }
+  // Chọn thể loại
   const handleSetTheLoai = (listTheLoai) => {
     listTheLoai.forEach(element => {
       if (element == "thien nhien") {
@@ -237,6 +266,8 @@ function MapBox() {
       }
     });
   }
+  //
+  // đóng form tour
   const handleClickDongForm = () => {
     setShowForm(!showForm)
   }
@@ -247,23 +278,23 @@ function MapBox() {
   const [viTriHD, setViTriHD] = useState()
   const [thongTinHD, setThongTinHD] = useState()
   const [tieuDeHD, setTieuDeHD] = useState()
-  const [hinhAnhHD, setHinhAnhHD] = useState()
+  const [hinhAnhHD, setHinhAnhHD] = useState("")
   const [maHD, setMaHD] = useState()
   const handleChangeTieuDe = (e) => {
     setTieuDeHD(e.target.value)
-  } 
+  }
   const handleChangeThoiGian = (e) => {
     setThoiGianHD(e.target.value)
-  } 
+  }
   const handleChangeThongTinHD = (e) => {
     setThongTinHD(e.target.value)
-  } 
+  }
   const handleChangeDiaChiHD = (e) => {
     setViTriHD(e.target.value)
-  } 
+  }
   const handleChangeHinhAnhHD = (e) => {
     setHinhAnhHD(e.target.value)
-  } 
+  }
 
   const [hoatDong, setHoatDong] = useState({
     "thoiGianHD": thoiGianHD,
@@ -277,6 +308,7 @@ function MapBox() {
     "longitude": lng,
     "latitude": lat
   })
+  // get danh sách hoạt động của tour
   const handleResultHoatDongTour = async (item) => {
     const result = await axios.get(`http://localhost:8080/hoatdong/findbyTourId`, {
       params: {
@@ -290,6 +322,8 @@ function MapBox() {
       console.log("Loi get data")
     }
   }
+  // chọn một hoạt động
+  const [hoatDongChecked, setHoatDongChecked] = useState({})
   const handleClickHoatDong = (item) => {
     console.log(item)
     setMaHD(item.id)
@@ -297,12 +331,14 @@ function MapBox() {
     setViTriHD(item.viTri)
     setThongTinHD(item.thongTin)
     setThoiGianHD(item.thoiGianHD)
-    setHinhAnhHD(item.hinhAnh)
+    setHinhAnhHD(item.hinhAnh[0])
     setLat(item.latitude)
     setLng(item.longitude)
     setShowForm(false)
     setShowFormHoatDong(true)
+    setHoatDongChecked(item)
   }
+  // tạo hoạt động
   const handleClickCreateHoatDong = () => {
     // console.log(item)
     setMaHD("")
@@ -314,9 +350,11 @@ function MapBox() {
     setShowForm(false)
     setShowFormHoatDong(true)
   }
+  // chọn đóng tour
   const handleClickDongHoatDong = () => {
     setShowFormHoatDong(!showFormHoatDong)
   }
+  // set new hoạt động
   const setNewHoatDong = () => {
     setHoatDong({
       "thoiGianHD": thoiGianHD,
@@ -331,12 +369,62 @@ function MapBox() {
       "latitude": lat
     })
   }
-   // Click button them hoat dong
-   const handleThemHoatDong = async () => {
-    setNewHoatDong()
-    console.log("successful")
-    const result = await axios.post(`http://localhost:8080/hoatdong/insert`, hoatDong)
+  const deleteHoatDongById = async (item) => {
+    const result = await axios.delete(`http://localhost:8080/hoatdong/delete`, {
+      params: {
+        document_id: item.id
+      }
+    })
     console.log(result)
+    handleResultHoatDongTour(tourClicked)
+    setIsDeleteHoatDongPopup(!isDeleteHoatDongPopup)
+    setShowFormHoatDong(!showFormHoatDong)
+  }
+  // Click button them hoat dong
+  const handleThemHoatDong = async () => {
+    const new_hoatDong = ({
+      "thoiGianHD": thoiGianHD,
+      "viTri": viTriHD,
+      "thongTin": thongTinHD,
+      "tieuDe": tieuDeHD,
+      "tourId": tourId,
+      "hinhAnh": [
+        hinhAnhHD
+      ],
+      "longitude": lng,
+      "latitude": lat
+    })
+    console.log("successful")
+    const result = await axios.post(`http://localhost:8080/hoatdong/insert`, new_hoatDong)
+    console.log(result)
+    handleResultHoatDongTour(tourClicked)
+    setShowFormHoatDong(!showFormHoatDong)
+  }
+  // Cập nhật hoạt động
+  const handleUpdateHoatDong = async () => {
+    console.log("Click update")
+    const new_hoatDong = ({
+      "id": maHD,
+      "thoiGianHD": thoiGianHD,
+      "viTri": viTriHD,
+      "thongTin": thongTinHD,
+      "tieuDe": tieuDeHD,
+      "tourId": tourId,
+      "hinhAnh": [
+        hinhAnhHD
+      ],
+      "longitude": lng,
+      "latitude": lat
+    })
+    console.log(new_hoatDong)
+    const result = await axios.put(`http://localhost:8080/hoatdong/update`, new_hoatDong)
+    if (result) {
+      console.log(result)
+      handleResultHoatDongTour(tourClicked)
+      console.log(tourClicked)
+    } else {
+      console.log("Cập nhật hoạt động thất bại!")
+    }
   }
   //Kết thúc cập nhật
   const handDiaChiThanhToaDo = async () => {
@@ -359,7 +447,26 @@ function MapBox() {
       })
     console.log(arrNewAddress)
   }
+  const handDiaChiHoatDongThanhToaDo = async () => {
+    let arrNewAddress = []
+    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${viTriHD}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
+      .then(function (response) {
+        console.log(response)
+        arrNewAddress.push({
+          lng: response.data.features[0].center[0],
+          lat: response.data.features[0].center[1]
+        })
+        setLat(arrNewAddress[0].lat)
+        setLng(arrNewAddress[0].lng)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      .then(() => {
 
+      })
+    console.log(arrNewAddress)
+  }
   // const mapRef = React.useRef();
   const [viewState, setViewState] = React.useState({
     longitude: lng,
@@ -370,7 +477,8 @@ function MapBox() {
   //useEffect
   useEffect(() => {
     handleResultData()
-  }, [tour])
+
+  }, [tour, listHoatDong])
 
   return (
     <Map
@@ -462,49 +570,8 @@ function MapBox() {
           <div className="ds-tour">
             {
               listTour.map((item, index) => {
-                return <div onClick={() => handleClickItem(item)} key={index} className='item-tour'>
-                  <div style={{
-                    height: 50,
-                    width: 50,
-                    backgroundImage: `url(${item.hinhAnh[0]})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                    // padding: '10px'
-                  }} >
-                  </div>
-                  <p className="item-ten-tour">{item.tenTour}</p>
-                </div>
-              })
-            }
-          </div>
-          {/* Hoat dong */}
-          <div className="list-hoat-dong">
-            <p className="title-hoat-dong">Hoạt động</p>
-            {/* <hr /> */}
-            {
-              tourId ?   <div className='item-tour' onClick={() => handleClickCreateHoatDong()}>
-              <div style={{
-                display: "flex",
-                height: 50,
-                width: 50,
-                backgroundColor: "gray",
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                // padding: '10px'
-                justifyContent: "center"
-              }} >
-                <h1 style={{
-                  textAlign: 'center'
-                }}>+</h1>
-              </div>
-              <p className="item-ten-tour">Thêm hoạt động</p>
-            </div>:""
-            }
-            <div className="ds-hoat-dong">
-              {/* // fix thanh scroll view */}
-              {
-                listHoatDong.map((item, index) => {
-                  return <div onClick={() => handleClickHoatDong(item)} key={index} className='item-tour'>
+                return <div key={item.document_id} className='item-tour'>
+                  <div onClick={() => handleClickItem(item)} className="hoat-dong-filter">
                     <div style={{
                       height: 50,
                       width: 50,
@@ -514,7 +581,54 @@ function MapBox() {
                       // padding: '10px'
                     }} >
                     </div>
-                    <p className="item-ten-tour">{item.tieuDe}</p>
+                    <p className="item-ten-tour">{item.tenTour}</p>
+                  </div>
+
+                </div>
+              })
+            }
+          </div>
+          {/* Hoat dong */}
+          <div className="list-hoat-dong">
+            <p className="title-hoat-dong">Hoạt động</p>
+            {/* <hr /> */}
+            {
+              tourId ? <div className='item-tour' onClick={() => handleClickCreateHoatDong()}>
+                <div style={{
+                  display: "flex",
+                  height: 50,
+                  width: 50,
+                  backgroundColor: "gray",
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  // padding: '10px'
+                  justifyContent: "center"
+                }} >
+                  <h1 style={{
+                    textAlign: 'center'
+                  }}>+</h1>
+                </div>
+                <p className="item-ten-tour">Thêm hoạt động</p>
+              </div> : ""
+            }
+            <div className="ds-hoat-dong">
+              {/* // fix thanh scroll view */}
+              {
+                listHoatDong.map((item, index) => {
+                  return <div key={index} className='item-hoat-dong'>
+                    <div onClick={() => handleClickHoatDong(item)} className="hoat-dong-filter">
+                      <div style={{
+                        height: 50,
+                        width: 50,
+                        backgroundImage: `url(${item.hinhAnh[0]})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        // padding: '10px'
+                      }} >
+                      </div>
+                      <p className="item-tieu-de">{item.tieuDe}</p>
+                    </div>
+
                   </div>
                 })
               }
@@ -524,12 +638,14 @@ function MapBox() {
 
         {
           showForm ?
-            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', width: '100%' }} className='group-control' onSubmit={() => handSubmit()}>
-              <Form.Label
-                onClick={() => handleClickDongForm()}
-                style={{ float: "right", textAlign: 'end', color: 'red', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>Đóng </Form.Label>
+            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', width: '100%',height:"100%", justifyContent:"flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
               <Form.Group className='title-them-tour'>
-                <h3 className='label-title-tour'>Thông tin tour </h3>
+                <Button variant="outline-danger"
+                  onClick={() => setShowForm(!showForm)}
+                  style={{ float: "right", textAlign: 'end', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>X </Button>
+                <h5 className='label-title-tour' style={{ fontSize: 25 }}>Thông tin tour</h5>
+              </Form.Group>     
+               <Form.Group className='title-them-tour'>
                 {tourId !== '' ? <p>ID: {tourId}</p> : ""}
               </Form.Group>
               <Form.Group>
@@ -632,7 +748,7 @@ function MapBox() {
                     onChange={e => handleChangeThongTin(e)}
                     as="textarea"
                     placeholder="Leave a comment here"
-                    style={{ height: '100px' }}
+                    style={{ height: '250px' }}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -651,7 +767,7 @@ function MapBox() {
                     onChange={e => handleChangeDiaChi(e)}
                     autoComplete="strees-address"
                     type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                  <Button onClick={() => handDiaChiThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
+                  <Button style={{ marginTop: 10 }} onClick={() => handDiaChiThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
                 </AddressAutofill>
 
               </Form.Group>
@@ -694,12 +810,38 @@ function MapBox() {
                   onChange={e => handleChangeHinhAnh(e)}
                   type="text" placeholder="VD: " required />
               </Form.Group>
-              <Form.Group style={{ paddingLeft: 100, margin: 5 }}>
+              <Form.Group style={{ paddingLeft: 1, height: 30, margin: 5 }}>
                 {tourId !== '' ?
-                  <Button style={{ width: 150 }}
-                    onClick={() => handleUpdate()}
-                    type="button"
-                    variant="warning">Cập nhật</Button>
+                  <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
+                    <Button style={{ flex: 0.5, marginRight: 5 }}
+                      onClick={() => handleUpdate()}
+                      type="button"
+                      variant="warning">Cập nhật</Button>
+                    <Button style={{ flex: 0.5 }} onClick={() => handleShowPopupDeleteTour()} variant="danger" >Xóa</Button>
+                    <PopupNote className="xoa_popub" showInfoPopup={isDeletePopup} trigger={isDeletePopup} setTrigger={setIsDeletePopup} >
+                      <div
+                        style={{
+                          minHeight: '250px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: 22
+                        }}>
+                        <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                          <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
+                          <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsDeletePopup(false)}>x</Button>
+                        </div>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ bị xóa khỏi dữ liệu</p>
+                        <p style={{ color: "gray" }}>Mã tour: {tourClicked.document_id}</p>
+                        <p style={{ color: "gray" }}>Tên tour: {tourClicked.tenTour}</p>
+                        <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsDeletePopup(false)}>Cancel</Button>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => deleteTourById(tourClicked)}>Start delete</Button>
+                        </div>
+                      </div>
+                    </PopupNote>
+                  </div>
                   : <Button style={{ width: 150 }} type="submit" variant="primary">Thêm</Button>
                 }
               </Form.Group>
@@ -710,17 +852,19 @@ function MapBox() {
         {
           showFormHoatDong ?
             <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start' }} className='group-control'>
-              <Form.Label
-                onClick={() => handleClickDongForm()}
-                style={{ float: "right", textAlign: 'end', color: 'red', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>Đóng </Form.Label>
+
+              <Form.Group className='title-them-tour'>
+                <Button variant="outline-danger"
+                  onClick={() => setShowFormHoatDong(!showFormHoatDong)}
+                  style={{ float: "right", textAlign: 'end', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>X </Button>
+                <h5 className='label-title-tour' style={{ fontSize: 25 }}>Thông tin hoạt động</h5>
+              </Form.Group>
               <Form.Group className='title-them-tour'></Form.Group>
               <Form.Group className='title-them-tour'>
                 <h6 className='label-title-tour'>Mã tour: {tourId}</h6>
                 <h6 className='label-title-tour'>Mã hd: {maHD}</h6>
               </Form.Group>
-              <Form.Group className='title-them-tour'>
-                <h5 className='label-title-tour'>Thông tin hoạt động</h5>
-              </Form.Group>
+
               <Form.Group style={{ height: '50px' }}>
                 <Form.Label style={{ height: '15px' }} className='label-ten-tour'>Tiêu đề hoạt động:</Form.Label>
                 <Form.Control
@@ -748,7 +892,7 @@ function MapBox() {
                     value={thongTinHD}
                     as="textarea"
                     placeholder="Leave a comment here"
-                    style={{ height: '100px' }}
+                    style={{ height: '250px' }}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -767,7 +911,7 @@ function MapBox() {
                     onChange={e => handleChangeDiaChiHD(e)}
                     autoComplete="strees-address"
                     type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                  <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiThanhToaDo()} type="button" variant="warning">Tìm kiếm</Button>{' '}
+                  <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiHoatDongThanhToaDo()} type="button" variant="warning">Tìm kiếm</Button>{' '}
                 </AddressAutofill>
 
               </Form.Group>
@@ -798,10 +942,41 @@ function MapBox() {
                   onChange={e => handleChangeHinhAnhHD(e)}
                   type="text" placeholder="VD: " required />
               </Form.Group>
-              <Form.Group style={{ paddingLeft: 10 }}>
-                <Button type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>{' '}
-                {/* onClick={() => handSubmit()} */}
-                {/* <Button variant="danger" onClick={() => handShowPopupThem()}>Đóng</Button>{' '} */}
+              <Form.Group style={{ paddingLeft: 1, margin: 5 }}>
+                {maHD !== '' ?
+                  <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
+
+                    <Button style={{ flex: 0.5, marginRight: 5 }}
+                      onClick={() => handleUpdateHoatDong()}
+                      type="button"
+                      variant="warning">Cập nhật</Button>
+                    <Button style={{ flex: 0.5 }} onClick={() => handleShowPopupDeleteHoatDong()} variant="danger">Xóa </Button>
+                    <PopupNote className="xoa_popub" showInfoPopup={isDeleteHoatDongPopup} trigger={isDeleteHoatDongPopup} setTrigger={setIsDeleteHoatDongPopup} >
+                      <div
+                        style={{
+                          minHeight: '250px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: 22
+                        }}>
+                        <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                          <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
+                          <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsDeleteHoatDongPopup(false)}>x</Button>
+                        </div>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ bị xóa khỏi dữ liệu</p>
+                        <p style={{ color: "gray" }}>Mã tour: {hoatDongChecked.id}</p>
+                        <p style={{ color: "gray" }}>Tên tour: {hoatDongChecked.tieuDe}</p>
+                        <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsDeleteHoatDongPopup(false)}>Cancel</Button>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => deleteHoatDongById(hoatDongChecked)}>Start delete</Button>
+                        </div>
+                      </div>
+                    </PopupNote>
+                  </div>
+                  : <Button type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>
+                }
               </Form.Group>
 
             </Form> : ""
