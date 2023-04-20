@@ -39,7 +39,7 @@ public class HoatDongController {
 		return true;
 	}
 
-	@CrossOrigin(origins = {"http://localhost:3000", "http:/192.168.1.2:8081"})
+	@CrossOrigin(origins = {"http://localhost:3000", "http:/192.168.1.116:8081"})
 	@GetMapping("/find")
 	public List<HoatDong> getHoatDong(@RequestParam String tourID) throws InterruptedException, ExecutionException {
 		List<HoatDong> listHD = dbHoatDong.getHoatDong(tourID);
