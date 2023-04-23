@@ -51,6 +51,7 @@ public class TourServiceImp implements TourService {
         Tour tour;
         if (doc.exists()) {
             tour = doc.toObject(Tour.class);
+            tour.getTenTour();
             return tour;
         }
         return null;
