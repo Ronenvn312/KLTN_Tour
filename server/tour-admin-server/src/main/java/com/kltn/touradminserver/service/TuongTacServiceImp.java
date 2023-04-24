@@ -6,6 +6,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.entity.TuongTac;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 @Service
 public class TuongTacServiceImp implements  TuongTacService{
@@ -29,5 +30,20 @@ public class TuongTacServiceImp implements  TuongTacService{
             return collectionApiFuture.get().getUpdateTime().toString();
         }
         return "Tuong Tac not exists";
+    }
+
+    @Override
+    public List<String> getTourIdPlaned(String userId) throws ExecutionException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public List<String> getTourIdLiked(String userId) throws ExecutionException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public List<String> getTourIdBooked(String userId) throws ExecutionException, InterruptedException {
+        return null;
     }
 }
