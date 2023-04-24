@@ -1,19 +1,81 @@
 import React, { useEffect, useState } from 'react'
+import { Button, Form } from 'react-bootstrap';
 import './screenThongKe.css'
 import Chart from './ChartThongKe/Chart'
 import PieChartExample from './ChartThongKe/PieChartExample.JS'
+import axios from 'axios';
 export default function ScreenThongKe() {
     const dsTour = localStorage.getItem("dsTour")
     const [listTour, setListTour] = useState([])
     const slTT = 100;
+    const date = new Date();
     const handleShowListTour = () => {
         if (dsTour != null) {
             const list = JSON.parse(dsTour);
             setListTour(list)
         }
     }
+    const [selectedThang, setSelectedThang] = useState(4);
+    const [selectedNam, setSelectedNam] = useState(2023);
+    const [listNam, setListNam] = useState([])
+    const [listThang, setListThang] = useState([])
+    const handleSelectChangeNam = (event) => {
+        setSelectedNam(event.target.value);
+        console.log(event.target.value)
+    };
+    const [listThongKe, setListThongKe] = useState([])
+    const handleSelectChangeThang = (event) => {
+        setSelectedThang(event.target.value);
+        console.log(event.target.value)
+    };
+    const handleValue = () => {
+        let listN = []
+        let listT = []
+        for (let index = 2023; index >= 2010; index--) {
+            listN.push(index);
+        }
+        for (let index = 1; index <= 12; index++) {
+            listT.push(index);
+        }
+        setListNam(listN)
+        setListThang(listT)
+    }
+    const handleSearchThongKe = async () => {
+        const result = await axios.get(`http://localhost:8080/thongKe/find`, {
+            params: {
+                thang: selectedThang,
+                nam: selectedNam
+            }
+        })
+        if (result.data) {
+            console.log(result.data)
+            setListThongKe(result.data)
+        }
+    }
+    const handleListTourLike = () => {
+        const tours = []
+        listThongKe.forEach(element => {
+            // console.log(element)
+            axios.get(`http://localhost:8080/tour/get_tour`, {
+                params: {
+                    document_id: element.tourId
+                }
+            }).then((result) => {
+                console.log(result.data)
+                tours.push(result.data)
+            })
+        });
+        setListTour(tours)
+        console.log(listTour)
+    }
     useEffect(() => {
         handleShowListTour()
+        if (listNam.length <= 0 || listThang.length <= 0) {
+            handleValue()
+        }
+        if (listThongKe.length > 0) {
+            handleListTourLike()
+        }
     }, [])
     return (
         <div className='thongke-container'>
@@ -99,9 +161,39 @@ export default function ScreenThongKe() {
                     </div>
                 </div>
             </div>
-            <hr/>
+            <hr />
             {/* END DASHBOARD STATS */}
+            <Form style={{ flexDirection: 'row', display: "flex", marginLeft: 40 }}>
+                <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11 }}>
+                    <Form.Label>Chọn tháng: </Form.Label>
+                    <Form.Select value={selectedThang} onChange={handleSelectChangeThang}>
+                        {
+                            listThang.map((item) => {
+                                return <option key={item} value={item}>Tháng {item}</option>
+                            })
+                        }
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11, marginLeft: 20 }}>
+                    <Form.Label>chọn năm: </Form.Label>
+                    <Form.Select value={selectedNam} onChange={handleSelectChangeNam}>
+                        {
+                            listNam.map((item) => {
+                                return <option value={item}>Năm {item}</option>
+                            })
+                        }
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group style={{ flex: 0.18, marginTop: 32, marginLeft: 20, justifyContent: 'flex-end', alignItems: 'flex-end', flexDirection: 'column' }}>
+                    <Button
+                        onClick={() => handleSearchThongKe()}
+                        style={{ width: 150 }}
+                        variant='info'
+                        type='button'>Tìm kiếm</Button>
+                </Form.Group>
+            </Form>
             <div className='thongke-content'>
+
                 <div className='thongke-fluid' >
                     <div className='thongke-fluid-left'>
                         <h5 className='thongke-fluid-left-title'>Danh sách tour có lượng tương tác cao nhất trong tháng:</h5>
@@ -114,9 +206,9 @@ export default function ScreenThongKe() {
                             </thead>
                             <tbody className='thongke-table-tbody'>
                                 {
-                                    
+
                                     listTour.map((item, index) => {
-                                        return <tr className='thongke-table-tbody-tr'>
+                                        return <tr key={item.document_id} className='thongke-table-tbody-tr'>
                                             <td>
                                                 {index + 1}
                                             </td>
@@ -127,7 +219,7 @@ export default function ScreenThongKe() {
                                                 {item.tenTour}
                                             </td>
                                             <td>
-                                                {slTT-index}
+                                                {slTT - index}
                                             </td>
                                         </tr>
                                     })

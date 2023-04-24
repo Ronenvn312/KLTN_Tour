@@ -61,7 +61,10 @@ export const Tabheader = (props) => {
 
     setValidated(true);
   };
-
+  const handleDangXuat = () => {
+    localStorage.removeItem("email")
+    navigate("/")
+  }
   //event get values
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value })
@@ -74,7 +77,7 @@ export const Tabheader = (props) => {
             <img className='user-avatar' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/profire.jpg?alt=media&token=36f9f734-d5a5-46fd-897f-d7406be4a3dd'} alt="user avatar" />
             <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
             <div className="user-email">datnguyen9g@gmail.com</div>
-            <button type="button" className="btn btn-danger" onClick={() => navigate("/")}>Đăng xuất</button>
+            <button type="button" className="btn btn-danger" onClick={() => handleDangXuat()}>Đăng xuất</button>
           </div>
         </div>
         <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">

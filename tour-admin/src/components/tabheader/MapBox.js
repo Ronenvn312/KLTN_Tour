@@ -638,17 +638,17 @@ function MapBox() {
 
         {
           showForm ?
-            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', width: '100%',height:"100%", justifyContent:"flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
-              <Form.Group className='title-them-tour'>
+            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', minWidth: 390, width: '100%', height: "100%", justifyContent: "flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
+              <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <Button variant="outline-danger"
                   onClick={() => setShowForm(!showForm)}
                   style={{ float: "right", textAlign: 'end', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>X </Button>
                 <h5 className='label-title-tour' style={{ fontSize: 25 }}>Thông tin tour</h5>
-              </Form.Group>     
-               <Form.Group className='title-them-tour'>
+              </Form.Group>
+              <Form.Group className='title-them-tour'>
                 {tourId !== '' ? <p>ID: {tourId}</p> : ""}
               </Form.Group>
-              <Form.Group>
+              <Form.Group style={{ width: "100%" }}>
                 <Form.Label className='label-ten-tour'>Tên tour:</Form.Label>
                 <Form.Control
                   name='tenTour'
@@ -657,14 +657,7 @@ function MapBox() {
                   type="text" placeholder="VD:Tour Nha Trang, Tour Đà Nẵng" required />
               </Form.Group>
               <Form.Label className='label-loai-tour'>Thể loại:</Form.Label>
-              <Form.Group style={{ display: 'flex' }}>
-
-                {/* <Form.Control
-                  name='theLoai'
-                  value={theLoai}
-                  contentEditable={"true"}
-                  onChange={e => handleChangeTheLoai(e)}
-                  type="text" placeholder="VD: Gia đình, tổ chức, hẹn hò, thư dãn, tổ chức tiệc,..." required /> */}
+              <Form.Group style={{ display: 'flex', width: "100%" }}>
                 <Form.Check
                   type="switch"
                   label="Thiên nhiên"
@@ -719,7 +712,7 @@ function MapBox() {
 
 
               </Form.Group>
-              <Form.Group>
+              <Form.Group  style={{width: "100%"}}>
                 <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
                 <Form.Select
                   name="soNgay"
@@ -739,7 +732,7 @@ function MapBox() {
                   <option value="9">2 tuần</option>
                 </Form.Select>
               </Form.Group>
-              <Form.Group>
+              <Form.Group  style={{width: "100%"}}>
 
                 <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
                   <Form.Control
@@ -748,12 +741,12 @@ function MapBox() {
                     onChange={e => handleChangeThongTin(e)}
                     as="textarea"
                     placeholder="Leave a comment here"
-                    style={{ height: '250px' }}
+                    style={{ height: '100px' }}
                   />
                 </FloatingLabel>
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group  style={{width: "100%"}}>
                 <Form.Label className='label-login'>Địa chỉ :</Form.Label>
                 <AddressAutofill
                   options={{
@@ -771,7 +764,7 @@ function MapBox() {
                 </AddressAutofill>
 
               </Form.Group>
-              <Form.Group style={{ marginTop: 10 }}>
+              <Form.Group style={{ marginTop: 10, width: "100%" }}>
                 <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
                 <Form.Group>
                   <Form.Label className='label-loai-tour'>longitude:</Form.Label>
@@ -788,7 +781,7 @@ function MapBox() {
                     type="text" placeholder="VD: 10.0001" required />
                 </Form.Group>
               </Form.Group>
-              <Form.Group>
+              <Form.Group  style={{width: "100%"}}>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
@@ -802,7 +795,7 @@ function MapBox() {
                   onChange={e => handleChangeCheckPhoBien(e)}
                 />
               </Form.Group>
-              <Form.Group>
+              <Form.Group  style={{width: "100%"}}>
                 <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
                 <Form.Control
                   name='hinhAnh'
@@ -810,7 +803,7 @@ function MapBox() {
                   onChange={e => handleChangeHinhAnh(e)}
                   type="text" placeholder="VD: " required />
               </Form.Group>
-              <Form.Group style={{ paddingLeft: 1, height: 30, margin: 5 }}>
+              <Form.Group style={{ paddingLeft: 1, height: 30, margin: 5, width: "100%" }}>
                 {tourId !== '' ?
                   <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
                     <Button style={{ flex: 0.5, marginRight: 5 }}
@@ -821,7 +814,7 @@ function MapBox() {
                     <PopupNote className="xoa_popub" showInfoPopup={isDeletePopup} trigger={isDeletePopup} setTrigger={setIsDeletePopup} >
                       <div
                         style={{
-                          minHeight: '250px',
+                          minHeight: '200px',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'center',
@@ -851,21 +844,20 @@ function MapBox() {
         {/* Form hoạt động */}
         {
           showFormHoatDong ?
-            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start' }} className='group-control'>
+            <Form style={{minWidth: 390, display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start', flexDirection: 'column' }} className='group-control'>
 
-              <Form.Group className='title-them-tour'>
+              <Form.Group className='title-them-tour'  style={{width: "100%"}}>
                 <Button variant="outline-danger"
                   onClick={() => setShowFormHoatDong(!showFormHoatDong)}
                   style={{ float: "right", textAlign: 'end', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>X </Button>
                 <h5 className='label-title-tour' style={{ fontSize: 25 }}>Thông tin hoạt động</h5>
               </Form.Group>
-              <Form.Group className='title-them-tour'></Form.Group>
-              <Form.Group className='title-them-tour'>
+              <Form.Group className='title-them-tour' style={{width: "100%"}}>
                 <h6 className='label-title-tour'>Mã tour: {tourId}</h6>
                 <h6 className='label-title-tour'>Mã hd: {maHD}</h6>
               </Form.Group>
 
-              <Form.Group style={{ height: '50px' }}>
+              <Form.Group style={{ height: '50px', width: "100%" }}>
                 <Form.Label style={{ height: '15px' }} className='label-ten-tour'>Tiêu đề hoạt động:</Form.Label>
                 <Form.Control
                   name='tenhd'
@@ -874,7 +866,7 @@ function MapBox() {
                   onChange={e => handleChangeTieuDe(e)}
                   type="text" placeholder="tiêu đề" required />
               </Form.Group>
-              <Form.Group style={{ height: '50px' }}>
+              <Form.Group style={{ height: '50px', width: "100%" }}>
                 <Form.Label style={{ height: '15px' }} className='label-loai-tour'>Thời gian:</Form.Label>
                 <Form.Control
                   name='thoigian'
@@ -884,7 +876,7 @@ function MapBox() {
                   onChange={e => handleChangeThoiGian(e)}
                   type="text" placeholder="VD: Ngày thứ 1" required />
               </Form.Group>
-              <Form.Group >
+              <Form.Group style={{ width: "100%"}}>
                 {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
                 <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
                   <Form.Control
@@ -896,7 +888,7 @@ function MapBox() {
                   />
                 </FloatingLabel>
               </Form.Group>
-              <Form.Group style={{ height: '80px' }}>
+              <Form.Group style={{ height: '80px', width: "100%" }}>
                 <Form.Label style={{ height: '15px' }} className='label-login'>Địa chỉ :</Form.Label>
                 <AddressAutofill
                   options={{
@@ -915,8 +907,8 @@ function MapBox() {
                 </AddressAutofill>
 
               </Form.Group>
-              <Form.Group style={{ marginTop: 10 }}>
-                <Form.Group>
+              <Form.Group style={{ marginTop: 10, width: "100%", display:"flex", flexDirection: "row" }}>
+                <Form.Group style={{flex: 0.5}}>
                   <Form.Label className='label-loai-tour'>longitude:</Form.Label>
                   <Form.Control
                     name='longitude'
@@ -924,7 +916,7 @@ function MapBox() {
                     // onChange={e => handleChange(e)}
                     type="text" placeholder="VD: 100.1" required />
                 </Form.Group>
-                <Form.Group>
+                <Form.Group  style={{flex: 0.5, marginLeft: 5}}>
                   <Form.Label className='label-loai-tour'>latitude:</Form.Label>
                   <Form.Control
                     name='latitude'
@@ -934,7 +926,7 @@ function MapBox() {
                 </Form.Group>
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group style={{ width: "100%"}}>
                 <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
                 <Form.Control
                   name='hinhanh'
@@ -942,7 +934,7 @@ function MapBox() {
                   onChange={e => handleChangeHinhAnhHD(e)}
                   type="text" placeholder="VD: " required />
               </Form.Group>
-              <Form.Group style={{ paddingLeft: 1, margin: 5 }}>
+              <Form.Group style={{ paddingLeft: 1, margin: 5, width: "100%" }}>
                 {maHD !== '' ?
                   <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
 

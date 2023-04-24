@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Login.css'
 import logo from '../assets/logo.png'
 import wel_human from '../assets/Wel_human.png'
-import { useNavigate } from 'react-router-dom'
+import { parsePath, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -18,15 +18,15 @@ function Login() {
 
   const toggleshowErroPassword = () => setshowErroPassword(!showErroPassword);
   const toggleshowErroEmail = () => setshowErroEmail(!showErroEmail);
-    //event get values
-    const [validateEmail, setValidateEmail] = useState({
-      "status": true,
-      "content": ""
-    })
-    const [validatePassword, setValidatePassword] = useState({
-      "status": true,
-      "content": ""
-    })
+  //event get values
+  const [validateEmail, setValidateEmail] = useState({
+    "status": true,
+    "content": ""
+  })
+  const [validatePassword, setValidatePassword] = useState({
+    "status": true,
+    "content": ""
+  })
   //submit login
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -39,19 +39,33 @@ function Login() {
   // const handlogin
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = async (event) => {
-
-    if (validateEmail == true && validatePassword == true) {
-
-    }
-    else {
-      let result = axios.get(`http://localhost:8080/taikhoan/loggin`, {
-        params: {
-          username: email
-        }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios.get(`http://localhost:8080/taikhoan/loggin`, {
+      params: {
+        username: email
+      }
+    }).then((res) => {
+      if(res.data && res.data.password == password){
+        localStorage.setItem("email", JSON.stringify(res.data))
+        console.log(validateEmail.status + "" + validatePassword.status)
+        console.log(res)
+        navigate('/home')
+      }
+     else {
+      setValidateEmail({
+        "status": true,
+        "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
       })
-      console.log(result)
-    }
+      setValidatePassword({
+        "status": true,
+        "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
+      })
+     }
+    })
+    
+
+
   };
 
   const handleChangeEmail = (event) => {
@@ -90,13 +104,19 @@ function Login() {
   // const handleValidation = () => {
 
   // }
+  useEffect(() => {
+    const email = localStorage.getItem("email")
+    if(email) {
+      navigate("/home")
+    }
+  }, [])
   return (
     <div className='Login'>
       <div className='Login-left'>
         <img className='Logo-left' src={logo} alt='' />
         <h1 className='Login-title'>Sign In</h1>
 
-        <Form className='group-control' onSubmit={(e) => handleSubmit(e)}>
+        <Form className='group-control' onSubmit={(e) => handleSubmit(e)} >
           <Form.Label className='label-login'>Email address</Form.Label>
           <Form.Group id='form-group' controlId="formBasicEmail">
             <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -125,6 +145,7 @@ function Login() {
               <Form.Control
                 name='password'
                 value={password}
+
                 onChange={e => handleChangePassword(e)}
                 type="password" placeholder="Password" required />
               {
@@ -146,7 +167,7 @@ function Login() {
             <Form.Check
               className='label-login' type="checkbox" label="Check me out" />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" >
             Đăng nhập
           </Button>
         </Form>

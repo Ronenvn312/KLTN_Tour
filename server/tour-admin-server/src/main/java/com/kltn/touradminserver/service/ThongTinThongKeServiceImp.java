@@ -7,6 +7,9 @@ import com.kltn.touradminserver.entity.ThongTinThongKe;
 import com.kltn.touradminserver.entity.Tour;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 //import java.util.Date;
 import java.util.Date;
@@ -42,15 +45,26 @@ public class ThongTinThongKeServiceImp implements ThongTinThongKeService{
     @Override
     public List<ThongTinThongKe> getTttkByThangNam(int thang, int nam) throws ExecutionException, InterruptedException {
         CollectionReference collectionReference = dbFireStore.collection("thongTinThongKe");
-        Query query = collectionReference.orderBy("slTuongTac");
+        Query query = collectionReference.orderBy("slThich");
         QuerySnapshot querySnapshot = query.get().get();
         List<ThongTinThongKe> thongTinThongKes = new ArrayList<>();
         Date new_date = new Date();
+
+        String dateString = "1/"+thang+"/"+ nam;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = format.parse(dateString);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         for (QueryDocumentSnapshot tttk : querySnapshot.getDocuments()) {
             ThongTinThongKe new_tttk = tttk.toObject(ThongTinThongKe.class);
-            if (new_tttk.getThangNam().getMonth() == thang-1 && new_tttk.getThangNam().getYear() == new_date.getYear()) {
+            if (new_tttk.getThangNam().getMonth() == date.getMonth() && new_tttk.getThangNam().getYear() == date.getYear()) {
                 thongTinThongKes.add(new_tttk);
-                System.out.println(""+ thang + nam +" "+ new_tttk.getThangNam().getYear());
+                System.out.println(new_date);
             }
         }
 

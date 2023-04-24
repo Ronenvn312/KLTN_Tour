@@ -12,6 +12,7 @@
   min-width: 700px;
 }
 
+
 .form-them-list-tour {
   flex: 1;
   max-width: 350px;
@@ -39,7 +40,6 @@
   display: flex;
   flex: 0.6;
   flex-direction: column;
-
   margin-bottom: 30px;
 }
 
@@ -82,11 +82,13 @@
   background-color: rgba(128, 128, 128, 0.308);
   border-radius: 10px;
 }
+
 .hoat-dong-filter {
   display: flex;
   flex-direction: row;
   flex: 0.9;
 }
+
 .item-hoat-dong:hover {
   background-color: rgba(128, 128, 128, 0.815);
 }
