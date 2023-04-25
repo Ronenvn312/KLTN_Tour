@@ -12,4 +12,5 @@ public interface HoatDongService {
 	public String deleteHoatDong(String document_id);
 	public List<HoatDong> findAllsByTourId(String tourId) throws InterruptedException, ExecutionException;
 	List<HoatDong> findAlls() throws InterruptedException, ExecutionException;
+	HoatDong findById(String id) throws InterruptedException, ExecutionException;
 }

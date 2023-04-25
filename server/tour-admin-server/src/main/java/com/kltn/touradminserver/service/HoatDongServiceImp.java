@@ -95,4 +95,18 @@ public class HoatDongServiceImp implements HoatDongService {
 			return tourDocument;
 		}).collect(Collectors.toList());
 	}
+
+	@Override
+	public HoatDong findById(String id) throws InterruptedException, ExecutionException {
+		Firestore dbFireStore = FirestoreClient.getFirestore();
+		DocumentReference documentReference = dbFireStore.collection("hoatDong").document(id);
+		ApiFuture<DocumentSnapshot> future = documentReference.get();
+		DocumentSnapshot doc = future.get();
+		HoatDong hd;
+		if (doc.exists()) {
+			hd = doc.toObject(HoatDong.class);
+			return hd;
+		}
+		return null;
+	}
 }

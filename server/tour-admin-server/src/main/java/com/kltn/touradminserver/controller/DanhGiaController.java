@@ -23,19 +23,25 @@ public class DanhGiaController {
     @Autowired
     DanhGiaServiceImp danhGiaService;
 
-    @GetMapping("getByUserId")
-    public List<DanhGia> getByUserId(@RequestParam String userId) throws InterruptedException, ExecutionException {
+    @GetMapping("/getByUserId")
+    public List<String> getByUserId(@RequestParam String userId, @RequestParam boolean status) throws InterruptedException, ExecutionException {
         logger.log(Level.WARNING, "UserId: " + userId);
-        return danhGiaService.getByUserId(userId);
+        return danhGiaService.getByUserId(userId, status);
     }
 
-    @DeleteMapping("delete")
+    @GetMapping("/getForUser")
+    public List<DanhGia> getDanhGia(@RequestParam String userId) throws InterruptedException, ExecutionException {
+        logger.log(Level.WARNING, "UserId: " + userId);
+        return danhGiaService.getDanhGia(userId);
+    }
+
+    @DeleteMapping("/delete")
     public String delete(@RequestParam String id) throws ExecutionException, InterruptedException {
         logger.log(Level.WARNING, "Id: " + id);
         return danhGiaService.delete(id);
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public DanhGia create(@RequestBody DanhGia d) throws ExecutionException, InterruptedException {
         return danhGiaService.insert(d);
     }

@@ -4,10 +4,13 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.entity.TuongTac;
+import lombok.var;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
 @Service
 public class TuongTacServiceImp implements  TuongTacService{
     Firestore dbFireStore = FirestoreClient.getFirestore();
@@ -34,16 +37,25 @@ public class TuongTacServiceImp implements  TuongTacService{
 
     @Override
     public List<String> getTourIdPlaned(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userLenKeHoach", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId= id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getTourIdLiked(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userDaThich", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId= id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getTourIdBooked(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userDaDat", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId= id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
 }
