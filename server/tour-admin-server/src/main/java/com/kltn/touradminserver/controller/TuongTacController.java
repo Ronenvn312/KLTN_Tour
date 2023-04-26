@@ -21,4 +21,35 @@ public class TuongTacController {
     public String insertTour(@RequestBody TuongTac tuongTac) throws InterruptedException, ExecutionException {
         return tuongTacServiceImp.insert(tuongTac);
     }
+
+    @PutMapping("/update")
+    public String update(@RequestBody TuongTac tuongTac) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.insert(tuongTac);
+    }
+
+    @PutMapping("/like")
+    public String like(@RequestParam String tourId,@RequestParam String userId) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.like(tourId,userId);
+    }
+
+    @PutMapping("/unlike")
+    public String unlike(@RequestParam String tourId,@RequestParam String userId) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.unLike(tourId,userId);
+    }
+
+    @PutMapping("/plan")
+    public String plan(@RequestParam String tourId,@RequestParam String userId) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.plan(tourId,userId);
+    }
+
+    @PutMapping("/dropOurPlan")
+    public String dropPlan(@RequestParam String tourId,@RequestParam String userId) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.dropOutPlan(tourId,userId);
+    }
+
+    @PutMapping("/book")
+    public String book(@RequestParam String tourId,@RequestParam String userId) throws InterruptedException, ExecutionException {
+        return tuongTacServiceImp.book(tourId,userId);
+    }
+
 }

@@ -95,7 +95,7 @@ public class TourController {
         return ResponseEntity.ok().headers(headers).body(dbTour.findByCategory(cate));
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.34.106:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
     @GetMapping("/findTrending")
     public ResponseEntity<List<Tour>> findTrending() throws InterruptedException, ExecutionException {
         HttpHeaders headers = new HttpHeaders();
@@ -103,7 +103,7 @@ public class TourController {
         return ResponseEntity.ok().headers(headers).body(dbTour.findTrending());
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.34.106:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
     @GetMapping("/findPopular")
     public ResponseEntity<List<Tour>> findPopular() throws InterruptedException, ExecutionException {
         HttpHeaders headers = new HttpHeaders();
