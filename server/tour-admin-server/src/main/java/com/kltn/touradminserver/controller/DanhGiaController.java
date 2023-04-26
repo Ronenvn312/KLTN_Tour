@@ -1,9 +1,8 @@
 package com.kltn.touradminserver.controller;
 
 import com.kltn.touradminserver.entity.DanhGia;
-import com.kltn.touradminserver.entity.HoatDong;
-import com.kltn.touradminserver.service.DanhGiaService;
 import com.kltn.touradminserver.service.DanhGiaServiceImp;
+import com.kltn.touradminserver.service.TourService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//@CrossOrigin
+@CrossOrigin
 @RestController
 @RequestMapping("/danhGia")
 @NoArgsConstructor
@@ -22,6 +21,9 @@ public class DanhGiaController {
     Logger logger = Logger.getLogger(DanhGiaController.class.getName());
     @Autowired
     DanhGiaServiceImp danhGiaService;
+
+    @Autowired
+    TourService tourService;
 
     @GetMapping("/getByUserId")
     public List<String> getByUserId(@RequestParam String userId, @RequestParam boolean status) throws InterruptedException, ExecutionException {
@@ -44,5 +46,13 @@ public class DanhGiaController {
     @PostMapping("/add")
     public DanhGia create(@RequestBody DanhGia d) throws ExecutionException, InterruptedException {
         return danhGiaService.insert(d);
+    }
+
+    @PutMapping("/update")
+    public String update(@RequestParam String id, @RequestParam String comment, @RequestParam int rate, String tourId) throws ExecutionException, InterruptedException {
+        logger.log(Level.WARNING, "Id: " + id);
+        //Cap nhat danh gia cho tour
+        tourService.updateRatingTour(danhGiaService.getForRatingTour(tourId), tourId);
+        return danhGiaService.update(rate, comment, id);
     }
 }

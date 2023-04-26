@@ -5,15 +5,11 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.entity.DanhGia;
-import com.kltn.touradminserver.entity.HoatDong;
-import com.kltn.touradminserver.entity.Tour;
-import lombok.var;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Service
 public class DanhGiaServiceImp implements DanhGiaService {
@@ -44,12 +40,30 @@ public class DanhGiaServiceImp implements DanhGiaService {
     }
 
     @Override
+    public String update(int rate, String comment, String id) throws ExecutionException, InterruptedException {
+        if (dbFireStore.collection("danhGia").document(id).get().get().toObject(DanhGia.class).isStatus())
+            return dbFireStore.collection("danhGia").document(id).update("danhGia", rate, "binhLuan", comment).get().getUpdateTime().toString();
+        return "Failed";
+    }
+
+    @Override
     public List<String> getByUserId(String userId, boolean status) throws ExecutionException, InterruptedException {
         QuerySnapshot querySnapshot = dbFireStore.collection("danhGia").whereEqualTo("nguoiDungID", userId).whereEqualTo("status", status).get().get();
         List<String> list = new ArrayList<>();
         for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
             String dg = hd.toObject(DanhGia.class).getHoatDongID();
             list.add(dg);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Integer> getForRatingTour(String tourId) throws ExecutionException, InterruptedException {
+        QuerySnapshot querySnapshot = dbFireStore.collection("danhGia").whereEqualTo("tourId", tourId).whereEqualTo("status", true).get().get();
+        List<Integer> list = new ArrayList<>();
+        for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
+            int rate = hd.toObject(DanhGia.class).getDanhGia();
+            list.add(rate);
         }
         return list;
     }

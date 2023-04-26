@@ -16,5 +16,4 @@ public class DanhGia {
     private String hoatDongID;
     private Date thoiGian;
     private boolean status;
-
 }

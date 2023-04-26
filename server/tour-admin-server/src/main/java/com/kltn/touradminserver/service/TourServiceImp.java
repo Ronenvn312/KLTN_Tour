@@ -5,19 +5,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import com.google.cloud.firestore.*;
 import com.kltn.touradminserver.entity.HoatDong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,6 +63,16 @@ public class TourServiceImp implements TourService {
         return "Tour not exists";
     }
 
+    @Override
+    public String updateRatingTour(List<Integer> ratingList, String tourId) throws InterruptedException, ExecutionException {
+        int rating = 0;
+        for (int i = 0; i < ratingList.size(); i++) {
+            rating += ratingList.get(i);
+        }
+        rating = rating/ratingList.size();
+        return collectionReference.document(tourId).update("danhGia", rating).get().getUpdateTime().toString();
+    }
+
 
     @Override
     public String deleteTour(String document_id) {
@@ -87,22 +90,22 @@ public class TourServiceImp implements TourService {
         }).collect(Collectors.toList());
     }
 
-	@Override
-	public List<Tour> findByCategory(String cate) throws ExecutionException, InterruptedException {
-		Query query = collectionReference.orderBy("theLoai");
-		QuerySnapshot querySnapshot = query.get().get();
-		List<Tour> tours = new ArrayList<>();
-		for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
-			Tour new_tour = tour.toObject(Tour.class);
-			for (String theLoai: new_tour.getTheLoai()
-			) {
-				if (theLoai.equalsIgnoreCase(cate.toLowerCase())) {
-					tours.add(new_tour);
-				}
-			}
-		}
-		return tours;
-	}
+    @Override
+    public List<Tour> findByCategory(String cate) throws ExecutionException, InterruptedException {
+        Query query = collectionReference.orderBy("theLoai");
+        QuerySnapshot querySnapshot = query.get().get();
+        List<Tour> tours = new ArrayList<>();
+        for (QueryDocumentSnapshot tour : querySnapshot.getDocuments()) {
+            Tour new_tour = tour.toObject(Tour.class);
+            for (String theLoai : new_tour.getTheLoai()
+            ) {
+                if (theLoai.equalsIgnoreCase(cate.toLowerCase())) {
+                    tours.add(new_tour);
+                }
+            }
+        }
+        return tours;
+    }
 
 
     @Override
@@ -129,6 +132,7 @@ public class TourServiceImp implements TourService {
         }
         return tours;
     }
+
     @Override
     public List<Tour> findByNameAndCate(String name, String cate) throws ExecutionException, InterruptedException {
         QuerySnapshot querySnapshot = collectionReference.whereArrayContains("theLoai", cate).get().get();

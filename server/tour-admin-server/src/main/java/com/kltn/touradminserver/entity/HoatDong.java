@@ -22,4 +22,5 @@ public class HoatDong {
 	private List<String> hinhAnh;
 	private double longitude;
 	private double latitude;
+	private int danhGia;
 }
