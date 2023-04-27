@@ -1,10 +1,14 @@
 package com.kltn.touradminserver.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.kltn.touradminserver.entity.Tour;
+import com.kltn.touradminserver.service.DanhGiaServiceImp;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +34,8 @@ public class HoatDongController {
 	Logger logger = Logger.getLogger(HoatDongController.class.getName());
 	@Autowired
 	HoatDongServiceImp dbHoatDong;
+	@Autowired
+	DanhGiaServiceImp danhGiaService;
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/insert")
@@ -39,7 +45,7 @@ public class HoatDongController {
 		return true;
 	}
 
-	@CrossOrigin(origins = {"http://localhost:3000", "http:/192.168.1.116:8081"})
+	@CrossOrigin(origins = {"http://localhost:3000", "http:/localhost:8081"})
 	@GetMapping("/find")
 	public List<HoatDong> getHoatDong(@RequestParam String tourID) throws InterruptedException, ExecutionException {
 		List<HoatDong> listHD = dbHoatDong.getHoatDong(tourID);
@@ -88,5 +94,16 @@ public class HoatDongController {
 	@GetMapping("/findalls")
 	public List<HoatDong> findAlls() throws InterruptedException, ExecutionException {
 		return dbHoatDong.findAlls();
+	}
+
+	@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+	@GetMapping("/rate")
+	public List<HoatDong> getTourForRate(@RequestParam String userId, @RequestParam boolean status) throws ExecutionException, InterruptedException {
+		List<HoatDong> list = new ArrayList<>();
+		List<String> listId = danhGiaService.getByUserId(userId, status);
+		for (String id : listId) {
+			list.add(dbHoatDong.findById(id));
+		}
+		return list;
 	}
 }

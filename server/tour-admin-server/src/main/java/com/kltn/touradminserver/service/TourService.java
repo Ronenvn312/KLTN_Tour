@@ -14,6 +14,8 @@ public interface TourService {
 
     String updateTour(Tour tour) throws InterruptedException, ExecutionException;
 
+    String updateRatingTour(List<Integer> ratinglist, String tourId) throws InterruptedException, ExecutionException;
+
     String deleteTour(String document_id) throws InterruptedException, ExecutionException;
 
     List<Tour> findAlls() throws InterruptedException, ExecutionException;

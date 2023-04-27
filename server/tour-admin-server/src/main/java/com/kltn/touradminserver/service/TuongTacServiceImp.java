@@ -4,15 +4,20 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.entity.TuongTac;
+import lombok.var;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 @Service
-public class TuongTacServiceImp implements  TuongTacService{
+public class TuongTacServiceImp implements TuongTacService {
     Firestore dbFireStore = FirestoreClient.getFirestore();
 
     CollectionReference collectionReference = dbFireStore.collection("tuongTac");
+
     @Override
     public String insert(TuongTac tuongTac) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("tuongTac").document().set(tuongTac);
@@ -25,8 +30,7 @@ public class TuongTacServiceImp implements  TuongTacService{
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot doc = future.get();
         if (doc.exists()) {
-            ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("tour").document(tuongTac.getDocument_id())
-                    .set(tuongTac);
+            ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("tour").document(tuongTac.getDocument_id()).set(tuongTac);
             return collectionApiFuture.get().getUpdateTime().toString();
         }
         return "Tuong Tac not exists";
@@ -34,16 +38,71 @@ public class TuongTacServiceImp implements  TuongTacService{
 
     @Override
     public List<String> getTourIdPlaned(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userLenKeHoach", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId = id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getTourIdLiked(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userDaThich", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId = id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getTourIdBooked(String userId) throws ExecutionException, InterruptedException {
-        return null;
+        return collectionReference.whereArrayContains("userDaDat", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var tourId = id.toObject(TuongTac.class).getTourId();
+            return tourId;
+        }).collect(Collectors.toList());
     }
+
+    @Override
+    public String like(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tt = tour.toObject(TuongTac.class).getDocument_id();
+            return tt;
+        }).collect(Collectors.toList());
+        return collectionReference.document(listTT.get(0)).update("userDaThich", FieldValue.arrayUnion(userId)).get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String unLike(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tt = tour.toObject(TuongTac.class).getDocument_id();
+            return tt;
+        }).collect(Collectors.toList());
+        return collectionReference.document(listTT.get(0)).update("userDaThich", FieldValue.arrayRemove(userId)).get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String book(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tt = tour.toObject(TuongTac.class).getDocument_id();
+            return tt;
+        }).collect(Collectors.toList());
+        return collectionReference.document(listTT.get(0)).update("userDaDat", FieldValue.arrayUnion(userId)).get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String plan(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tt = tour.toObject(TuongTac.class).getDocument_id();
+            return tt;
+        }).collect(Collectors.toList());
+        return collectionReference.document(listTT.get(0)).update("userLenKeHoach", FieldValue.arrayUnion(userId)).get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String dropOutPlan(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tt = tour.toObject(TuongTac.class).getDocument_id();
+            return tt;
+        }).collect(Collectors.toList());
+        return collectionReference.document(listTT.get(0)).update("userLenKeHoach", FieldValue.arrayRemove(userId)).get().getUpdateTime().toString();
+    }
+
 }
