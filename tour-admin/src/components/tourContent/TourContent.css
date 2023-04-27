@@ -82,7 +82,7 @@
 }
 
 .thead_table tr .col_info {
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   width: 300px;
   font-weight: 'bold';
@@ -91,7 +91,7 @@
 
 .thead_table tr .col_stt {
   background-color: rgb(243, 241, 141);
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   width: 40px;
 }
@@ -103,12 +103,13 @@
   border: 3px solid;
   height: 250px;
   border-color: blanchedalmond;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .tbody_table tr td * {
+  padding-left: 5px;
   color: #fff;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .btn_sua {

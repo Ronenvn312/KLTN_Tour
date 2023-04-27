@@ -148,7 +148,7 @@ export default function TourContent() {
                 </div>
                 <div className='content-left'>
                     <div id="table-scroll">
-                        <Table striped bordered hover size="sm">
+                        <Table striped bordered hover size="sm"  >
                             <thead className='thead_table'>
                                 <tr>
                                     <th className='col_stt' scope="col">#</th>
@@ -157,7 +157,7 @@ export default function TourContent() {
                                     <th className='col_info' scope="col">Mô tả</th>
                                     <th className='col_info' scope="col">Địa chỉ</th>
                                     <th className='col_info' scope="col">Xu hướng</th>
-                                    <th className='col_info' scope="col">Tác vụ</th>
+                                    <th className='col_info' scope="col">Thể loại & số ngày</th>
                                 </tr>
                             </thead>
                             <tbody className='tbody_table' style={{ height: '500px', overflow: 'scroll' }}>

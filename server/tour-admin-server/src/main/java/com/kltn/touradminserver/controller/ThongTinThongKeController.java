@@ -1,5 +1,6 @@
 package com.kltn.touradminserver.controller;
 
+import com.kltn.touradminserver.dto.ThongTinThongKeThangDTO;
 import com.kltn.touradminserver.entity.ThongTinThongKe;
 import com.kltn.touradminserver.entity.Tour;
 import com.kltn.touradminserver.service.ThongTinThongKeServiceImp;
@@ -28,5 +29,10 @@ public class ThongTinThongKeController {
     @GetMapping("/find")
     public List<ThongTinThongKe> findByThang(@RequestParam int thang, int nam) throws InterruptedException, ExecutionException {
         return dbTttk.getTttkByThangNam(thang, nam);
+    }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/findByNam")
+    public List<ThongTinThongKeThangDTO> findAllThangInNam(int nam) throws InterruptedException, ExecutionException {
+        return dbTttk.thongKeCacThangTrongNam(nam);
     }
 }

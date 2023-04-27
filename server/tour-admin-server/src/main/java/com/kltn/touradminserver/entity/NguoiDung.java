@@ -9,9 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NguoiDung {
-	private String document_id;// username của tk
+	@DocumentId
+	private String document_id;
 	private String ten;
 	private String diaChi;
 	private String email;
 	private String sdt;
+	private String avatar;
 }

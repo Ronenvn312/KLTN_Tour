@@ -47,7 +47,7 @@ function Login() {
       }
     }).then((res) => {
       if(res.data && res.data.password == password){
-        localStorage.setItem("email", JSON.stringify(res.data))
+        localStorage.setItem("email", JSON.stringify({userName: res.data.userName}))
         console.log(validateEmail.status + "" + validatePassword.status)
         console.log(res)
         navigate('/home')
@@ -108,6 +108,7 @@ function Login() {
     const email = localStorage.getItem("email")
     if(email) {
       navigate("/home")
+      // localStorage.removeItem("email")
     }
   }, [])
   return (

@@ -11,16 +11,17 @@ const data = [
   { name: 'Jul', 2021: 349, 2022: 430, amt: 2100 },
 ];
 
-function Chart() {
+function Chart(props) {
   return (
-    <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+    <LineChart width={920} height={500} data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
       <XAxis dataKey="name" />
       <YAxis />
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="2022" stroke="#8884d8" activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey="2021" stroke="#82ca9d" />
+      <Line type="monotone" dataKey="slThich" stroke="#8884d8" activeDot={{ r: 8 }} />
+      <Line type="monotone" dataKey="slDat" stroke="#82ca9d" />
+      <Line type="monotone" dataKey="slThemKeHoach" stroke="red" />
     </LineChart>
   ); 
 }

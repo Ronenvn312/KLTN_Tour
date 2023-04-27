@@ -5,21 +5,26 @@ import './Tabheader.css'
 import ScreenThongKe from '../ScreenThongKe/ScreenThongKe';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Popup from '../Popup/PopupInfo';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import TourContent from '../tourContent/TourContent';
 import MapBox from './MapBox';
+import ScreenTaiKhoan from '../ScreenTaiKhoan/ScreenTaiKhoan';
+import axios from 'axios';
 export const Tabheader = (props) => {
+
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
-
+  const  email = JSON.parse(localStorage.getItem("email"));
   const [showInfoPopup, setshowInfoPopup] = useState(false)
   const [values, setValues] = useState({ email: "", password: "" })
   const [showMapPopup, setshowMapPopup] = useState(false)
   const [showTours, setShowTours] = useState(true)
   const [showThemTours, setShowThemTours] = useState(false)
   const [showThongKe, setShowThongKe] = useState(false)
+  const [showTaiKhoan, setShowTaiKhoan] = useState(false)
+  const [thongTinUser, setThongTinUser] = useState({})
   const handleClick = () => {
     setExpanded(!expanded);
   };
@@ -28,24 +33,38 @@ export const Tabheader = (props) => {
     setShowTours(false)
     setShowThemTours(true)
     setShowThongKe(false)
+    setShowTaiKhoan(false)
   }
   const handShowAllTour = () => {
     setShowTours(true)
     setShowThemTours(false)
     setShowThongKe(false)
+    setShowTaiKhoan(false)
   }
   const handShowThongKe = () => {
     setShowThongKe(true)
     setShowThemTours(false)
     setShowTours(false)
+    setShowTaiKhoan(false)
   }
-  // Click show popup doi mat khau
-  const handShowPopupDoiMK = async () => {
-    setshowInfoPopup(!showInfoPopup)
+  const handleShowTaiKhoan = () => {
+    setShowThongKe(false)
+    setShowThemTours(false)
+    setShowTours(false)
+    setShowTaiKhoan(true)
   }
-  // Click show popup doi mat khau
-  const handShowMapPopup = async () => {
-    setshowMapPopup(!showMapPopup)
+  // handle thong tin user
+  const handleThongTinUser = async () => {
+    console.log(email)
+    const result = await axios.get(`http://localhost:8080/admin/findByEmail`, {
+      params: {
+        email: email.userName,
+      }
+    })
+    if (result.data) {
+      setThongTinUser(result.data)
+      console.log(result.data)
+    }
   }
   //hand Click show Alert 
 
@@ -69,6 +88,9 @@ export const Tabheader = (props) => {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value })
   }
+  useEffect(() => {
+    handleThongTinUser()
+  }, [])
   return (
     <div className='container-home'>
       <div className='left-contain'>
@@ -80,29 +102,29 @@ export const Tabheader = (props) => {
             <button type="button" className="btn btn-danger" onClick={() => handleDangXuat()}>Đăng xuất</button>
           </div>
         </div>
-        <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#link1">
-          <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link1">
+        <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#bangdieukhien">
+          <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#bangdieukhien">
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/design.png')} alt="use" />
             Bảng điều khiển
           </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#link2">
+          <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#thongtintour">
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
             Thông tin Tour
           </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#link'>
+          <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#thongke'>
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
             Thống kê
           </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowPopupDoiMK()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action>
+          <ListGroup.Item onClick={() => handleShowTaiKhoan()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#taikhoan'>
             <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
-            Cập nhật tài khoản
+            Quản lý tài khoản
           </ListGroup.Item>
-        
+
         </ListGroup>
         {/* Danh sách tour được cập nhật gần đây */}
         <div>
-          <p style={{color: 'white'}}>tours cập nhật gần đây  </p>
-          <hr style={{color: 'white'}}></hr>
+          <p style={{ color: 'white' }}>tours cập nhật gần đây  </p>
+          <hr style={{ color: 'white' }}></hr>
           <div>
 
           </div>
@@ -156,6 +178,11 @@ export const Tabheader = (props) => {
         {
           showThongKe ?
             <ScreenThongKe />
+            : ""
+        }
+        {
+          showTaiKhoan ?
+            <ScreenTaiKhoan nguoiDung={thongTinUser} />
             : ""
         }
       </div>

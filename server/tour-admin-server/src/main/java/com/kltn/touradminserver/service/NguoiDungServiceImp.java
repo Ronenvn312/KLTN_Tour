@@ -1,17 +1,17 @@
 package com.kltn.touradminserver.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.google.cloud.firestore.*;
+import com.kltn.touradminserver.entity.Tour;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.dto.TaiKhoanAdminUserDTO;
 import com.kltn.touradminserver.entity.NguoiDung;
@@ -24,7 +24,7 @@ public class NguoiDungServiceImp implements NguoiDungService {
 	
 	@Override
 	public String insertNguoiDung(TaiKhoanAdminUserDTO tk_user_dto) throws InterruptedException, ExecutionException {
-		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("nguoiDung").document(tk_user_dto.getNguoiDung().getDocument_id()).set(tk_user_dto.getNguoiDung());
+		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("nguoiDung").document().set(tk_user_dto.getNguoiDung());
 		return collectionApiFuture.get().getUpdateTime().toString();
 	}
 	@Override
@@ -32,13 +32,31 @@ public class NguoiDungServiceImp implements NguoiDungService {
 		DocumentReference documentReference = dbFireStore.collection("nguoiDung").document(document_id);
 		ApiFuture<DocumentSnapshot> future = documentReference.get();
 		DocumentSnapshot doc = future.get();
-		NguoiDung admin;	
+		NguoiDung admin;
 		if (doc.exists()) {
 			admin = doc.toObject(NguoiDung.class);
 			return admin;
 		}
 		return null;
-	} 
+	}
+
+	@Override
+	public NguoiDung getNguoiDungByEmail(String email) throws InterruptedException, ExecutionException {
+		CollectionReference collectionReference = dbFireStore.collection("nguoiDung");
+		Query query = collectionReference.whereEqualTo("email", email);
+		QuerySnapshot querySnapshot = query.get().get();
+		List<NguoiDung> nguoiDungs = new ArrayList<>();
+		for (QueryDocumentSnapshot nd : querySnapshot.getDocuments()) {
+			NguoiDung nguoiDung = nd.toObject(NguoiDung.class);
+			nguoiDungs.add(nguoiDung);
+		}
+		if (nguoiDungs.size() >0) {
+			return nguoiDungs.get(0);
+		}
+		System.out.println("Don't exit user");
+		return null;
+	}
+
 	@Override
 	public String updateNguoiDung(NguoiDung nguoiDung) throws InterruptedException, ExecutionException {
 		

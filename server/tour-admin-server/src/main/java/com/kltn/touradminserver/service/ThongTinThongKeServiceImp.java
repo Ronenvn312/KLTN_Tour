@@ -3,6 +3,7 @@ package com.kltn.touradminserver.service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.kltn.touradminserver.dto.ThongTinThongKeThangDTO;
 import com.kltn.touradminserver.entity.ThongTinThongKe;
 import com.kltn.touradminserver.entity.Tour;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class ThongTinThongKeServiceImp implements ThongTinThongKeService{
     @Override
     public List<ThongTinThongKe> getTttkByThangNam(int thang, int nam) throws ExecutionException, InterruptedException {
         CollectionReference collectionReference = dbFireStore.collection("thongTinThongKe");
-        Query query = collectionReference.orderBy("slThich");
+        Query query = collectionReference.orderBy("slThich", Query.Direction.DESCENDING);
         QuerySnapshot querySnapshot = query.get().get();
         List<ThongTinThongKe> thongTinThongKes = new ArrayList<>();
         Date new_date = new Date();
@@ -59,7 +60,6 @@ public class ThongTinThongKeServiceImp implements ThongTinThongKeService{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         for (QueryDocumentSnapshot tttk : querySnapshot.getDocuments()) {
             ThongTinThongKe new_tttk = tttk.toObject(ThongTinThongKe.class);
             if (new_tttk.getThangNam().getMonth() == date.getMonth() && new_tttk.getThangNam().getYear() == date.getYear()) {
@@ -82,5 +82,30 @@ public class ThongTinThongKeServiceImp implements ThongTinThongKeService{
             return thongTinThongKe;
         }
         return null;
+    }
+
+    @Override
+    public List<ThongTinThongKeThangDTO> thongKeCacThangTrongNam(int nam) throws ExecutionException, InterruptedException {
+        List<ThongTinThongKeThangDTO> thongTinThongKeThangDTOS = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            List<ThongTinThongKe> thongTinThongKes =  getTttkByThangNam(i, nam);
+            int slThich = 0;
+            int slDat = 0;
+            int slThemKeHoach = 0;
+            if (thongTinThongKes.size() >0 ) {
+                for (ThongTinThongKe info: thongTinThongKes
+                     ) {
+                    slThich = slThich + info.getSlThich();
+                    slDat = slDat + info.getSlDatTour();
+                    slThemKeHoach = slThemKeHoach + info.getSlThemKeHoach();
+                }
+                ThongTinThongKeThangDTO tttkt = new ThongTinThongKeThangDTO("Tháng "+ i, slThich, slDat, slThemKeHoach, 2000);
+                thongTinThongKeThangDTOS.add(tttkt);
+            } else {
+                ThongTinThongKeThangDTO tttkt = new ThongTinThongKeThangDTO("Tháng "+ i, slThich, slDat, slThemKeHoach, 2000);
+                thongTinThongKeThangDTOS.add(tttkt);
+            }
+        }
+        return thongTinThongKeThangDTOS;
     }
 }

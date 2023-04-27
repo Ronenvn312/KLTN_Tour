@@ -63,6 +63,12 @@ public class AdminController {
 		return null;
 	}
 	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/findByEmail")
+	public NguoiDung findNguoiDungByEmail(@RequestParam String email) throws InterruptedException, ExecutionException {
+		NguoiDung nd =  nguoiDungService.getNguoiDungByEmail(email);
+		return nd;
+	}
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/update")
 	public boolean updateNguoiDung(@RequestBody NguoiDung nguoiDung) throws InterruptedException, ExecutionException {
 		String res =  nguoiDungService.updateNguoiDung(nguoiDung);

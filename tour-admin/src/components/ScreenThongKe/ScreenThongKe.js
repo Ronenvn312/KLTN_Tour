@@ -17,15 +17,23 @@ export default function ScreenThongKe() {
     }
     const [selectedThang, setSelectedThang] = useState(4);
     const [selectedNam, setSelectedNam] = useState(2023);
+    const [selectedHieuQua, setSelectedHieuQua] = useState("tot nhat");
     const [listNam, setListNam] = useState([])
     const [listThang, setListThang] = useState([])
+    const [listThongKe, setListThongKe] = useState([])
+    const [data, setData] = useState([])
+    const [tongTuongTac, setTongTuongTac] = useState(0)
+    const [tongDatTour, setTongDatTour] = useState(0)
     const handleSelectChangeNam = (event) => {
         setSelectedNam(event.target.value);
         console.log(event.target.value)
     };
-    const [listThongKe, setListThongKe] = useState([])
     const handleSelectChangeThang = (event) => {
         setSelectedThang(event.target.value);
+        console.log(event.target.value)
+    };
+    const handleSelectChangeHieuQua = (event) => {
+        setSelectedHieuQua(event.target.value);
         console.log(event.target.value)
     };
     const handleValue = () => {
@@ -41,6 +49,9 @@ export default function ScreenThongKe() {
         setListThang(listT)
     }
     const handleSearchThongKe = async () => {
+        const new_data = []
+        let sum = 0;
+        let sumLuotDat = 0;
         const result = await axios.get(`http://localhost:8080/thongKe/find`, {
             params: {
                 thang: selectedThang,
@@ -48,40 +59,44 @@ export default function ScreenThongKe() {
             }
         })
         if (result.data) {
-            console.log(result.data)
-            setListThongKe(result.data)
+            if (selectedHieuQua == "cao nhat") {
+                setListThongKe(result.data)
+            } else {
+                // console.log(result.data)
+                setListThongKe(result.data.reverse())
+            }
+            result.data.forEach(element => {
+                sum = sum + element.slThich + element.slDatTour + element.slThemKeHoach
+                sumLuotDat = sumLuotDat + element.slDatTour
+            });
+            setTongTuongTac(sum)
+            setTongDatTour(sumLuotDat)
         }
+        handleThongKeCacThang()
     }
-    const handleListTourLike = () => {
-        const tours = []
-        listThongKe.forEach(element => {
-            // console.log(element)
-            axios.get(`http://localhost:8080/tour/get_tour`, {
-                params: {
-                    document_id: element.tourId
-                }
-            }).then((result) => {
-                console.log(result.data)
-                tours.push(result.data)
-            })
-        });
-        setListTour(tours)
-        console.log(listTour)
+    const handleThongKeCacThang = async () => {
+        const result = await axios.get(`http://localhost:8080/thongKe/findByNam`, {
+            params: {
+                nam: selectedNam
+            }
+        })
+        if (result.data) {
+            console.log(result.data)
+            setData(result.data)
+        }
     }
     useEffect(() => {
         handleShowListTour()
+        handleSearchThongKe()
         if (listNam.length <= 0 || listThang.length <= 0) {
             handleValue()
         }
-        if (listThongKe.length > 0) {
-            handleListTourLike()
-        }
+
     }, [])
     return (
         <div className='thongke-container'>
             <div className='thongke-header'>
                 <a>Home/ Thống kê</a>
-
             </div>
             <div className="row-fluid">
                 <div className="span3 responsive" data-tablet="span6" data-desktop="span3">
@@ -128,7 +143,7 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    528
+                                    {tongTuongTac}
                                 </div>
                                 <div className="desc">
                                     Số lượng tương tác trong tháng
@@ -147,7 +162,7 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    9
+                                    {tongDatTour}
                                 </div>
                                 <div className="desc">
                                     Số lượng đặt tour trong tháng
@@ -184,6 +199,13 @@ export default function ScreenThongKe() {
                         }
                     </Form.Select>
                 </Form.Group>
+                <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11, marginLeft: 20 }}>
+                    <Form.Label>Hiệu quả: </Form.Label>
+                    <Form.Select value={selectedHieuQua} onChange={handleSelectChangeHieuQua}>
+                        <option value="cao nhat">Tốt nhất</option>
+                        <option value="thap nhat">Thấp nhất</option>
+                    </Form.Select>
+                </Form.Group>
                 <Form.Group style={{ flex: 0.18, marginTop: 32, marginLeft: 20, justifyContent: 'flex-end', alignItems: 'flex-end', flexDirection: 'column' }}>
                     <Button
                         onClick={() => handleSearchThongKe()}
@@ -195,20 +217,31 @@ export default function ScreenThongKe() {
             <div className='thongke-content'>
 
                 <div className='thongke-fluid' >
+                 
+                    {/* <!-- BEGIN STACK CHART CONTROLS PORTLET--> */}
+
+                    <div className='thongke-fluid-right'>
+                        <h5 className='thongke-fluid-right-title'>Thống kế lượng tương tác tour các tháng trong nắm {selectedNam}</h5>
+                        <Chart data={data} />
+                        {/* <PieChartExample /> */}
+                    </div>
+                    {/* <!-- END STACK CHART CONTROLS PORTLET--> */}
                     <div className='thongke-fluid-left'>
-                        <h5 className='thongke-fluid-left-title'>Danh sách tour có lượng tương tác cao nhất trong tháng:</h5>
+                        <h5 className='thongke-fluid-left-title'>Thống kê tương tác trong tháng {selectedThang}</h5>
                         <table className='thongke-table'>
                             <thead className='thongke-table-header'>
                                 <th> STT</th>
                                 <th> mã tour </th>
                                 <th> tên tour</th>
-                                <th> SL tương tác</th>
+                                <th> Lượt thích</th>
+                                <th> Lượt đặt</th>
+                                <th> Lượt thêm kê hoạch</th>
                             </thead>
                             <tbody className='thongke-table-tbody'>
                                 {
 
-                                    listTour.map((item, index) => {
-                                        return <tr key={item.document_id} className='thongke-table-tbody-tr'>
+                                    listThongKe.map((item, index) => {
+                                        return <tr style={{ height: 100 }} key={item.document_id} className='thongke-table-tbody-tr'>
                                             <td>
                                                 {index + 1}
                                             </td>
@@ -219,7 +252,13 @@ export default function ScreenThongKe() {
                                                 {item.tenTour}
                                             </td>
                                             <td>
-                                                {slTT - index}
+                                                {item.slThich}
+                                            </td>
+                                            <td>
+                                                {item.slDatTour}
+                                            </td>
+                                            <td>
+                                                {item.slThemKeHoach}
                                             </td>
                                         </tr>
                                     })
@@ -227,14 +266,6 @@ export default function ScreenThongKe() {
                             </tbody>
                         </table>
                     </div>
-                    {/* <!-- BEGIN STACK CHART CONTROLS PORTLET--> */}
-
-                    <div className='thongke-fluid-right'>
-                        <h5 className='thongke-fluid-right-title'>Thống kế lượng tương tác tour trong tháng:</h5>
-                        <Chart />
-                        {/* <PieChartExample /> */}
-                    </div>
-                    {/* <!-- END STACK CHART CONTROLS PORTLET--> */}
                 </div>
             </div>
         </div>
