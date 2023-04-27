@@ -86,6 +86,8 @@ export default function TourContent() {
             console.log("No data filter!")
         }
     }
+   
+    
     useEffect(() => {
         handleResultData();
     }, [tourAlter])

@@ -5,6 +5,7 @@ import Chart from './ChartThongKe/Chart'
 import PieChartExample from './ChartThongKe/PieChartExample.JS'
 import axios from 'axios';
 export default function ScreenThongKe() {
+ 
     const dsTour = localStorage.getItem("dsTour")
     const [listTour, setListTour] = useState([])
     const slTT = 100;

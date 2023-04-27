@@ -96,9 +96,9 @@ export const Tabheader = (props) => {
       <div className='left-contain'>
         <div className='left-header-contain'>
           <div className='user-container' >
-            <img className='user-avatar' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/profire.jpg?alt=media&token=36f9f734-d5a5-46fd-897f-d7406be4a3dd'} alt="user avatar" />
-            <h1 className='user-name'>Nguyễn Tiến Đạt</h1>
-            <div className="user-email">datnguyen9g@gmail.com</div>
+            <img className='user-avatar' src={thongTinUser.avatar} alt="user avatar" />
+            <h1 className='user-name'>{thongTinUser.ten}</h1>
+            <div className="user-email">{thongTinUser.email}</div>
             <button type="button" className="btn btn-danger" onClick={() => handleDangXuat()}>Đăng xuất</button>
           </div>
         </div>
@@ -182,7 +182,7 @@ export const Tabheader = (props) => {
         }
         {
           showTaiKhoan ?
-            <ScreenTaiKhoan nguoiDung={thongTinUser} />
+            <ScreenTaiKhoan nguoiDung={thongTinUser} setThongTinUser={setThongTinUser} />
             : ""
         }
       </div>
