@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useLocation, useNavigate, Outlet, Link } from 'react-router-dom';
 import Alert from '../dashboard/Alert';
+import bro from '../../assets/bro.png'
+import logo from '../../assets/logo.png'
 import './Tabheader.css'
 import ScreenThongKe from '../ScreenThongKe/ScreenThongKe';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -15,8 +17,9 @@ import axios from 'axios';
 export const Tabheader = (props) => {
 
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState(true);
-  const  email = JSON.parse(localStorage.getItem("email"));
+  const email = JSON.parse(localStorage.getItem("email"));
   const [showInfoPopup, setshowInfoPopup] = useState(false)
   const [values, setValues] = useState({ email: "", password: "" })
   const [showMapPopup, setshowMapPopup] = useState(false)
@@ -30,24 +33,32 @@ export const Tabheader = (props) => {
   };
   // click item DASHBOARD
   const handShowActionThemTour = () => {
+    setTimeout(() => setIsLoading(true), 10);
+    setTimeout(() => setIsLoading(false), 1500);
     setShowTours(false)
     setShowThemTours(true)
     setShowThongKe(false)
     setShowTaiKhoan(false)
   }
   const handShowAllTour = () => {
+    setTimeout(() => setIsLoading(true), 10);
+    setTimeout(() => setIsLoading(false), 1500);
     setShowTours(true)
     setShowThemTours(false)
     setShowThongKe(false)
     setShowTaiKhoan(false)
   }
   const handShowThongKe = () => {
+    setTimeout(() => setIsLoading(true), 10);
+    setTimeout(() => setIsLoading(false), 1500);
     setShowThongKe(true)
     setShowThemTours(false)
     setShowTours(false)
     setShowTaiKhoan(false)
   }
   const handleShowTaiKhoan = () => {
+    setTimeout(() => setIsLoading(true), 10);
+    setTimeout(() => setIsLoading(false), 1500);
     setShowThongKe(false)
     setShowThemTours(false)
     setShowTours(false)
@@ -89,6 +100,7 @@ export const Tabheader = (props) => {
     setValues({ ...values, [event.target.name]: event.target.value })
   }
   useEffect(() => {
+    setTimeout(() => setIsLoading(false), 4000);
     handleThongTinUser()
   }, [])
   return (
@@ -165,27 +177,38 @@ export const Tabheader = (props) => {
         </Popup>
       </div>
       {/* right content in Bảng điều khiển */}
-      <div className='right-contain' >
-        {
-          showTours ?
-            <TourContent /> : ""
-        }
-        {
-          showThemTours ?
-            <MapBox />
-            : ""
-        }
-        {
-          showThongKe ?
-            <ScreenThongKe />
-            : ""
-        }
-        {
-          showTaiKhoan ?
-            <ScreenTaiKhoan nguoiDung={thongTinUser} setThongTinUser={setThongTinUser} />
-            : ""
-        }
-      </div>
+      {isLoading ? (
+        <div className='loading_view'>
+          {/* <img className='logo-loading' src={logo} alt='logo' /> */}
+          <img className='image-loading' src={bro} />
+          <div className='logo-loading' >
+          </div>
+          <div className="loading">
+          </div>
+          <h2 className='title-loading'>Loading...</h2>
+        </div>
+      ) : (
+        <div className='right-contain' >
+          {
+            showTours ?
+              <TourContent /> : ""
+          }
+          {
+            showThemTours ?
+              <MapBox />
+              : ""
+          }
+          {
+            showThongKe ?
+              <ScreenThongKe />
+              : ""
+          }
+          {
+            showTaiKhoan ?
+              <ScreenTaiKhoan nguoiDung={thongTinUser} setThongTinUser={setThongTinUser} />
+              : ""
+          }
+        </div>)}
     </div>
 
   );

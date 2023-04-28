@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Login.css'
 import logo from '../assets/logo.png'
+import bro from '../assets/bro.png'
 import wel_human from '../assets/Wel_human.png'
 import { parsePath, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -15,6 +16,8 @@ function Login() {
   const [password, setPassword] = useState("")
   const [showErroPassword, setshowErroPassword] = useState(false);
   const [showErroEmail, setshowErroEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const toggleshowErroPassword = () => setshowErroPassword(!showErroPassword);
   const toggleshowErroEmail = () => setshowErroEmail(!showErroEmail);
@@ -47,22 +50,22 @@ function Login() {
         password: password
       }
     }).then((res) => {
-      if(res.data){
-        localStorage.setItem("email", JSON.stringify({userName: res.data.userName}))
+      if (res.data) {
+        localStorage.setItem("email", JSON.stringify({ userName: res.data.userName }))
         console.log(validateEmail.status + "" + validatePassword.status)
         console.log(res)
         navigate('/home')
       }
-     else {
-      setValidateEmail({
-        "status": true,
-        "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
-      })
-      setValidatePassword({
-        "status": true,
-        "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
-      })
-     }
+      else {
+        setValidateEmail({
+          "status": true,
+          "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
+        })
+        setValidatePassword({
+          "status": true,
+          "content": "Email hoặc mật khẩu của bạn chưa chính xác!"
+        })
+      }
     })
   };
 
@@ -103,77 +106,92 @@ function Login() {
 
   // }
   useEffect(() => {
+    setTimeout(() => setIsLoading(false), 3000);
     const email = localStorage.getItem("email")
-    if(email) {
+    if (email) {
       navigate("/home")
       // localStorage.removeItem("email")
     }
   }, [])
   return (
+
     <div className='Login'>
-      <div className='Login-left'>
-        <img className='Logo-left' src={logo} alt='' />
-        <h1 className='Login-title'>Sign In</h1>
+      {isLoading ? (
+        <div className='loading_view'>
+          <img className='logo-loading' src={logo} alt='logo' />
+          <img className='image-loading' src={bro} />
+          <div className='logo-loading' >
+          </div>
+          <div className="loading">
+          </div>
+          <h2 className='title-loading'>Đang đăng xuất...</h2>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "row", flex: 1 }}>
+          <div className='Login-left'>
+            <img className='Logo-left' src={logo} alt='' />
+            <h1 className='Login-title'>Sign In</h1>
 
-        <Form className='group-control' onSubmit={(e) => handleSubmit(e)} >
-          <Form.Label className='label-login'>Email address</Form.Label>
-          <Form.Group id='form-group' controlId="formBasicEmail">
-            <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Form.Control
-                name='email'
-                value={email}
-                onChange={e => handleChangeEmail(e)}
-                type="text" placeholder="Enter email" required />
+            <Form className='group-control' onSubmit={(e) => handleSubmit(e)} >
+              <Form.Label className='label-login'>Email address</Form.Label>
+              <Form.Group id='form-group' controlId="formBasicEmail">
+                <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <Form.Control
+                    name='email'
+                    value={email}
+                    onChange={e => handleChangeEmail(e)}
+                    type="text" placeholder="Enter email" required />
 
-              {
-                validateEmail.content != "" ? (
-                  validateEmail.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
-                    : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
-                ) : ""
-              }
-            </div>
-            {
-              validateEmail.status ? <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
-                {validateEmail.content}
-              </p> : ""
-            }
-          </Form.Group>
-          <Form.Label className='label-login'>Password</Form.Label>
-          <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
-            <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Form.Control
-                name='password'
-                value={password}
+                  {
+                    validateEmail.content != "" ? (
+                      validateEmail.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
+                        : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
+                    ) : ""
+                  }
+                </div>
+                {
+                  validateEmail.status ? <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
+                    {validateEmail.content}
+                  </p> : ""
+                }
+              </Form.Group>
+              <Form.Label className='label-login'>Password</Form.Label>
+              <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
+                <div style={{ minWidth: 350, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <Form.Control
+                    name='password'
+                    value={password}
 
-                onChange={e => handleChangePassword(e)}
-                type="password" placeholder="Password" required />
-              {
-                validatePassword.content != "" ? (
-                  validatePassword.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
-                    : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
-                ) : ""
-              }
-            </div>
+                    onChange={e => handleChangePassword(e)}
+                    type="password" placeholder="Password" required />
+                  {
+                    validatePassword.content != "" ? (
+                      validatePassword.status ? <img className='Logo-left' style={{ marginLeft: 10, width: 30, height: 30 }} src={require('../assets/validation/erro_checked.png')} alt='' />
+                        : <img style={{ marginLeft: 10, width: 30, height: 30 }} className='Logo-left' src={require('../assets/validation/success_checked.png')} alt='' />
+                    ) : ""
+                  }
+                </div>
 
-            {validatePassword.status ?
-              <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
-                {validatePassword.content}
-              </p> : ""
-            }
+                {validatePassword.status ?
+                  <p style={{ maxWidth: 350, color: "red", alignItems: 'flex-start', float: "left", paddingLeft: 10 }}>
+                    {validatePassword.content}
+                  </p> : ""
+                }
 
-          </Form.Group>
-          <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check
-              className='label-login' type="checkbox" label="Check me out" />
-          </Form.Group>
-          <Button variant="primary" type="submit" >
-            Đăng nhập
-          </Button>
-        </Form>
-      </div>
-      <div className='Login-right'>
-        {/* <img className='img-wel' src={wel_human} alt='wel' /> */}
-      </div>
+              </Form.Group>
+              <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
+                <Form.Check
+                  className='label-login' type="checkbox" label="Check me out" />
+              </Form.Group>
+              <Button variant="primary" type="submit" >
+                Đăng nhập
+              </Button>
+            </Form>
+          </div>
+          <div className='Login-right'>
+            {/* <img className='img-wel' src={wel_human} alt='wel' /> */}
+          </div>
+        </div>)}
     </div>
   )
 }
