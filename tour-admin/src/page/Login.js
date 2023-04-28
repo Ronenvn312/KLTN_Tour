@@ -41,12 +41,13 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.get(`http://localhost:8080/taikhoan/loggin`, {
+    axios.get(`http://localhost:8080/taikhoan/logginUser`, {
       params: {
-        username: email
+        userName: email,
+        password: password
       }
     }).then((res) => {
-      if(res.data && res.data.password == password){
+      if(res.data){
         localStorage.setItem("email", JSON.stringify({userName: res.data.userName}))
         console.log(validateEmail.status + "" + validatePassword.status)
         console.log(res)

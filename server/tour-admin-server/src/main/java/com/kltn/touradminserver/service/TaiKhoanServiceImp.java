@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import com.kltn.touradminserver.entity.Tour;
+import com.kltn.touradminserver.security.PasswordEncoder;
 import lombok.var;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
 
 	@Override
 	public String insertTK(TaiKhoan taiKhoan) throws InterruptedException, ExecutionException {
+		String encodePassword = PasswordEncoder.encode(taiKhoan.getPassword());
+		taiKhoan.setPassword(encodePassword);
 		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("taiKhoan").document(taiKhoan.getUserName())
 				.set(taiKhoan);
 		return collectionApiFuture.get().getUpdateTime().toString();

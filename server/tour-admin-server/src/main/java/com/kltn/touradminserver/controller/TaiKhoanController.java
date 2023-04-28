@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.kltn.touradminserver.security.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,6 +73,17 @@ public class TaiKhoanController {
 			return tk;
 		}
 		logger.log(Level.WARNING, "Không tìm thấy tài khoản với username :" + username);
+		return null;
+	}
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/logginUser")
+	public TaiKhoan logginUser(@RequestParam String userName, @RequestParam String password) throws InterruptedException, ExecutionException {
+		TaiKhoan tk = taikKhoanServiceImp.getTK(userName);
+		String hashedPassword = PasswordEncoder.encode(password);
+		if (tk != null && hashedPassword.equals(tk.getPassword())) {
+			return tk;
+		}
+		logger.log(Level.WARNING, "Không tìm thấy tài khoản với username :" + userName);
 		return null;
 	}
 	@CrossOrigin(origins = "http://localhost:3000")
