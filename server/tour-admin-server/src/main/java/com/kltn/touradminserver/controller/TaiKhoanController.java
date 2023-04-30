@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 @RequestMapping("/taikhoan")
 public class TaiKhoanController {
 	static Logger logger = Logger.getLogger(AdminController.class.getName());
+	
 	@Autowired
 	TaiKhoanServiceImp taikKhoanServiceImp;
 	@Autowired

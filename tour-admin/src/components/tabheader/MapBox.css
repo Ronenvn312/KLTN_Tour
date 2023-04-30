@@ -101,3 +101,10 @@
   cursor: pointer;
   flex: 0.9;
 }
+.view-hinhAnh {
+  display: flex;
+  flex-direction: row;
+}
+.group-btn-file {
+  margin-left: 10px;
+}

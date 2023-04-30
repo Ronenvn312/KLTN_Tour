@@ -5,12 +5,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import './MapBox.css'
 import { AddressAutofill } from '@mapbox/search-js-react';
 import axios from "axios";
-
+import { getDownloadURL } from 'firebase/storage'
+import { firebase } from '../../util/config';
 // npm install @turf/turf
 import * as turf from '@turf/turf';
 import PopupNote from "../Popup/PopupNote";
@@ -40,6 +40,41 @@ function MapBox() {
   const [showFormHoatDong, setShowFormHoatDong] = useState(false)
   const [isDeletePopup, setIsDeletePopup] = useState(false)
   const [isDeleteHoatDongPopup, setIsDeleteHoatDongPopup] = useState(false)
+  // khai báo cho image
+  const [image, setImage] = useState(null)
+  const storage = firebase.storage()
+  const [url, setUrl] = useState("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf");
+  // upload image
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+  const handleUpload = () => {
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // progress function
+      },
+      (error) => {
+        // error function
+        console.log(image)
+        console.log(error);
+      },
+      () => {
+        // complete function
+        storage
+          .ref('images')
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            setUrl(url);
+            console.log(url)
+          });
+      }
+    );
+  };
   // List the loai
   const [thienNhien, setThienNhien] = useState(false)
   const [theThao, setTheThao] = useState(false)
@@ -145,7 +180,7 @@ function MapBox() {
       "viTri": diaChi,
       "soNgay": soNgay,
       "hinhAnh": [
-        hinhAnh,
+        url,
       ],
       "theLoai": theLoai,
       "danhGia": danhGia,
@@ -168,7 +203,7 @@ function MapBox() {
       "viTri": diaChi,
       "soNgay": soNgay,
       "hinhAnh": [
-        hinhAnh
+        url
       ],
       "theLoai": theLoai,
       "danhGia": 4.0,
@@ -206,7 +241,7 @@ function MapBox() {
   const handleShowPopupDeleteHoatDong = () => {
     setIsDeleteHoatDongPopup(!isDeleteHoatDongPopup);
   }
-  // Thêm tour
+  // Click Thêm mới tour
   const handleClickThemTour = () => {
     delete tour.document_id;
     setTourId("")
@@ -224,6 +259,7 @@ function MapBox() {
     setNghiDuong(false)
     setThienNhien(false)
     setShowFormHoatDong(false)
+    setUrl("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf")
   }
   // Chọn tour
   const handleClickItem = (item) => {
@@ -245,32 +281,50 @@ function MapBox() {
     handleSetTheLoai(item.theLoai)
     console.log(item)
     setTourClicked(item)
+    setPopupInfo({
+      "name": item.tenTour,
+      "address": item.viTri,
+      "lng": item.longitude,
+      "lat": item.latitude,
+      "image": item.hinhAnh[0]
+    })
+    setShowPopup(true)
+    setUrl(item.hinhAnh[0])
   }
   // Chọn thể loại
   const handleSetTheLoai = (listTheLoai) => {
-    listTheLoai.forEach(element => {
-      if (element == "thien nhien") {
-        setThienNhien(true)
-      }
-      if (element == "the thao") {
-        setTheThao(true)
-      }
-      if (element == "tham quan") {
-        setThamQuan(true)
-      }
-      if (element == "nghi duong") {
-        setNghiDuong(true)
-      }
-      if (element == "bien") {
-        setBien(true)
-      }
-    });
+
+    if (listTheLoai.includes("thien nhien")) {
+      setThienNhien(true)
+    } else {
+      setThienNhien(false)
+    }
+
+    if (listTheLoai.includes("the thao")) {
+      setTheThao(true)
+    } else {
+      setTheThao(false)
+    }
+
+    if (listTheLoai.includes("tham quan")) {
+      setThamQuan(true)
+    } else {
+      setThamQuan(false)
+    }
+    if (listTheLoai.includes("nghi duong")) {
+      setNghiDuong(true)
+    } else {
+      setNghiDuong(false)
+    }
+    if (listTheLoai.includes("bien")) {
+      setBien(true)
+    } else {
+      setBien(false)
+    }
+
   }
   //
-  // đóng form tour
-  const handleClickDongForm = () => {
-    setShowForm(!showForm)
-  }
+
   // get data tour when show popup
   //THAO TÁC VỚI HOẠT ĐỘNG
   const [listHoatDong, setListHoatDong] = useState([])
@@ -295,19 +349,6 @@ function MapBox() {
   const handleChangeHinhAnhHD = (e) => {
     setHinhAnhHD(e.target.value)
   }
-
-  const [hoatDong, setHoatDong] = useState({
-    "thoiGianHD": thoiGianHD,
-    "viTri": viTriHD,
-    "thongTin": thongTinHD,
-    "tieuDe": tieuDeHD,
-    "tourId": tourId,
-    "hinhAnh": [
-      hinhAnhHD
-    ],
-    "longitude": lng,
-    "latitude": lat
-  })
   // get danh sách hoạt động của tour
   const handleResultHoatDongTour = async (item) => {
     const result = await axios.get(`http://localhost:8080/hoatdong/findbyTourId`, {
@@ -337,6 +378,15 @@ function MapBox() {
     setShowForm(false)
     setShowFormHoatDong(true)
     setHoatDongChecked(item)
+    setPopupInfo({
+      "name": item.tieuDe,
+      "address": item.viTri,
+      "lng": item.longitude,
+      "lat": item.latitude,
+      "image": item.hinhAnh[0]
+    })
+    setShowPopup(true)
+    setUrl(item.hinhAnh[0])
   }
   // tạo hoạt động
   const handleClickCreateHoatDong = () => {
@@ -349,25 +399,7 @@ function MapBox() {
     setHinhAnhHD("")
     setShowForm(false)
     setShowFormHoatDong(true)
-  }
-  // chọn đóng tour
-  const handleClickDongHoatDong = () => {
-    setShowFormHoatDong(!showFormHoatDong)
-  }
-  // set new hoạt động
-  const setNewHoatDong = () => {
-    setHoatDong({
-      "thoiGianHD": thoiGianHD,
-      "viTri": viTriHD,
-      "thongTin": thongTinHD,
-      "tieuDe": tieuDeHD,
-      "tourId": tourId,
-      "hinhAnh": [
-        hinhAnhHD
-      ],
-      "longitude": lng,
-      "latitude": lat
-    })
+    setUrl("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf")
   }
   const deleteHoatDongById = async (item) => {
     const result = await axios.delete(`http://localhost:8080/hoatdong/delete`, {
@@ -389,7 +421,7 @@ function MapBox() {
       "tieuDe": tieuDeHD,
       "tourId": tourId,
       "hinhAnh": [
-        hinhAnhHD
+        url
       ],
       "longitude": lng,
       "latitude": lat
@@ -411,7 +443,7 @@ function MapBox() {
       "tieuDe": tieuDeHD,
       "tourId": tourId,
       "hinhAnh": [
-        hinhAnhHD
+        url
       ],
       "longitude": lng,
       "latitude": lat
@@ -513,24 +545,25 @@ function MapBox() {
           // If we let the click event propagates to the map, it will immediately close the popup
           // with `closeOnClick: true`
           e.originalEvent.stopPropagation();
-          setPopupInfo(data);
+          // setPopupInfo(data);
+          setShowPopup(true)
         }}
 
       >
         <img src="https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/mapbox-icon.png?alt=media&token=a70dd5be-1312-4f84-aa53-c0b6092b9e75" />
       </Marker>
-      {popupInfo && (
+      {showPopup && (
         <Popup
           anchor="top"
-          longitude={Number(popupInfo.longitude)}
-          latitude={Number(popupInfo.latitude)}
-          onClose={() => setPopupInfo(null)}
+          longitude={Number(popupInfo.lng)}
+          latitude={Number(popupInfo.lat)}
+          onClose={() => setShowPopup(false)}
         >
           <div>
-            {popupInfo.city}, {popupInfo.state} |{' '}
+            {popupInfo.name}, {popupInfo.address} |{' '}
             <a
               target="_new"
-              href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.city}, ${popupInfo.state}`}
+              href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.name}, ${popupInfo.address}`}
             >
               Wikipedia
             </a>
@@ -638,7 +671,7 @@ function MapBox() {
 
         {
           showForm ?
-            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', minWidth: 390, width: '100%', height: "100%", justifyContent: "flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
+            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', minWidth: 450, width: '100%', height: "100%", justifyContent: "flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
               <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <Button variant="outline-danger"
                   onClick={() => setShowForm(!showForm)}
@@ -712,7 +745,7 @@ function MapBox() {
 
 
               </Form.Group>
-              <Form.Group  style={{width: "100%"}}>
+              <Form.Group style={{ width: "100%" }}>
                 <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
                 <Form.Select
                   name="soNgay"
@@ -732,7 +765,7 @@ function MapBox() {
                   <option value="9">2 tuần</option>
                 </Form.Select>
               </Form.Group>
-              <Form.Group  style={{width: "100%"}}>
+              <Form.Group style={{ width: "100%" }}>
 
                 <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
                   <Form.Control
@@ -746,7 +779,7 @@ function MapBox() {
                 </FloatingLabel>
               </Form.Group>
 
-              <Form.Group  style={{width: "100%"}}>
+              <Form.Group style={{ width: "100%" }}>
                 <Form.Label className='label-login'>Địa chỉ :</Form.Label>
                 <AddressAutofill
                   options={{
@@ -781,7 +814,7 @@ function MapBox() {
                     type="text" placeholder="VD: 10.0001" required />
                 </Form.Group>
               </Form.Group>
-              <Form.Group  style={{width: "100%"}}>
+              <Form.Group style={{ width: "100%" }}>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
@@ -795,13 +828,15 @@ function MapBox() {
                   onChange={e => handleChangeCheckPhoBien(e)}
                 />
               </Form.Group>
-              <Form.Group  style={{width: "100%"}}>
-                <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
-                <Form.Control
-                  name='hinhAnh'
-                  value={hinhAnh}
-                  onChange={e => handleChangeHinhAnh(e)}
-                  type="text" placeholder="VD: " required />
+              <Form.Group style={{ width: "100%" }}>
+                <Form.Label className='label-hinhAnh'>Hình Ảnh:</Form.Label>
+                <div className="view-hinhAnh">
+                  <img style={{ width: 130 }} className='image' src={url} alt="image" />
+                  <div className="group-btn-file">
+                    <input type='file' onChange={handleChange} alt='uri image' ></input>
+                    <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUpload}>Upload Image</Button>{' '}
+                  </div>
+                </div>
               </Form.Group>
               <Form.Group style={{ paddingLeft: 1, height: 30, margin: 5, width: "100%" }}>
                 {tourId !== '' ?
@@ -844,15 +879,15 @@ function MapBox() {
         {/* Form hoạt động */}
         {
           showFormHoatDong ?
-            <Form style={{minWidth: 390, display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start', flexDirection: 'column' }} className='group-control'>
+            <Form style={{ minWidth: 450, display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start', flexDirection: 'column' }} className='group-control'>
 
-              <Form.Group className='title-them-tour'  style={{width: "100%"}}>
+              <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <Button variant="outline-danger"
                   onClick={() => setShowFormHoatDong(!showFormHoatDong)}
                   style={{ float: "right", textAlign: 'end', fontSize: 15, fontWeight: 'bold', cursor: 'pointer' }} className='btn-dong'>X </Button>
                 <h5 className='label-title-tour' style={{ fontSize: 25 }}>Thông tin hoạt động</h5>
               </Form.Group>
-              <Form.Group className='title-them-tour' style={{width: "100%"}}>
+              <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <h6 className='label-title-tour'>Mã tour: {tourId}</h6>
                 <h6 className='label-title-tour'>Mã hd: {maHD}</h6>
               </Form.Group>
@@ -876,7 +911,7 @@ function MapBox() {
                   onChange={e => handleChangeThoiGian(e)}
                   type="text" placeholder="VD: Ngày thứ 1" required />
               </Form.Group>
-              <Form.Group style={{ width: "100%"}}>
+              <Form.Group style={{ width: "100%" }}>
                 {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}
                 <FloatingLabel controlId="floatingTextarea2" label="Thông tin chi tiết" style={{ marginTop: 10 }}>
                   <Form.Control
@@ -903,12 +938,12 @@ function MapBox() {
                     onChange={e => handleChangeDiaChiHD(e)}
                     autoComplete="strees-address"
                     type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                  <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiHoatDongThanhToaDo()} type="button" variant="warning">Tìm kiếm</Button>{' '}
+                  <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiHoatDongThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
                 </AddressAutofill>
 
               </Form.Group>
-              <Form.Group style={{ marginTop: 10, width: "100%", display:"flex", flexDirection: "row" }}>
-                <Form.Group style={{flex: 0.5}}>
+              <Form.Group style={{ marginTop: 10, width: "100%", display: "flex", flexDirection: "row" }}>
+                <Form.Group style={{ flex: 0.5 }}>
                   <Form.Label className='label-loai-tour'>longitude:</Form.Label>
                   <Form.Control
                     name='longitude'
@@ -916,7 +951,7 @@ function MapBox() {
                     // onChange={e => handleChange(e)}
                     type="text" placeholder="VD: 100.1" required />
                 </Form.Group>
-                <Form.Group  style={{flex: 0.5, marginLeft: 5}}>
+                <Form.Group style={{ flex: 0.5, marginLeft: 5 }}>
                   <Form.Label className='label-loai-tour'>latitude:</Form.Label>
                   <Form.Control
                     name='latitude'
@@ -926,13 +961,15 @@ function MapBox() {
                 </Form.Group>
               </Form.Group>
 
-              <Form.Group style={{ width: "100%"}}>
-                <Form.Label className='label-login'>Hình Ảnh (URL) :</Form.Label>
-                <Form.Control
-                  name='hinhanh'
-                  value={hinhAnhHD}
-                  onChange={e => handleChangeHinhAnhHD(e)}
-                  type="text" placeholder="VD: " required />
+              <Form.Group style={{ width: "100%" }}>
+                <Form.Label className='label-hinhAnh'>Hình Ảnh:</Form.Label>
+                <div className="view-hinhAnh">
+                  <img style={{ width: 130 }} className='image' src={url} alt="image" />
+                  <div className="group-btn-file">
+                    <input type='file' onChange={handleChange} alt='uri image' ></input>
+                    <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUpload}>Upload Image</Button>{' '}
+                  </div>
+                </div>
               </Form.Group>
               <Form.Group style={{ paddingLeft: 1, margin: 5, width: "100%" }}>
                 {maHD !== '' ?
@@ -967,7 +1004,7 @@ function MapBox() {
                       </div>
                     </PopupNote>
                   </div>
-                  : <Button type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>
+                  : <Button style={{ width: 150 }}  type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>
                 }
               </Form.Group>
 

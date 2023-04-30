@@ -24,6 +24,7 @@ export default function ScreenThongKe() {
     const [listThongKe, setListThongKe] = useState([])
     const [data, setData] = useState([])
     const [tongTuongTac, setTongTuongTac] = useState(0)
+    const [tongLuotThich, setTongLuotThich] = useState(0)
     const [tongDatTour, setTongDatTour] = useState(0)
     const handleSelectChangeNam = (event) => {
         setSelectedNam(event.target.value);
@@ -53,6 +54,7 @@ export default function ScreenThongKe() {
         const new_data = []
         let sum = 0;
         let sumLuotDat = 0;
+        let sumLuotThich = 0;
         const result = await axios.get(`http://localhost:8080/thongKe/find`, {
             params: {
                 thang: selectedThang,
@@ -69,9 +71,11 @@ export default function ScreenThongKe() {
             result.data.forEach(element => {
                 sum = sum + element.slThich + element.slDatTour + element.slThemKeHoach
                 sumLuotDat = sumLuotDat + element.slDatTour
+                sumLuotThich = sumLuotThich + element.slThich
             });
             setTongTuongTac(sum)
             setTongDatTour(sumLuotDat)
+            setTongLuotThich(sumLuotThich)
         }
         handleThongKeCacThang()
     }
@@ -125,10 +129,10 @@ export default function ScreenThongKe() {
                             <i className="icon-comments"></i>
                             <div className="details">
                                 <div className="number">
-                                    8
+                                    {tongLuotThich}
                                 </div>
                                 <div className="desc">
-                                    Người dùng
+                                    Tổng lượt thích trong tháng
                                 </div>
                             </div>
                         </div>
@@ -181,7 +185,7 @@ export default function ScreenThongKe() {
             {/* END DASHBOARD STATS */}
             <Form style={{ flexDirection: 'row', display: "flex", marginLeft: 40 }}>
                 <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11 }}>
-                    <Form.Label>Chọn tháng: </Form.Label>
+                    <Form.Label style={{ color: "#fff"}}>Chọn tháng: </Form.Label>
                     <Form.Select value={selectedThang} onChange={handleSelectChangeThang}>
                         {
                             listThang.map((item) => {
@@ -191,7 +195,7 @@ export default function ScreenThongKe() {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11, marginLeft: 20 }}>
-                    <Form.Label>chọn năm: </Form.Label>
+                    <Form.Label style={{ color: "#fff"}}>chọn năm: </Form.Label>
                     <Form.Select value={selectedNam} onChange={handleSelectChangeNam}>
                         {
                             listNam.map((item) => {
@@ -201,7 +205,7 @@ export default function ScreenThongKe() {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group controlId="exampleForm.SelectCustom" style={{ flex: 0.11, marginLeft: 20 }}>
-                    <Form.Label>Hiệu quả: </Form.Label>
+                    <Form.Label style={{ color: "#fff"}}>Hiệu quả: </Form.Label>
                     <Form.Select value={selectedHieuQua} onChange={handleSelectChangeHieuQua}>
                         <option value="cao nhat">Tốt nhất</option>
                         <option value="thap nhat">Thấp nhất</option>

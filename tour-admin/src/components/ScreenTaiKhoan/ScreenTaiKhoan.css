@@ -1,7 +1,9 @@
 .tai-khoan-container {
-    background-color: antiquewhite;
+    background-image: url('../../assets/bandotrentay.jpg');
     width: 100%;
     height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .info-tai-khoan {
     padding: 10px;

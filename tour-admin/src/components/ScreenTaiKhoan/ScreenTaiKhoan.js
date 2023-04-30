@@ -8,10 +8,7 @@ import axios from 'axios';
 
 export default function ScreenTaiKhoan(props) {
     const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false)
     const storage = firebase.storage()
-    const storageRef = firebase.storage().ref();
-
     const [nguoiDung, setNguoiDung] = useState(props.nguoiDung)
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -169,6 +166,36 @@ export default function ScreenTaiKhoan(props) {
                                         <Button variant="outline-secondary">Xóa trắng</Button>{' '}
                                         <Button variant='outline-warning' onClick={(e) => handleUpdatePassword(e)}> Cập nhật</Button>
                                     </div>
+                                </div>
+                            </div>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2">
+                        <Accordion.Header>Danh sách tài khoản người dùng</Accordion.Header>
+                        <Accordion.Body>
+                            <div className='cap-nhat-mat-khau-view'>
+                                <div className='title-cap-nhat-mat-khau'>
+                                    <h5>Tài khoản sử dụng ứng dụng Dream Trip</h5>
+                                </div>
+                                <div>
+                                   <table>
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>tên tài khoản</th>
+                                            <th>password</th>
+                                            <th>status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>nguoidung07@gmail.com</td>
+                                            <td>Aa12345678</td>
+                                            <td>true</td>
+                                        </tr>
+                                    </tbody>
+                                   </table>
                                 </div>
                             </div>
                         </Accordion.Body>
