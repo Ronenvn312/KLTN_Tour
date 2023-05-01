@@ -39,7 +39,9 @@ function MapBox() {
   const [danhGia, setDanhGia0] = useState(5.0)
   const [showFormHoatDong, setShowFormHoatDong] = useState(false)
   const [isDeletePopup, setIsDeletePopup] = useState(false)
+  const [isUpdatePopup, setIsUpdatePopup] = useState(false)
   const [isDeleteHoatDongPopup, setIsDeleteHoatDongPopup] = useState(false)
+  const [isUpdateHoatDongPopup, setIsUpdateHoatDongPopup] = useState(false)
   // khai báo cho image
   const [image, setImage] = useState(null)
   const storage = firebase.storage()
@@ -217,6 +219,8 @@ function MapBox() {
     if (result) {
       console.log(result)
       handleResultData()
+      setIsUpdatePopup(false
+      )
     } else {
       console.log("Cập nhật tour thất bại!")
     }
@@ -238,8 +242,14 @@ function MapBox() {
   const handleShowPopupDeleteTour = () => {
     setIsDeletePopup(!isDeletePopup);
   }
+  const handleShowPopupUpdateTour = () => {
+    setIsUpdatePopup(!isUpdatePopup);
+  }
   const handleShowPopupDeleteHoatDong = () => {
     setIsDeleteHoatDongPopup(!isDeleteHoatDongPopup);
+  }
+  const handleShowPopupUpdateHoatDong = () => {
+    setIsUpdateHoatDongPopup(!isUpdateHoatDongPopup);
   }
   // Click Thêm mới tour
   const handleClickThemTour = () => {
@@ -454,6 +464,7 @@ function MapBox() {
       console.log(result)
       handleResultHoatDongTour(tourClicked)
       console.log(tourClicked)
+      setIsUpdateHoatDongPopup(false)
     } else {
       console.log("Cập nhật hoạt động thất bại!")
     }
@@ -797,16 +808,16 @@ function MapBox() {
                 </AddressAutofill>
 
               </Form.Group>
-              <Form.Group style={{ marginTop: 10, width: "100%" }}>
-                <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
-                <Form.Group>
+              <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
+              <Form.Group style={{ marginTop: 10, width: "100%", display: 'flex', flexDirection: 'row' }}>
+                <Form.Group style={{ flex: 0.48 }}>
                   <Form.Label className='label-loai-tour'>longitude:</Form.Label>
                   <Form.Control
                     name='longitude'
                     value={lng}
                     type="text" placeholder="VD: 100.1" required />
                 </Form.Group>
-                <Form.Group>
+                <Form.Group style={{ flex: 0.48, marginLeft: 5 }}>
                   <Form.Label className='label-loai-tour'>latitude:</Form.Label>
                   <Form.Control
                     name='latitude'
@@ -842,7 +853,7 @@ function MapBox() {
                 {tourId !== '' ?
                   <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
                     <Button style={{ flex: 0.5, marginRight: 5 }}
-                      onClick={() => handleUpdate()}
+                      onClick={() => handleShowPopupUpdateTour()}
                       type="button"
                       variant="warning">Cập nhật</Button>
                     <Button style={{ flex: 0.5 }} onClick={() => handleShowPopupDeleteTour()} variant="danger" >Xóa</Button>
@@ -869,6 +880,29 @@ function MapBox() {
                         </div>
                       </div>
                     </PopupNote>
+                    <PopupNote className="xoa_popub" showInfoPopup={isUpdatePopup} trigger={isUpdatePopup} setTrigger={setIsUpdatePopup} >
+                      <div
+                        style={{
+                          minHeight: '200px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: 22
+                        }}>
+                        <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                          <p style={{ color: 'gray', flex: 0.9 }}> Update Data </p>
+                          <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsUpdatePopup(false)}>x</Button>
+                        </div>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ cập nhật vào dữ liệu</p>
+                        <p style={{ color: "gray" }}>Mã tour: {tourClicked.document_id}</p>
+                        <p style={{ color: "gray" }}>Tên tour: {tourClicked.tenTour}</p>
+                        <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsUpdatePopup(false)}>Cancel</Button>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleUpdate()}>Start Update</Button>
+                        </div>
+                      </div>
+                    </PopupNote>
                   </div>
                   : <Button style={{ width: 150 }} type="submit" variant="primary">Thêm</Button>
                 }
@@ -876,6 +910,7 @@ function MapBox() {
 
             </Form> : ""
         }
+
         {/* Form hoạt động */}
         {
           showFormHoatDong ?
@@ -976,10 +1011,35 @@ function MapBox() {
                   <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
 
                     <Button style={{ flex: 0.5, marginRight: 5 }}
-                      onClick={() => handleUpdateHoatDong()}
+                      onClick={() => handleShowPopupUpdateHoatDong()}
                       type="button"
                       variant="warning">Cập nhật</Button>
                     <Button style={{ flex: 0.5 }} onClick={() => handleShowPopupDeleteHoatDong()} variant="danger">Xóa </Button>
+                    {/* Popup Update */}
+                    <PopupNote className="xoa_popub" showInfoPopup={isUpdateHoatDongPopup} trigger={isUpdateHoatDongPopup} setTrigger={setIsUpdateHoatDongPopup} >
+                      <div
+                        style={{
+                          minHeight: '250px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: 22
+                        }}>
+                        <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                          <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
+                          <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsUpdateHoatDongPopup(false)}>x</Button>
+                        </div>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ bị xóa khỏi dữ liệu</p>
+                        <p style={{ color: "gray" }}>Mã tour: {hoatDongChecked.id}</p>
+                        <p style={{ color: "gray" }}>Tên tour: {hoatDongChecked.tieuDe}</p>
+                        <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsUpdateHoatDongPopup(false)}>Cancel</Button>
+                          <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleUpdateHoatDong()}>Start update</Button>
+                        </div>
+                      </div>
+                    </PopupNote>
+                    {/* Popup delete */}
                     <PopupNote className="xoa_popub" showInfoPopup={isDeleteHoatDongPopup} trigger={isDeleteHoatDongPopup} setTrigger={setIsDeleteHoatDongPopup} >
                       <div
                         style={{
@@ -1004,7 +1064,7 @@ function MapBox() {
                       </div>
                     </PopupNote>
                   </div>
-                  : <Button style={{ width: 150 }}  type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>
+                  : <Button style={{ width: 150 }} type="button" variant="primary" onClick={() => handleThemHoatDong()}>Thêm</Button>
                 }
               </Form.Group>
 

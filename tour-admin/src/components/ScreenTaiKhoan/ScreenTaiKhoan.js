@@ -5,6 +5,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import { getDownloadURL } from 'firebase/storage'
 import { firebase } from '../../util/config';
 import axios from 'axios';
+import PopupNote from '../Popup/PopupNote';
 
 export default function ScreenTaiKhoan(props) {
     const [image, setImage] = useState(null);
@@ -13,6 +14,9 @@ export default function ScreenTaiKhoan(props) {
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [renewPassword, setRenewPassword] = useState("")
+    const [isUpdatePopup, setIsUpdatePopup] = useState(false)
+    const [isErrorUpdate, setIsErrorUpdate] = useState(false)
+    const [isUpdateMatKhauPopup, setIsUpdateMatKhauPopup] = useState(false)
     // thông tin người dùng
     const [ten, setTen] = useState(nguoiDung.ten)
     const [diaChi, setDiaChi] = useState(nguoiDung.diaChi)
@@ -20,6 +24,9 @@ export default function ScreenTaiKhoan(props) {
     const [sdt, setSdt] = useState(nguoiDung.sdt)
     const [url, setUrl] = useState(nguoiDung.avatar);
 
+    const handleShowPopupUpdateTaiKhoan = () => {
+        setIsUpdatePopup(!isUpdatePopup)
+    }
     const onChangeOldPassword = (e) => {
         setOldPassword(e.target.value)
     }
@@ -77,30 +84,49 @@ export default function ScreenTaiKhoan(props) {
             console.log(result.data)
             console.log(user)
             props.setThongTinUser(user)
+            setIsUpdatePopup(false)
         } else {
             console.log("Update Error")
         }
     }
     // handle update Password
-    const handleUpdatePassword = (event) => {
+    const handleUpdatePassword = async (event) => {
         event.preventDefault();
-        axios.get(`http://localhost:8080/taikhoan/loggin`, {
+        const res = await axios.get(`http://localhost:8080/taikhoan/logginUser`, {
             params: {
-                username: email
+                userName: email,
+                password: oldPassword
             }
-        }).then((res) => {
-            if (res.data && oldPassword != newPassword) {
-                res.data.password = newPassword
-                console.log(res.data)
-                axios.put('http://localhost:8080/taikhoan/update', res.data)
-                    .then((result) => {
-                        console.log(result.data)
-                    })
-                    .catch((error) => console.log(error))
-            }
-
         })
+        if (res.data && oldPassword != newPassword) {
+            res.data.password = newPassword
+            console.log(res.data)
+            axios.put('http://localhost:8080/taikhoan/updateMK', res.data)
+                .then((result) => {
+                    console.log(result.data)
+                    setIsUpdateMatKhauPopup(false)
+                })
+                .catch((error) => {
+                    setIsUpdateMatKhauPopup(false)
+                    setIsErrorUpdate(true)
+                    console.log(error)
+                })
+        } else {
+            setIsUpdateMatKhauPopup(false)
+            setIsErrorUpdate(true)
+            console.log("Loi doi mật khẩu")
+        }
     };
+    const handleRespacePW = () => {
+        setOldPassword("")
+        setNewPassword("")
+        setRenewPassword("")
+    }
+    const handleRespaceUser = () => {
+        setTen("")
+        setDiaChi("")
+        setSdt("")
+    }
     return (
         <div className='tai-khoan-container'>
             <div className='thongke-header'>
@@ -130,9 +156,33 @@ export default function ScreenTaiKhoan(props) {
                                     <input type='text' onChange={(e) => setSdt(e.target.value)} value={sdt} />
                                     <hr />
                                     <div>
-                                        <Button variant="outline-secondary">Xóa trắng</Button>{' '}
-                                        <Button variant='outline-warning' onClick={() => updateNguoiDung()}> Cập nhật</Button>
+                                        <Button variant="outline-secondary" onClick={() => handleRespaceUser()}>Xóa trắng</Button>{' '}
+                                        <Button variant='outline-warning' onClick={() => handleShowPopupUpdateTaiKhoan()}> Cập nhật</Button>
                                     </div>
+                                    <PopupNote className="update_popup" showInfoPopup={isUpdatePopup} trigger={isUpdatePopup} setTrigger={setIsUpdatePopup} >
+                                        <div
+                                            style={{
+                                                minHeight: '200px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 22
+                                            }}>
+                                            <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                                                <p style={{ color: 'gray', flex: 0.9 }}> Update Data </p>
+                                                <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsUpdatePopup(false)}>x</Button>
+                                            </div>
+                                            <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ cập nhật vào dữ liệu</p>
+                                            {/* <p style={{ color: "gray" }}>Mã tour: {tourClicked.document_id}</p>
+                                            <p style={{ color: "gray" }}>Tên tour: {tourClicked.tenTour}</p> */}
+                                            <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                                                <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsUpdatePopup(false)}>Cancel</Button>
+                                                <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => updateNguoiDung()}>Start Update</Button>
+                                            </div>
+                                        </div>
+                                    </PopupNote>
+
                                 </div>
                             </div>
                         </Accordion.Body>
@@ -149,23 +199,71 @@ export default function ScreenTaiKhoan(props) {
                                     <p>Mật khẩu cũ (Older Password) * : </p>
                                     <input
                                         type='password'
+                                        placeholder='Aa87654321'
                                         onChange={e => onChangeOldPassword(e)}
                                         value={oldPassword} />
                                     <p>Mật khẩu mới {"(New Password)"}*:</p>
                                     <input
+                                         placeholder='Aa12345678'
                                         type='password'
                                         onChange={e => onChangeNewPassword(e)}
                                         value={newPassword} />
                                     <p>Nhập lại mật khẩu mới {"(New Password)"}*:</p>
                                     <input
+                                        placeholder='Aa12345678'
                                         type='password'
                                         onChange={e => onChangeRenewPassword(e)}
                                         value={renewPassword} />
                                     <hr />
                                     <div>
-                                        <Button variant="outline-secondary">Xóa trắng</Button>{' '}
-                                        <Button variant='outline-warning' onClick={(e) => handleUpdatePassword(e)}> Cập nhật</Button>
+                                        <Button variant="outline-secondary" onClick={() => handleRespacePW()}>Xóa trắng</Button>{' '}
+                                        <Button variant='outline-warning' onClick={() => setIsUpdateMatKhauPopup(true)}> Cập nhật</Button>
                                     </div>
+                                    <PopupNote className="updateMK_popub" showInfoPopup={isUpdateMatKhauPopup} trigger={isUpdateMatKhauPopup} setTrigger={setIsUpdateMatKhauPopup} >
+                                        <div
+                                            style={{
+                                                minHeight: '200px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 22
+                                            }}>
+                                            <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                                                <p style={{ color: 'gray', flex: 0.9 }}> Update Data </p>
+                                                <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsUpdateMatKhauPopup(false)}>x</Button>
+                                            </div>
+                                            <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ cập nhật vào dữ liệu</p>
+                                            {/* <p style={{ color: "gray" }}>Mã tour: {tourClicked.document_id}</p>
+                                            <p style={{ color: "gray" }}>Tên tour: {tourClicked.tenTour}</p> */}
+                                            <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                                                <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsUpdateMatKhauPopup(false)}>Cancel</Button>
+                                                <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={(e) => handleUpdatePassword(e)}>Start Update</Button>
+                                            </div>
+                                        </div>
+                                    </PopupNote>
+                                    <PopupNote className="erro_popup" showInfoPopup={isErrorUpdate} trigger={isErrorUpdate} setTrigger={setIsErrorUpdate} >
+                                        <div
+                                            style={{
+                                                minHeight: '200px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 22
+                                            }}>
+                                            <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                                                <p style={{ color: 'gray', flex: 0.9 }}> Update Error! </p>
+                                                <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsErrorUpdate(false)}>x</Button>
+                                            </div>
+                                            <p style={{ color: "red", fontSize: 14 }}>Thông tin nhập vào không chính xác!</p>
+                                            {/* <p style={{ color: "gray" }}>Mã tour: {tourClicked.document_id}</p>
+                                            <p style={{ color: "gray" }}>Tên tour: {tourClicked.tenTour}</p> */}
+                                            <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                                                <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsErrorUpdate(false)}>OK</Button>
+                                            </div>
+                                        </div>
+                                    </PopupNote>
                                 </div>
                             </div>
                         </Accordion.Body>
@@ -178,24 +276,24 @@ export default function ScreenTaiKhoan(props) {
                                     <h5>Tài khoản sử dụng ứng dụng Dream Trip</h5>
                                 </div>
                                 <div>
-                                   <table>
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>tên tài khoản</th>
-                                            <th>password</th>
-                                            <th>status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>nguoidung07@gmail.com</td>
-                                            <td>Aa12345678</td>
-                                            <td>true</td>
-                                        </tr>
-                                    </tbody>
-                                   </table>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>tên tài khoản</th>
+                                                <th>password</th>
+                                                <th>status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>nguoidung07@gmail.com</td>
+                                                <td>Aa12345678</td>
+                                                <td>true</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </Accordion.Body>

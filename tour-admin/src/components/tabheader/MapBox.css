@@ -9,13 +9,13 @@
   background: rgba(0, 0, 0, .25);
   border-radius: 10px;
   z-index: 1;
-  min-width: 700px;
+  min-width: auto;
 }
 
 
 .form-them-list-tour {
   flex: 1;
-  max-width: 350px;
+  width: 320px;
   min-height: 900px;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   color: white;
-  padding: 10px;
+  padding-left: 10px;
   /* font-size: 15px; */
 }
 
@@ -101,10 +101,12 @@
   cursor: pointer;
   flex: 0.9;
 }
+
 .view-hinhAnh {
   display: flex;
   flex-direction: row;
 }
+
 .group-btn-file {
   margin-left: 10px;
 }

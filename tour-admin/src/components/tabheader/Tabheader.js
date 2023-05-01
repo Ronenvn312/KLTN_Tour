@@ -14,6 +14,7 @@ import TourContent from '../tourContent/TourContent';
 import MapBox from './MapBox';
 import ScreenTaiKhoan from '../ScreenTaiKhoan/ScreenTaiKhoan';
 import axios from 'axios';
+import PopupNote from '../Popup/PopupNote';
 export const Tabheader = (props) => {
 
   const navigate = useNavigate();
@@ -28,13 +29,14 @@ export const Tabheader = (props) => {
   const [showThongKe, setShowThongKe] = useState(false)
   const [showTaiKhoan, setShowTaiKhoan] = useState(false)
   const [thongTinUser, setThongTinUser] = useState({})
+  const [isLogoutPopup, setIsLogoutPopup] = useState(false)
   const handleClick = () => {
     setExpanded(!expanded);
   };
   // click item DASHBOARD
   const handShowActionThemTour = () => {
     setTimeout(() => setIsLoading(true), 10);
-    setTimeout(() => setIsLoading(false), 1500);
+    setTimeout(() => setIsLoading(false), 1000);
     setShowTours(false)
     setShowThemTours(true)
     setShowThongKe(false)
@@ -42,7 +44,7 @@ export const Tabheader = (props) => {
   }
   const handShowAllTour = () => {
     setTimeout(() => setIsLoading(true), 10);
-    setTimeout(() => setIsLoading(false), 1500);
+    setTimeout(() => setIsLoading(false), 1000);
     setShowTours(true)
     setShowThemTours(false)
     setShowThongKe(false)
@@ -50,7 +52,7 @@ export const Tabheader = (props) => {
   }
   const handShowThongKe = () => {
     setTimeout(() => setIsLoading(true), 10);
-    setTimeout(() => setIsLoading(false), 1500);
+    setTimeout(() => setIsLoading(false), 1000);
     setShowThongKe(true)
     setShowThemTours(false)
     setShowTours(false)
@@ -58,7 +60,7 @@ export const Tabheader = (props) => {
   }
   const handleShowTaiKhoan = () => {
     setTimeout(() => setIsLoading(true), 10);
-    setTimeout(() => setIsLoading(false), 1500);
+    setTimeout(() => setIsLoading(false), 1000);
     setShowThongKe(false)
     setShowThemTours(false)
     setShowTours(false)
@@ -100,7 +102,7 @@ export const Tabheader = (props) => {
     setValues({ ...values, [event.target.name]: event.target.value })
   }
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 4000);
+    setTimeout(() => setIsLoading(false), 2000);
     handleThongTinUser()
   }, [])
   return (
@@ -111,8 +113,30 @@ export const Tabheader = (props) => {
             <img className='user-avatar' src={thongTinUser.avatar} alt="user avatar" />
             <h1 className='user-name'>{thongTinUser.ten}</h1>
             <div className="user-email">{thongTinUser.email}</div>
-            <button type="button" className="btn btn-danger" onClick={() => handleDangXuat()}>Đăng xuất</button>
+            <button type="button" className="btn btn-danger" onClick={() => setIsLogoutPopup(true)}>Đăng xuất</button>
           </div>
+          <PopupNote className="xoa_popub" showInfoPopup={isLogoutPopup} trigger={isLogoutPopup} setTrigger={setIsLogoutPopup} >
+            <div
+              style={{
+                minHeight: '200px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: 22
+              }}>
+              <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                <p style={{ color: 'gray', flex: 0.9 }}> Đăng xuất </p>
+                <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsLogoutPopup(false)}>x</Button>
+              </div>
+              <p style={{ color: "red", fontSize: 14 }}>Bạn có muốn đăng xuất không!</p>
+
+              <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsLogoutPopup(false)}>No</Button>
+                <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleDangXuat()}>Yes</Button>
+              </div>
+            </div>
+          </PopupNote>
         </div>
         <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#bangdieukhien">
           <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#bangdieukhien">
