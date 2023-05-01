@@ -129,16 +129,18 @@ function MapBox() {
     setHinhAnh(hinhAnh)
     // console.log(hinhAnh)
   }
-  const handleChangeCheckPhoBien = (e) => {
-    let isChecked = e.target.checked;
-    setPhoBien(isChecked)
-    // console.log(isChecked)
-  }
-  const handleChangeCheckXuHuong = (e) => {
-    let isChecked = e.target.checked;
-    setXuHuong(isChecked)
-    // console.log(isChecked)
-  }
+  // const handleChangeCheckPhoBien = (e) => {
+  //   let isChecked = e.target.checked;
+  //   setPhoBien(isChecked)
+
+  //   // console.log(isChecked)
+  // }
+  // const handleChangeCheckXuHuong = (e) => {
+  //   let isChecked = e.target.checked;
+  //   setXuHuong(isChecked)
+
+  //   // console.log(isChecked)
+  // }
   const handleChangeCheckTheLoai = (e) => {
     let isChecked = e.target.checked;
     console.log(e.target.checked)
@@ -209,8 +211,8 @@ function MapBox() {
       ],
       "theLoai": theLoai,
       "danhGia": 4.0,
-      "phoBien": true,
-      "xuHuong": true,
+      "phoBien": phoBien,
+      "xuHuong": xuHuong,
       "longitude": 106.68921221955645,
       "latitude": 10.772420997560602
     })
@@ -262,6 +264,8 @@ function MapBox() {
     setDiaChi("")
     setHinhAnh("")
     setShowForm(true)
+    setXuHuong(false)
+    setPhoBien(false)
     // set for the loai
     setBien(false)
     setThamQuan(false)
@@ -682,7 +686,7 @@ function MapBox() {
 
         {
           showForm ?
-            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', minWidth: 450, width: '100%', height: "100%", justifyContent: "flex-start" }} className='group-control' onSubmit={() => handSubmit()}>
+            <Form style={{ display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', minWidth: 450, width: '100%', height: "100%", justifyContent: "flex-start", overflow: "auto" }} className='group-control' onSubmit={() => handSubmit()}>
               <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <Button variant="outline-danger"
                   onClick={() => setShowForm(!showForm)}
@@ -829,14 +833,18 @@ function MapBox() {
                 <Form.Check
                   type="switch"
                   id="custom-switch"
+                  checked={xuHuong}
                   label="Xu hướng"
-                  onChange={e => handleChangeCheckXuHuong(e)}
+                  onClick={() => setXuHuong(!xuHuong)}
+                  // onChange={e => handleChangeCheckXuHuong(e)}
                 />
                 <Form.Check
                   type="switch"
                   label="phổ biến"
                   id="disabled-custom-switch"
-                  onChange={e => handleChangeCheckPhoBien(e)}
+                  checked={phoBien}
+                  onClick={() => setPhoBien(!phoBien)}
+                  // onChange={e => handleChangeCheckPhoBien(e)}
                 />
               </Form.Group>
               <Form.Group style={{ width: "100%" }}>
