@@ -45,7 +45,7 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
 
 	@Override
 	public String updateTK(TaiKhoan taiKhoan) throws InterruptedException, ExecutionException {
-
+		taiKhoan.setPassword(PasswordEncoder.encode(taiKhoan.getPassword()));
 		DocumentReference documentReference = dbFireStore.collection("taiKhoan").document(taiKhoan.getUserName());
 		ApiFuture<DocumentSnapshot> future = documentReference.get();
 		DocumentSnapshot doc = future.get();

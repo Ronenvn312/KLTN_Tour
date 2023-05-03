@@ -13,4 +13,5 @@ public class KhachHangTour {
     private int nguoiLon;
     private int treEm;
     private Date ngayDi;
+    private boolean status;
 }

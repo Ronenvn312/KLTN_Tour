@@ -73,11 +73,13 @@ public class TourServiceImp implements TourService {
 
     @Override
     public String updateRatingTour(List<Integer> ratingList, String tourId) throws InterruptedException, ExecutionException {
-        int rating = 0;
-        for (int i = 0; i < ratingList.size(); i++) {
-            rating += ratingList.get(i);
+        float rating = 0;
+        if (ratingList.size() != 0) {
+            for (int i = 0; i < ratingList.size(); i++) {
+                rating += ratingList.get(i);
+            }
+            rating = rating / ratingList.size();
         }
-        rating = rating/ratingList.size();
         return collectionReference.document(tourId).update("danhGia", rating).get().getUpdateTime().toString();
     }
 

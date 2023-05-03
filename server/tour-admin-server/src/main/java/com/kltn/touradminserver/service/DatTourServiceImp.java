@@ -16,9 +16,21 @@ public class DatTourServiceImp implements DatTourService {
     Firestore dbFireStore = FirestoreClient.getFirestore();
 
     @Override
-    public KhachHangTour insert(KhachHangTour k) {
-        dbFireStore.collection("khachHangTour").document().create(k);
-        return k;
+    public KhachHangTour insert(KhachHangTour k) throws ExecutionException, InterruptedException {
+        List<KhachHangTour> list = dbFireStore.collection("khachHangTour").whereEqualTo("tourId", k.getTourId()).whereEqualTo("nguoiDungId", k.getNguoiDungId()).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tourDocument = tour.toObject(KhachHangTour.class);
+            return tourDocument;
+        }).collect(Collectors.toList());
+        boolean check = true;
+        for (KhachHangTour t : list){
+            if (!t.isStatus())
+                check = false;
+        }
+        if (check == true) {
+            dbFireStore.collection("khachHangTour").document().create(k);
+            return k;
+        }
+        return null;
     }
 
     @Override
@@ -48,5 +60,19 @@ public class DatTourServiceImp implements DatTourService {
             final var tourDocument = tour.toObject(KhachHangTour.class);
             return tourDocument;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean check(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<KhachHangTour> list = dbFireStore.collection("khachHangTour").whereEqualTo("tourId", tourId).whereEqualTo("nguoiDungId", userId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tourDocument = tour.toObject(KhachHangTour.class);
+            return tourDocument;
+        }).collect(Collectors.toList());
+        boolean check = true;
+        for (KhachHangTour t : list){
+            if (!t.isStatus())
+                check = false;
+        }
+        return check;
     }
 }

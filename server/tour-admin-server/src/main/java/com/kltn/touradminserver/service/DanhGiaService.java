@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 public interface DanhGiaService {
     DanhGia insert(DanhGia danhGia) throws ExecutionException, InterruptedException;
 
-    List<DanhGia> getDanhGia(String userId) throws ExecutionException, InterruptedException;
+    List<DanhGia> getDanhGia(String userId, boolean status) throws ExecutionException, InterruptedException;
 
     //    public String update(DanhGia danhGia);
     String delete(String danhGiaId) throws ExecutionException, InterruptedException;

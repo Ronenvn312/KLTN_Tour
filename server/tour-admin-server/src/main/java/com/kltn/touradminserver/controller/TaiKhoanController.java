@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.kltn.touradminserver.security.PasswordEncoder;
+import com.kltn.touradminserver.service.OTPService;
+import com.kltn.touradminserver.service.OTPServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +36,8 @@ public class TaiKhoanController {
 	TaiKhoanServiceImp taikKhoanServiceImp;
 	@Autowired
 	private NguoiDungServiceImp nguoiDungService;
+    @Autowired
+    OTPServiceImp otpService;
 	// Đk tài khoản đầu vào là một lớp dto chứa 2 object là tk và thông tin tài
 	// khoản
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -56,7 +60,7 @@ public class TaiKhoanController {
 		}
 	}
 
-//	@CrossOrigin(origins = "http://localhost:3000")
+    //	@CrossOrigin(origins = "http://localhost:3000")
 //	@GetMapping("/get")
 //	public TaiKhoan getTK(@RequestParam String username) throws InterruptedException, ExecutionException {
 //		TaiKhoan tk = taikKhoanServiceImp.getTK(username);
@@ -124,4 +128,5 @@ public class TaiKhoanController {
 	public List<TaiKhoan> findAll() throws InterruptedException, ExecutionException {
 		return  taikKhoanServiceImp.findAll();
 	}
+
 }

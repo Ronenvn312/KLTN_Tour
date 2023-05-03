@@ -10,6 +10,8 @@ public interface NguoiDungService {
 
 	public String insertNguoiDung(TaiKhoanAdminUserDTO tk_user_dto) throws InterruptedException, ExecutionException;
 
+	public String insert(NguoiDung tk_user_dto) throws InterruptedException, ExecutionException;
+
 	public NguoiDung getNguoiDung(String document_id) throws InterruptedException, ExecutionException;
 	public NguoiDung getNguoiDungByEmail(String email) throws InterruptedException, ExecutionException;
 

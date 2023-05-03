@@ -105,4 +105,16 @@ public class TuongTacServiceImp implements TuongTacService {
         return collectionReference.document(listTT.get(0)).update("userLenKeHoach", FieldValue.arrayRemove(userId)).get().getUpdateTime().toString();
     }
 
+    @Override
+    public boolean checkLike(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List list = collectionReference.whereEqualTo("tourId", tourId).whereArrayContains("userDaThich", userId).get().get().getDocuments().parallelStream().map(id -> {
+            final var like = id.toObject(TuongTac.class).getTourId();
+            return like;
+        }).collect(Collectors.toList());
+        System.out.println(list.size());
+        if (list.size() != 0)
+            return true;
+        return false;
+    }
+
 }

@@ -32,9 +32,9 @@ public class DanhGiaController {
     }
 
     @GetMapping("/getForUser")
-    public List<DanhGia> getDanhGia(@RequestParam String userId) throws InterruptedException, ExecutionException {
+    public List<DanhGia> getDanhGia(@RequestParam String userId, @RequestParam boolean status) throws InterruptedException, ExecutionException {
         logger.log(Level.WARNING, "UserId: " + userId);
-        return danhGiaService.getDanhGia(userId);
+        return danhGiaService.getDanhGia(userId, status);
     }
 
     @DeleteMapping("/delete")
@@ -49,7 +49,7 @@ public class DanhGiaController {
     }
 
     @PutMapping("/update")
-    public String update(@RequestParam String id, @RequestParam String comment, @RequestParam int rate, String tourId) throws ExecutionException, InterruptedException {
+    public String update(@RequestParam String id, @RequestParam String comment, @RequestParam int rate,@RequestParam String tourId) throws ExecutionException, InterruptedException {
         logger.log(Level.WARNING, "Id: " + id);
         //Cap nhat danh gia cho tour
         tourService.updateRatingTour(danhGiaService.getForRatingTour(tourId), tourId);

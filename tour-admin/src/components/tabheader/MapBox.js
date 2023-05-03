@@ -25,6 +25,12 @@ function MapBox() {
   const [lat, setLat] = useState(10.772420997560602)
   const [showPopup, setShowPopup] = useState(false)
   const [popupInfo, setPopupInfo] = useState(null);
+  // phuong tien
+  const [phuongTien, setPhuongTien] = useState([])
+  const [xeMay, setXeMay] = useState(false)
+  const [oto, setOto] = useState(false)
+  const [mayBay, setMayBay] = useState(false)
+
   //info Add Tour 
   const [tourId, setTourId] = useState('')
   const [tenTour, setTenTour] = useState('')
@@ -158,6 +164,23 @@ function MapBox() {
     setTheLoai(theLoai)
     handleSetTheLoai(theLoai)
   }
+  const handleCheckPhuongTien = (e) => {
+    let isChecked = e.target.checked;
+    console.log(e.target.checked)
+    if (isChecked) {
+      phuongTien.push(e.target.name)
+      console.log(phuongTien)
+    } else {
+      for (let index = 0; index < phuongTien.length; index++) {
+        const element = phuongTien[index];
+        if (element == e.target.name)
+        phuongTien.splice(index, 1)
+      }
+    }
+    console.log(phuongTien)
+    setPhuongTien(phuongTien)
+    handleSetPhuongTien(phuongTien)
+  }
   const data = {
     longitude: lng,
     latitude: lat,
@@ -187,6 +210,7 @@ function MapBox() {
         url,
       ],
       "theLoai": theLoai,
+      "phuongTien": phuongTien,
       "danhGia": danhGia,
       "phoBien": phoBien,
       "xuHuong": xuHuong,
@@ -210,6 +234,7 @@ function MapBox() {
         url
       ],
       "theLoai": theLoai,
+      "phuongTien": phuongTien,
       "danhGia": 4.0,
       "phoBien": phoBien,
       "xuHuong": xuHuong,
@@ -259,6 +284,7 @@ function MapBox() {
     setTourId("")
     setTenTour("")
     setTheLoai([])
+    setPhuongTien([])
     setSoNgay("")
     setThongTinCT("")
     setDiaChi("")
@@ -272,6 +298,10 @@ function MapBox() {
     setTheThao(false)
     setNghiDuong(false)
     setThienNhien(false)
+    // set phuong tien
+    setXeMay(false)
+    setOto(false)
+    setMayBay(false)
     setShowFormHoatDong(false)
     setUrl("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf")
   }
@@ -281,6 +311,7 @@ function MapBox() {
     setTourId(item.document_id)
     setTenTour(item.tenTour)
     setTheLoai(item.theLoai)
+    setPhuongTien(item.phuongTien)
     setSoNgay(item.soNgay)
     setThongTinCT(item.thongTin)
     setDiaChi(item.viTri)
@@ -293,6 +324,7 @@ function MapBox() {
     handleResultHoatDongTour(item)
     setShowFormHoatDong(false)
     handleSetTheLoai(item.theLoai)
+    handleSetPhuongTien(item.phuongTien)
     console.log(item)
     setTourClicked(item)
     setPopupInfo({
@@ -338,7 +370,26 @@ function MapBox() {
 
   }
   //
+  const handleSetPhuongTien = (listPhuongTien) => {
 
+    if (listPhuongTien.includes("xe máy")) {
+      setXeMay(true)
+    } else {
+      setXeMay(false)
+    }
+
+    if (listPhuongTien.includes("ô tô")) {
+      setOto(true)
+    } else {
+      setOto(false)
+    }
+
+    if (listPhuongTien.includes("máy bay")) {
+      setMayBay(true)
+    } else {
+      setMayBay(false)
+    }
+  }
   // get data tour when show popup
   //THAO TÁC VỚI HOẠT ĐỘNG
   const [listHoatDong, setListHoatDong] = useState([])
@@ -757,8 +808,40 @@ function MapBox() {
                   onClick={() => setBien(!bien)}
                   onChange={e => handleChangeCheckTheLoai(e)}
                 />
+              </Form.Group>
+              <Form.Label className='label-loai-tour'>Phương tiện:</Form.Label>
+              <Form.Group style={{ display: 'flex', width: "100%" }}>
+                <Form.Check
+                  type="switch"
+                  label="xe máy"
+                  checked={xeMay}
+                  name="xe máy"
+                  id="disabled-custom-switch"
+                  style={{ marginRight: 3 }}
+                  onClick={() => setXeMay(!xeMay)}
+                  onChange={e => handleCheckPhuongTien(e)}
+                />
 
-
+                <Form.Check
+                  type="switch"
+                  label="ô tô"
+                  name="ô tô"
+                  checked={oto}
+                  id="disabled-custom-switch"
+                  style={{ marginRight: 3 }}
+                  onClick={() => setOto(!oto)}
+                  onChange={e => handleCheckPhuongTien(e)}
+                />
+                <Form.Check
+                  type="switch"
+                  label="máy bay"
+                  name="máy bay"
+                  checked={mayBay}
+                  id="disabled-custom-switch"
+                  style={{ marginRight: 3 }}
+                  onClick={() => setMayBay(!mayBay)}
+                  onChange={e => handleCheckPhuongTien(e)}
+                />
               </Form.Group>
               <Form.Group style={{ width: "100%" }}>
                 <Form.Label className='label-login'>Số ngày diễn ra: </Form.Label>
@@ -836,7 +919,7 @@ function MapBox() {
                   checked={xuHuong}
                   label="Xu hướng"
                   onClick={() => setXuHuong(!xuHuong)}
-                  // onChange={e => handleChangeCheckXuHuong(e)}
+                // onChange={e => handleChangeCheckXuHuong(e)}
                 />
                 <Form.Check
                   type="switch"
@@ -844,7 +927,7 @@ function MapBox() {
                   id="disabled-custom-switch"
                   checked={phoBien}
                   onClick={() => setPhoBien(!phoBien)}
-                  // onChange={e => handleChangeCheckPhoBien(e)}
+                // onChange={e => handleChangeCheckPhoBien(e)}
                 />
               </Form.Group>
               <Form.Group style={{ width: "100%" }}>
