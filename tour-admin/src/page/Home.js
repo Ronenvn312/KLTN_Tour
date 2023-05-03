@@ -51,9 +51,12 @@ function Home(props) {
               <h3 style={{ paddingTop: 10 }} className='title-page'>Dream Trip</h3>
             </div>
             <div className="right-widget">
-              <Button onClick={() => handShowThongBao()} variant="link" className='btn-about' style={{ color: 'white', flex: 1, width: '100%', display: 'flex' }}>
+              <Button onClick={() => handShowThongBao()} variant="link" className='btn-about' style={{ color: 'white', flex: 0.5, width: '100%', display: 'flex' }}>
                 <img style={{ width: 30, height: 30, marginRight: 10 }} src={require('./../assets/icon_thongbao.png')} />
                 About
+              </Button>
+              <Button onClick={() => handShowThongBao()} variant="link" className='btn-about' style={{ color: 'white', flex: 0.5, width: '100%', display: 'flex' }}>
+                Docs
               </Button>
               <div className='right-widget-info-log'>
                 1

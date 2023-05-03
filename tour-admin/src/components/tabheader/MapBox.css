@@ -102,11 +102,22 @@
   flex: 0.9;
 }
 
-.view-hinhAnh {
+.view-hinh-anh {
   display: flex;
   flex-direction: row;
 }
-
+.am-thanh-doan-phim {
+  display: flex;
+  flex-direction: column;
+}
 .group-btn-file {
   margin-left: 10px;
+}
+.view-am-thanh {
+  display: flex;
+  flex-direction: column;
+}
+.view-doan-phim {
+  display: flex;
+  flex-direction: row;
 }

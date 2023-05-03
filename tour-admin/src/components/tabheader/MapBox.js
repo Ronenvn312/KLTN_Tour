@@ -14,6 +14,7 @@ import { firebase } from '../../util/config';
 // npm install @turf/turf
 import * as turf from '@turf/turf';
 import PopupNote from "../Popup/PopupNote";
+import { Accordion } from "react-bootstrap";
 
 // A circle of 5 mile radius of the Empire State Building
 const GEOFENCE = turf.circle([-74.0122106, 40.7467898], 5, { units: 'miles' });
@@ -52,6 +53,12 @@ function MapBox() {
   const [image, setImage] = useState(null)
   const storage = firebase.storage()
   const [url, setUrl] = useState("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf");
+  // Khai báo cho video
+  const [video, setVideo] = useState(null)
+  const [urlVideo, setUrlVideo] = useState("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/videop.mp4?alt=media&token=a3e3681b-f1a0-49ff-a6da-1b97f2e9d0af")
+  // khai báo cho fike mp3
+  const [amThanh, setAmThanh] = useState(null)
+  const [urlAmThanh, setUrlAmThanh] = useState("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/mp3s%2Fsound.mp3?alt=media&token=cbb310b2-b3f6-49ae-9d95-3b5785393ccc")
   // upload image
   const handleChange = (e) => {
     if (e.target.files[0]) {
@@ -78,6 +85,70 @@ function MapBox() {
           .getDownloadURL()
           .then((url) => {
             setUrl(url);
+            console.log(url)
+          });
+      }
+    );
+  };
+  // upload doan phim
+  const handleChangeVideo = (e) => {
+    if (e.target.files[0]) {
+      setVideo(e.target.files[0]);
+    }
+  };
+  const handleUploadVideo = () => {
+    const uploadTask = storage.ref(`videos/${video.name}`).put(video);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // progress function
+      },
+      (error) => {
+        // error function
+        console.log(video)
+        console.log(error);
+      },
+      () => {
+        // complete function
+        storage
+          .ref('videos')
+          .child(video.name)
+          .getDownloadURL()
+          .then((url) => {
+            setUrlVideo(url);
+            console.log(url)
+          });
+      }
+    );
+  };
+  // upload âm thanh
+  const handleChangeAmThanh = (e) => {
+    if (e.target.files[0]) {
+      setAmThanh(e.target.files[0]);
+    }
+  };
+  const handleUploadAmThanh = () => {
+    const uploadTask = storage.ref(`mp3s/${amThanh.name}`).put(amThanh);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // progress function
+        // set loading = true
+      },
+      (error) => {
+        // error function
+        console.log(amThanh)
+        console.log(error);
+      },
+      () => {
+        // complete function
+        storage
+          .ref('mp3s')
+          .child(amThanh.name)
+          .getDownloadURL()
+          .then((url) => {
+            //setloading= false
+            setUrlAmThanh(url);
             console.log(url)
           });
       }
@@ -174,7 +245,7 @@ function MapBox() {
       for (let index = 0; index < phuongTien.length; index++) {
         const element = phuongTien[index];
         if (element == e.target.name)
-        phuongTien.splice(index, 1)
+          phuongTien.splice(index, 1)
       }
     }
     console.log(phuongTien)
@@ -289,6 +360,8 @@ function MapBox() {
     setThongTinCT("")
     setDiaChi("")
     setHinhAnh("")
+    setVideo("")
+    setAmThanh("")
     setShowForm(true)
     setXuHuong(false)
     setPhoBien(false)
@@ -315,7 +388,10 @@ function MapBox() {
     setSoNgay(item.soNgay)
     setThongTinCT(item.thongTin)
     setDiaChi(item.viTri)
+
     setHinhAnh(item.hinhAnh[0])
+    setUrl(item.hinhAnh[0])
+
     setLat(item.latitude)
     setLng(item.longitude)
     setPhoBien(item.phoBien)
@@ -325,6 +401,7 @@ function MapBox() {
     setShowFormHoatDong(false)
     handleSetTheLoai(item.theLoai)
     handleSetPhuongTien(item.phuongTien)
+
     console.log(item)
     setTourClicked(item)
     setPopupInfo({
@@ -428,7 +505,7 @@ function MapBox() {
       console.log("Loi get data")
     }
   }
-  // chọn một hoạt động
+  // chọn hoạt động
   const [hoatDongChecked, setHoatDongChecked] = useState({})
   const handleClickHoatDong = (item) => {
     console.log(item)
@@ -437,7 +514,25 @@ function MapBox() {
     setViTriHD(item.viTri)
     setThongTinHD(item.thongTin)
     setThoiGianHD(item.thoiGianHD)
-    setHinhAnhHD(item.hinhAnh[0])
+
+    setUrlAmThanh(item.amThanh)
+    if (item.amThanh) {
+      setAmThanh(item.amThanh)
+      setUrlAmThanh(item.amThanh)
+    } else {
+      setUrlAmThanh("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/mp3s%2Fsound.mp3?alt=media&token=cbb310b2-b3f6-49ae-9d95-3b5785393ccc")
+    }
+    if (item.hinhAnh[0]) {
+      setHinhAnhHD(item.hinhAnh[0])
+    } else {
+      setUrl("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf")
+    }
+    if (item.doanPhim) {
+      setVideo(item.doanPhim)
+      setUrlVideo(item.doanPhim)
+    } else {
+      setUrlVideo("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/videop.mp4?alt=media&token=a3e3681b-f1a0-49ff-a6da-1b97f2e9d0af")
+    }
     setLat(item.latitude)
     setLng(item.longitude)
     setShowForm(false)
@@ -462,9 +557,13 @@ function MapBox() {
     setThongTinHD("")
     setThoiGianHD("")
     setHinhAnhHD("")
+    setVideo("")
+    setAmThanh("")
     setShowForm(false)
     setShowFormHoatDong(true)
+    setUrlVideo("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/videop.mp4?alt=media&token=a3e3681b-f1a0-49ff-a6da-1b97f2e9d0af")
     setUrl("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/background-loading.jpg?alt=media&token=8b25495c-0949-40a5-8ce6-3ea0bdfa6fdf")
+    setUrlAmThanh("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/mp3s%2Fsound.mp3?alt=media&token=cbb310b2-b3f6-49ae-9d95-3b5785393ccc")
   }
   const deleteHoatDongById = async (item) => {
     const result = await axios.delete(`http://localhost:8080/hoatdong/delete`, {
@@ -488,6 +587,8 @@ function MapBox() {
       "hinhAnh": [
         url
       ],
+      "amThanh": urlAmThanh,
+      "doanPhim": urlVideo,
       "longitude": lng,
       "latitude": lat
     })
@@ -510,6 +611,8 @@ function MapBox() {
       "hinhAnh": [
         url
       ],
+      "amThanh": urlAmThanh,
+      "doanPhim": urlVideo,
       "longitude": lng,
       "latitude": lat
     })
@@ -1005,7 +1108,7 @@ function MapBox() {
         {/* Form hoạt động */}
         {
           showFormHoatDong ?
-            <Form style={{ minWidth: 450, display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start', flexDirection: 'column' }} className='group-control'>
+            <Form style={{ minWidth: 450, display: 'flex', flex: 0.5, backgroundColor: '#e0ffff', justifyContent: 'flex-start', flexDirection: 'column', overflow: "scroll" }} className='group-control'>
 
               <Form.Group className='title-them-tour' style={{ width: "100%" }}>
                 <Button variant="outline-danger"
@@ -1045,7 +1148,7 @@ function MapBox() {
                     value={thongTinHD}
                     as="textarea"
                     placeholder="Leave a comment here"
-                    style={{ height: '250px' }}
+                    style={{ height: '150px' }}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -1087,16 +1190,49 @@ function MapBox() {
                 </Form.Group>
               </Form.Group>
 
-              <Form.Group style={{ width: "100%" }}>
-                <Form.Label className='label-hinhAnh'>Hình Ảnh:</Form.Label>
-                <div className="view-hinhAnh">
-                  <img style={{ width: 130 }} className='image' src={url} alt="image" />
-                  <div className="group-btn-file">
-                    <input type='file' onChange={handleChange} alt='uri image' ></input>
-                    <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUpload}>Upload Image</Button>{' '}
-                  </div>
-                </div>
+              <Form.Group style={{ width: "100%", height: 400 }}>
+                <Accordion defaultActiveKey="0">
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>Hình ảnh:</Accordion.Header>
+                    <Accordion.Body>
+                      <div className="view-hinh-anh">
+                        <img style={{ width: 80 }} className='image' src={url} alt="image" />
+                        <div className="group-btn-file">
+                          <input type='file' onChange={handleChange} alt='uri image' ></input>
+                          <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUpload}>Upload</Button>{' '}
+                        </div>
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="1">
+                    <Accordion.Header>Âm thanh giới thiệu:</Accordion.Header>
+                    <Accordion.Body>
+                      <div className="view-am-thanh">
+                        <audio style={{ width: 330 }} src={urlAmThanh} controls />
+                        <div>
+                          <input type='file' onChange={handleChangeAmThanh} alt='uri amThanh' ></input>
+                          <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUploadAmThanh}>Upload</Button>{' '}
+                        </div>
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="2">
+                    <Accordion.Header>Đoạn phim giới thiệu:</Accordion.Header>
+                    <Accordion.Body>
+                      <div className="view-doan-phim">
+                        <video style={{ width: 130 }} src={urlVideo} controls>
+                          Your browser does not support the video tag.
+                        </video>
+                        <div className="group-btn-file">
+                          <input type='file' onChange={handleChangeVideo} alt='uri image' ></input>
+                          <Button style={{ marginTop: 10 }} variant="outline-secondary" onClick={handleUploadVideo}>Upload</Button>{' '}
+                        </div>
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </Form.Group>
+
               <Form.Group style={{ paddingLeft: 1, margin: 5, width: "100%" }}>
                 {maHD !== '' ?
                   <div style={{ width: "100%", height: 40, display: 'flex', flexDirection: 'row' }}>
@@ -1107,7 +1243,7 @@ function MapBox() {
                       variant="warning">Cập nhật</Button>
                     <Button style={{ flex: 0.5 }} onClick={() => handleShowPopupDeleteHoatDong()} variant="danger">Xóa </Button>
                     {/* Popup Update */}
-                    <PopupNote className="xoa_popub" showInfoPopup={isUpdateHoatDongPopup} trigger={isUpdateHoatDongPopup} setTrigger={setIsUpdateHoatDongPopup} >
+                    <PopupNote className="update_popub" showInfoPopup={isUpdateHoatDongPopup} trigger={isUpdateHoatDongPopup} setTrigger={setIsUpdateHoatDongPopup} >
                       <div
                         style={{
                           minHeight: '250px',

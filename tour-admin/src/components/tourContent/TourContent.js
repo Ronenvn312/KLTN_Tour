@@ -86,8 +86,8 @@ export default function TourContent() {
             console.log("No data filter!")
         }
     }
-   
-    
+
+
     useEffect(() => {
         handleResultData();
     }, [tourAlter])
@@ -154,7 +154,7 @@ export default function TourContent() {
                             <thead className='thead_table'>
                                 <tr>
                                     <th className='col_stt' scope="col">#</th>
-                                    <th className='col_info' scope="col">Tên Tour</th>
+                                    <th className='col_info' scope="col">Tour</th>
                                     <th className='col_info' scope="col">Ảnh</th>
                                     <th className='col_info' scope="col">Mô tả</th>
                                     <th className='col_info' scope="col">Địa chỉ</th>
@@ -168,14 +168,16 @@ export default function TourContent() {
                                         <th style={{ textAlign: 'center', color: 'white', backgroundColor: 'white' }} scope="row"> <p style={{ color: 'black' }}>{index + 1}</p>
                                             <input style={{ width: 25, height: 25 }} type="checkbox" value={item} onClick={e => handClickCheckBox(e, item)} />
                                         </th>
-                                        <td><p>{item.tenTour}</p></td>
+                                        <td>
+                                            <p>id: {item.document_id}</p>
+                                            <p>{item.tenTour}</p></td>
                                         <td>
                                             <div style={{ height: '250px', backgroundImage: `url(${item.hinhAnh[0]})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', padding: '10px' }} >
 
                                             </div>
                                         </td>
                                         <td className='col_mota' style={{ textAlign: 'start' }}>
-                                            <p>id: {item.document_id}</p>
+
                                             <p>Thông tin: {item.thongTin}</p>
                                         </td>
                                         <td style={{ textAlign: 'start' }}>
