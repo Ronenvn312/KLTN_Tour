@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
 public class Tour implements Serializable{
 
 	/**
@@ -23,6 +23,7 @@ public class Tour implements Serializable{
 	private String thongTin;
 	private String viTri;
 	private int soNgay;
+	private List<String> phuongTien;
 	private List<String> hinhAnh;
 	private List<String> theLoai;
 	private double danhGia;

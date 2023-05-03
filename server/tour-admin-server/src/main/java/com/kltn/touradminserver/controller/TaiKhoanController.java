@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @RequestMapping("/taikhoan")
 public class TaiKhoanController {
 	static Logger logger = Logger.getLogger(AdminController.class.getName());
-	
+
 	@Autowired
 	TaiKhoanServiceImp taikKhoanServiceImp;
 	@Autowired
@@ -97,7 +97,18 @@ public class TaiKhoanController {
 		logger.log(Level.WARNING, "Không thể cập nhật tài khoản :" + taiKhoan);
 		return false;
 	}
-
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PutMapping("/updateMK")
+	public boolean updateMatKhau(@RequestBody TaiKhoan taiKhoan) throws InterruptedException, ExecutionException {
+		String hashedPassword = PasswordEncoder.encode(taiKhoan.getPassword());
+		taiKhoan.setPassword(hashedPassword);
+		String res = taikKhoanServiceImp.updateTK(taiKhoan);
+		if (res != null) {
+			return true;
+		}
+		logger.log(Level.WARNING, "Không thể cập nhật tài khoản :" + taiKhoan);
+		return false;
+	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete")
 	public boolean deleteTK(@RequestParam String username) throws InterruptedException, ExecutionException {

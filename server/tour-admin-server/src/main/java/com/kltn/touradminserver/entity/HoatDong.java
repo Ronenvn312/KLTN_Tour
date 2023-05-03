@@ -23,4 +23,6 @@ public class HoatDong {
 	private double longitude;
 	private double latitude;
 	private int danhGia;
+	private String doanPhim;
+	private String amThanh;
 }

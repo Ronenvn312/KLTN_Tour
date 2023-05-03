@@ -35,7 +35,7 @@ public class HoatDongServiceImp implements HoatDongService {
 
 	@Override
 	public List<HoatDong> getHoatDong(String tourID) throws InterruptedException, ExecutionException {
-		Query query = dbFireStore.collection("hoatDong").whereEqualTo("tourId", tourID);
+		Query query = dbFireStore.collection("hoatDong").whereEqualTo("tourId", tourID).orderBy("thoiGianHD");
 		QuerySnapshot querySnapshot = query.get().get();
 		List<HoatDong> listHd = new ArrayList<>();
 		for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
@@ -69,7 +69,7 @@ public class HoatDongServiceImp implements HoatDongService {
 	public List<HoatDong> findAllsByTourId(String tourId) throws InterruptedException, ExecutionException {
 		List<HoatDong> result = new ArrayList<HoatDong>();
 		if (tourservice.getTour(tourId) != null) {
-			List<HoatDong> hoatDongs =  dbFireStore.collection("hoatDong").get().get().getDocuments().parallelStream().map(tour -> {
+			List<HoatDong> hoatDongs =  dbFireStore.collection("hoatDong").orderBy("thoiGianHD").get().get().getDocuments().parallelStream().map(tour -> {
 				final var tourDocument = tour.toObject(HoatDong.class);
 				if (tourDocument.getTourId().equalsIgnoreCase(tourId)) {
 					return tourDocument;

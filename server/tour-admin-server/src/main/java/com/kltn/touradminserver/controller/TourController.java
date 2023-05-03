@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.kltn.touradminserver.entity.HoatDong;
+import com.kltn.touradminserver.entity.TuongTac;
 import com.kltn.touradminserver.service.DanhGiaServiceImp;
 import com.kltn.touradminserver.service.HoatDongServiceImp;
 import com.kltn.touradminserver.service.TuongTacServiceImp;
@@ -43,6 +44,8 @@ public class TourController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/insert")
     public String insertTour(@RequestBody Tour tour) throws InterruptedException, ExecutionException {
+        TuongTac tuongTac = new TuongTac();
+        String new_tuongTac = tuongTacService.insert(tuongTac);
         return dbTour.insertTour(tour);
     }
 
