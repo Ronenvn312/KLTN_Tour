@@ -8,6 +8,7 @@ import com.kltn.touradminserver.entity.DanhGia;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -18,13 +19,22 @@ public class DanhGiaServiceImp implements DanhGiaService {
 
     @Override
     public DanhGia insert(DanhGia danhGia) throws ExecutionException, InterruptedException {
-        dbFireStore.collection("danhGia").document().create(danhGia).get().getUpdateTime();
-        return danhGia;
+        QuerySnapshot querySnapshot = dbFireStore.collection("danhGia").whereEqualTo("nguoiDungID", danhGia.getNguoiDungID()).whereEqualTo("hoatDongID", danhGia.getHoatDongID()).get().get();
+        boolean check = true;
+        for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
+            if (hd.toObject(DanhGia.class).getThoiGian().compareTo(new Date()) < 7)
+                check = false;
+        }
+        if (check) {
+            dbFireStore.collection("danhGia").document().create(danhGia).get().getUpdateTime();
+            return danhGia;
+        }
+        return null;
     }
 
     @Override
-    public List<DanhGia> getDanhGia(String userId) throws ExecutionException, InterruptedException {
-        QuerySnapshot querySnapshot = dbFireStore.collection("danhGia").whereEqualTo("nguoiDungID", userId).whereEqualTo("status", true).get().get();
+    public List<DanhGia> getDanhGia(String userId, boolean status) throws ExecutionException, InterruptedException {
+        QuerySnapshot querySnapshot = dbFireStore.collection("danhGia").whereEqualTo("nguoiDungID", userId).whereEqualTo("status", status).get().get();
         List<DanhGia> list = new ArrayList<>();
         for (QueryDocumentSnapshot hd : querySnapshot.getDocuments()) {
             DanhGia dg = hd.toObject(DanhGia.class);
@@ -41,8 +51,8 @@ public class DanhGiaServiceImp implements DanhGiaService {
 
     @Override
     public String update(int rate, String comment, String id) throws ExecutionException, InterruptedException {
-        if (dbFireStore.collection("danhGia").document(id).get().get().toObject(DanhGia.class).isStatus())
-            return dbFireStore.collection("danhGia").document(id).update("danhGia", rate, "binhLuan", comment).get().getUpdateTime().toString();
+        if (!dbFireStore.collection("danhGia").document(id).get().get().toObject(DanhGia.class).isStatus())
+            return dbFireStore.collection("danhGia").document(id).update("danhGia", rate, "binhLuan", comment, "status", true).get().getUpdateTime().toString();
         return "Failed";
     }
 

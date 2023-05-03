@@ -27,6 +27,13 @@ public class NguoiDungServiceImp implements NguoiDungService {
 		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("nguoiDung").document().set(tk_user_dto.getNguoiDung());
 		return collectionApiFuture.get().getUpdateTime().toString();
 	}
+
+	@Override
+	public String insert(NguoiDung tk_user_dto) throws InterruptedException, ExecutionException {
+		ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("nguoiDung").document().set(tk_user_dto);
+		return collectionApiFuture.get().getUpdateTime().toString();
+	}
+
 	@Override
 	public NguoiDung getNguoiDung(String document_id) throws InterruptedException, ExecutionException {
 		DocumentReference documentReference = dbFireStore.collection("nguoiDung").document(document_id);

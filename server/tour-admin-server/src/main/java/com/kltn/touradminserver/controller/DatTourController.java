@@ -2,6 +2,7 @@ package com.kltn.touradminserver.controller;
 
 import com.kltn.touradminserver.entity.KhachHangTour;
 import com.kltn.touradminserver.service.DatTourServiceImp;
+import com.kltn.touradminserver.service.TuongTacServiceImp;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,14 @@ public class DatTourController {
     @Autowired
     DatTourServiceImp datTourService;
 
+    @Autowired
+    TuongTacServiceImp tuongTacService;
+
     @PostMapping("/insert")
-    public KhachHangTour insert(@RequestBody KhachHangTour k) {
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.1.2:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+    public KhachHangTour insert(@RequestBody KhachHangTour k) throws ExecutionException, InterruptedException {
         datTourService.insert(k);
+        tuongTacService.book(k.getTourId(), k.getNguoiDungId());
         return k;
     }
 
@@ -37,5 +43,10 @@ public class DatTourController {
     @GetMapping("/getNotChecked")
     public List<KhachHangTour> getNotChecked() throws ExecutionException, InterruptedException {
         return datTourService.getNotCheck();
+    }
+
+    @GetMapping("/check")
+    public boolean check(@RequestParam String tourId, @RequestParam String userId) throws ExecutionException, InterruptedException {
+        return datTourService.check(tourId, userId);
     }
 }

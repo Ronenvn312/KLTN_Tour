@@ -18,4 +18,6 @@ public interface TuongTacService {
     String book(String tourId, String userId) throws ExecutionException, InterruptedException;
     String plan(String tourId, String userId) throws ExecutionException, InterruptedException;
     String dropOutPlan(String tourId, String userId) throws ExecutionException, InterruptedException;
+
+    boolean checkLike(String tourId, String userId) throws ExecutionException, InterruptedException;
 }
