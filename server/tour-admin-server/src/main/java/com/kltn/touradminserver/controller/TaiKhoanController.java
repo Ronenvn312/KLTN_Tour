@@ -30,35 +30,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @RequestMapping("/taikhoan")
 public class TaiKhoanController {
-    static Logger logger = Logger.getLogger(AdminController.class.getName());
-    @Autowired
-    TaiKhoanServiceImp taikKhoanServiceImp;
-    @Autowired
-    private NguoiDungServiceImp nguoiDungService;
+	static Logger logger = Logger.getLogger(AdminController.class.getName());
+	
+	@Autowired
+	TaiKhoanServiceImp taikKhoanServiceImp;
+	@Autowired
+	private NguoiDungServiceImp nguoiDungService;
     @Autowired
     OTPServiceImp otpService;
-
-    // Đk tài khoản đầu vào là một lớp dto chứa 2 object là tk và thông tin tài
-    // khoản
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/register")
-    public boolean dangKyTaiKhoan(@RequestBody TaiKhoanAdminUserDTO tk_user_dto)
-            throws InterruptedException, ExecutionException {
-        if (taikKhoanServiceImp.getTK(tk_user_dto.getTk().getUserName()) != null) {
-            logger.log(Level.SEVERE, "Erro tao tai khoan: tên tài khoản đã tồn tại!");
-            return false;
-        }
-        try {
+	// Đk tài khoản đầu vào là một lớp dto chứa 2 object là tk và thông tin tài
+	// khoản
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/register")
+	public boolean dangKyTaiKhoan(@RequestBody TaiKhoanAdminUserDTO tk_user_dto)
+			throws InterruptedException, ExecutionException {
+		if (taikKhoanServiceImp.getTK(tk_user_dto.getTk().getUserName()) != null) {
+			logger.log(Level.SEVERE, "Erro tao tai khoan: tên tài khoản đã tồn tại!");
+			return false;
+		}
+		try {
 //			tk_user_dto.getTk().setPassword(new BCryptPasswordEncoder().encode(tk_user_dto.getTk().getPassword()));
-            taikKhoanServiceImp.insertTK(tk_user_dto.getTk());
-            nguoiDungService.insertNguoiDung(tk_user_dto);
-            return true;
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Erro tao tai khoan:" + e);
-            logger.log(Level.SEVERE, "tai khoan:" + tk_user_dto);
-            return false;
-        }
-    }
+			taikKhoanServiceImp.insertTK(tk_user_dto.getTk());
+			nguoiDungService.insertNguoiDung(tk_user_dto);
+			return true;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erro tao tai khoan:" + e);
+			logger.log(Level.SEVERE, "tai khoan:" + tk_user_dto);
+			return false;
+		}
+	}
 
     //	@CrossOrigin(origins = "http://localhost:3000")
 //	@GetMapping("/get")

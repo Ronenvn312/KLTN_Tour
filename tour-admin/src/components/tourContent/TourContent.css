@@ -153,9 +153,9 @@
 
 .search-result {
   position: absolute;
-  top: 166px;
-  left: 250px;
-  background: rgba(48, 145, 236, 0.452);
+  top: 175px;
+  left: 516px;
+  background: #50555c83;
   border-radius: 10px;
   height: auto;
   width: 800px;
@@ -173,8 +173,12 @@
   height: 100px;
   margin: 5px;
   cursor: pointer;
+  border: 1px solid black;
+  border-radius: 20px;
 }
-
+.search-item:hover {
+  background: #50555c83;
+}
 .image-item {
   padding-left: 10px;
   width: 100px;
@@ -182,9 +186,9 @@
  
 }
 .search-item p {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   padding-left: 10px;
-  color: yellow;
+  color: white;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
