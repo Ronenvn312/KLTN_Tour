@@ -1138,7 +1138,7 @@ function MapBox() {
                   style={{ height: '28px' }}
                   value={thoiGianHD}
                   onChange={e => handleChangeThoiGian(e)}
-                  type="text" placeholder="VD: Ngày thứ 1" required />
+                  type="text" placeholder="VD: Hoạt động 1" required />
               </Form.Group>
               <Form.Group style={{ width: "100%" }}>
                 {/* <Form.Label className='label-login'>Thông tin chi tiết: </Form.Label> */}

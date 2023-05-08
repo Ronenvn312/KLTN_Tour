@@ -10,10 +10,25 @@ import { useNavigate } from 'react-router-dom';
 import FormThem from '../tabheader/FormThem';
 import { AppContext } from '../../context/AppContext';
 import PopupNote from '../Popup/PopupNote';
+import PopupTuongTac from '../Popup/PopupTuongTac';
+import { Accordion } from 'react-bootstrap';
+import TuongTacTour from '../tuongTacTour/TuongTacTour';
 
 export default function TourContent() {
     const [showInfoPopup, setshowInfoPopup] = useState(false)
     const [showLocatePopup, setshowLocatePopup] = useState(false)
+    const [showPopupTuongTac, setShowPopupTuongTac] = useState(false)
+    const [tuongTac, setTuongTac] = useState({
+        "document_id": "obWMJ9pcrGiz8f6TYGVd",
+        "tourId": "EzdyimgA7g3pEub8yo1r",
+        "userDaThich": [
+            "ok"
+        ],
+        "userDaDat": [],
+        "userLenKeHoach": [
+            "ok"
+        ]
+    })
     const navigate = useNavigate()
     const [resultData, setResultData] = useState([]);
     const [tourAlter, setTourAlter] = useState(null)
@@ -22,6 +37,24 @@ export default function TourContent() {
     const [searchResult, setSearchResult] = useState([])
     const [searchValue, setSearchValue] = useState()
     // const { setTourChecked } = useContext(AppContext)
+    const handleGetAllTuongTac = async (tourId) => {
+        const result = await axios.get(`http://localhost:8080/tuongtac/findAll`, {
+            params: {
+                "tourId": tourId
+            }
+        })
+
+        if (result != null) {
+            setTuongTac(result)
+            console.log(tuongTac)
+        } else {
+            console.log("Không thể tìm thấy tương tác này!")
+        }
+        hanleShowPopupTuongTac()
+    }
+    const hanleShowPopupTuongTac = () => {
+        setShowPopupTuongTac(!showPopupTuongTac)
+    }
     const handleResultData = async () => {
         const result = await axios.get('http://localhost:8080/tour/findAlls')
         if (result) {
@@ -102,11 +135,11 @@ export default function TourContent() {
                         <Form.Group style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <Button
                                 onClick={() => handShowPopupXoa()}
-                                type='button' variant="outline-danger" className='btn_xoa' >
+                                type='button' variant="danger" className='btn_xoa' >
                                 Xóa nhiều
-                                <img style={{ paddingLeft: 10, width: 30, height: 30 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
+                                <img style={{ marginLeft: 10, marginBottom: 5, width: 28, height: 28 }} src={require('../../assets/deleteicon.png')} alt='icon-locate' />
                             </Button>{' '}
-                            <label> Tìm kiếm </label>
+                            <label style={{ color: "wheat", marginRight: 20 }}> Tìm kiếm </label>
                             <Form.Control
                                 name='search'
                                 // value={" Tour Nha Trang 36h"}
@@ -154,12 +187,10 @@ export default function TourContent() {
                             <thead className='thead_table'>
                                 <tr>
                                     <th className='col_stt' scope="col">#</th>
-                                    <th className='col_info' scope="col">Tour</th>
-                                    <th className='col_info' scope="col">Ảnh</th>
+                                    <th className='col_ten' scope="col">Tour</th>
+                                    <th className='col_anh' scope="col">Ảnh</th>
+                                    <th className='col_thong_tin' scope="col">Thông tin</th>
                                     <th className='col_info' scope="col">Mô tả</th>
-                                    <th className='col_info' scope="col">Địa chỉ</th>
-                                    <th className='col_info' scope="col">Xu hướng</th>
-                                    <th className='col_info' scope="col">Thể loại & số ngày</th>
                                 </tr>
                             </thead>
                             <tbody className='tbody_table' style={{ height: '500px', overflow: 'scroll' }}>
@@ -170,40 +201,55 @@ export default function TourContent() {
                                         </th>
                                         <td>
                                             <p>id: {item.document_id}</p>
-                                            <p>{item.tenTour}</p></td>
+                                            <p>{item.tenTour}</p>
+                                            <Button style={{ marginRight: 20 }} variant='info' onClick={() => handleGetAllTuongTac(item.document_id)}>Danh Sách tương tác</Button>
+                                            <PopupNote className="xoa_popub" showInfoPopup={showPopupTuongTac} trigger={showPopupTuongTac} setTrigger={setShowPopupTuongTac} >
+                                                <div
+                                                    style={{
+                                                        minHeight: '200px',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        justifyContent: 'center',
+                                                        fontSize: 22
+                                                    }}>
+                                                    <h1>Danh sách tương tác</h1>
+                                                    <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                                                        <p style={{ color: 'gray', flex: 0.9 }}> Thông tin tuongTac {tuongTac.tourId} </p>
+                                                        <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setShowPopupTuongTac(false)}>x</Button>
+                                                    </div>
+                                                    <div>
+
+                                                    </div>
+                                                </div>
+                                            </PopupNote>
+                                        </td>
                                         <td>
                                             <div style={{ height: '250px', backgroundImage: `url(${item.hinhAnh[0]})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', padding: '10px' }} >
 
                                             </div>
                                         </td>
                                         <td className='col_mota' style={{ textAlign: 'start' }}>
-
-                                            <p>Thông tin: {item.thongTin}</p>
-                                        </td>
-                                        <td style={{ textAlign: 'start' }}>
                                             <p>Địa chỉ: {item.viTri}</p>
-                                            <p>longitude: {item.longitude}</p>
-                                            <p>latitude: {item.latitude}</p></td>
-                                        <td>
-                                            <p>Phổ biến: {item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />} </p>
-                                            <p>Xu hướng: {item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />} </p>
-                                            <p>Đánh giá: {item.danhGia}</p>
-                                        </td>
-
-                                        <td className='col_mota' style={{ textAlign: 'start' }}>
+                                            <p>longitude: {item.longitude} latitude: {item.latitude}</p>
                                             <p>Thể loại:
                                                 {item.theLoai.map((tl) => {
                                                     return " " + tl + ", "
                                                 })
                                                 }
                                             </p>
-
                                             <p>Số ngày: {item.soNgay}</p>
+                                            <p>Phổ biến: {item.phoBien ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />} Xu hướng: {item.xuHuong ? <input type="checkbox" checked disabled /> : <input type="checkbox" disabled />}</p>
+                                            <p>Đánh giá: {item.danhGia}</p>
+                                        </td>
+                                        <td className='col_mota' style={{ textAlign: 'start' }}>
+                                            <p>Thông tin: {item.thongTin}</p>
+
                                         </td>
                                     </tr>
                                 })
                                 }
                             </tbody>
+
                         </Table>
                     </div>
                 </div>
