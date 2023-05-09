@@ -44,9 +44,20 @@ public class TourController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/insert")
     public String insertTour(@RequestBody Tour tour) throws InterruptedException, ExecutionException {
-        TuongTac tuongTac = new TuongTac();
-        String new_tuongTac = tuongTacService.insert(tuongTac);
-        return dbTour.insertTour(tour);
+        Tour new_tour = dbTour.insertTour(tour);
+        List<String> new_list = new ArrayList<>();
+        if ( new_tour != null){
+            TuongTac tuongTac = new TuongTac();
+            tuongTac.setTourId(new_tour.getDocument_id());
+            tuongTac.setUserDaThich(new_list);
+            tuongTac.setUserLenKeHoach(new_list);
+            tuongTac.setUserDaDat(new_list);
+            String new_tuongTac = tuongTacService.insert(tuongTac);
+            return new_tuongTac;
+        } else {
+            return  "Không thể thêm tour";
+        }
+
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

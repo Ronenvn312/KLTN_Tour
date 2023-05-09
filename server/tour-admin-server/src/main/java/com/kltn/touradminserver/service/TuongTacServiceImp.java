@@ -3,10 +3,13 @@ package com.kltn.touradminserver.service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.kltn.touradminserver.entity.ThongTinThongKe;
+import com.kltn.touradminserver.entity.Tour;
 import com.kltn.touradminserver.entity.TuongTac;
 import lombok.var;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TuongTacServiceImp implements TuongTacService {
+    ThongTinThongKeServiceImp thongTinThongKeServiceImp;
     Firestore dbFireStore = FirestoreClient.getFirestore();
 
     CollectionReference collectionReference = dbFireStore.collection("tuongTac");
@@ -64,6 +68,7 @@ public class TuongTacServiceImp implements TuongTacService {
     public String like(String tourId, String userId) throws ExecutionException, InterruptedException {
         List<String> listTT = dbFireStore.collection("tuongTac").whereEqualTo("tourId", tourId).get().get().getDocuments().parallelStream().map(tour -> {
             final var tt = tour.toObject(TuongTac.class).getDocument_id();
+
             return tt;
         }).collect(Collectors.toList());
         return collectionReference.document(listTT.get(0)).update("userDaThich", FieldValue.arrayUnion(userId)).get().getUpdateTime().toString();
@@ -115,6 +120,18 @@ public class TuongTacServiceImp implements TuongTacService {
         if (list.size() != 0)
             return true;
         return false;
+    }
+
+    @Override
+    public TuongTac findAllByTourId(String tourId) throws ExecutionException, InterruptedException {
+        Query query = collectionReference.whereEqualTo("tourId", tourId);
+        QuerySnapshot querySnapshot = query.get().get();
+        List<TuongTac> tuongTacs = new ArrayList<>();
+        for (QueryDocumentSnapshot tt : querySnapshot.getDocuments()) {
+            TuongTac new_tt = tt.toObject(TuongTac.class);
+            tuongTacs.add(new_tt);
+        }
+        return tuongTacs.get(0);
     }
 
 }

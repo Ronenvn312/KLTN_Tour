@@ -7,15 +7,23 @@ import { parsePath } from 'react-router-dom'
 import { Accordion } from 'react-bootstrap'
 
 function PopupTuongTac(props) {
-
+   
+  
+    // useEffect(() => {
+    //     if(tuongTac.document_id == null) {
+    //         handleGetAllTuongTac()
+    //     }
+    // }, [tuongTac])
+    const [itemTT, setItemTT] = useState(props.tuongTac)
     return (props.trigger) ? (
-        <div className='popuptt_container'>
-            <motion.div animate={{ scale: 1 }} initial={{ scale: 0 }} className={clsx("popup-tt-inner", {
-               "tuongTac": props.tuongTac
+        <div className='popup_container'>
+            <motion.div animate={{ scale: 1 }} initial={{ scale: 0 }} className={clsx("popup-inner", {
+                "popup-inner_user": props.showInfoUserPopup,
+                "popup-inner_add_user": props.addUserPopup
             })}>
-                <button className='close-btn' onClick={() => props.setTrigger(!props.trigger)}>x</button>
+
                 {props.children}
-               
+
             </motion.div>
         </div>
     ) : ""

@@ -35,4 +35,9 @@ public class ThongTinThongKeController {
     public List<ThongTinThongKeThangDTO> findAllThangInNam(int nam) throws InterruptedException, ExecutionException {
         return dbTttk.thongKeCacThangTrongNam(nam);
     }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/findByThongKeTourNow")
+    public ThongTinThongKe getTttkByThangNamAndTourId(String tourId) throws InterruptedException, ExecutionException {
+        return dbTttk.getTttkByThangNamAndTourId(tourId);
+    }
 }

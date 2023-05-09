@@ -1,13 +1,14 @@
 package com.kltn.touradminserver.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
 public class TuongTac {
     @DocumentId
     private String document_id;

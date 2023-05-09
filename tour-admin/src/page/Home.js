@@ -17,10 +17,10 @@ function Home(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 4000);
+    setTimeout(() => setIsLoading(false), 2000);
   }, []);
 
-  const onClickMenuBar = async () => {
+  const onClickMenuBar = () => {
     setDisableMenu(!disableMenu);
   }
   // click xem thong bao
@@ -82,7 +82,7 @@ function Home(props) {
               }
             </div>
           </div>
-          <Tabheader />
+          <Tabheader trigger={disableMenu} />
         </div>
       )}
     </div>

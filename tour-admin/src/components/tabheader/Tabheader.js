@@ -107,99 +107,102 @@ export const Tabheader = (props) => {
   }, [])
   return (
     <div className='container-home'>
-      <div className='left-contain'>
-        <div className='left-header-contain'>
-          <div className='user-container' >
-            <img className='user-avatar' src={thongTinUser.avatar} alt="user avatar" />
-            <h1 className='user-name'>{thongTinUser.ten}</h1>
-            <div className="user-email">{thongTinUser.email}</div>
-            <button type="button" className="btn btn-danger" onClick={() => setIsLogoutPopup(true)}>Đăng xuất</button>
-          </div>
-          <PopupNote className="xoa_popub" showInfoPopup={isLogoutPopup} trigger={isLogoutPopup} setTrigger={setIsLogoutPopup} >
-            <div
-              style={{
-                minHeight: '200px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontSize: 22
-              }}>
-              <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
-                <p style={{ color: 'gray', flex: 0.9 }}> Đăng xuất </p>
-                <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsLogoutPopup(false)}>x</Button>
+      {
+        props.trigger ?
+          <div className='left-contain'>
+            <div className='left-header-contain'>
+              <div className='user-container' >
+                <img className='user-avatar' src={thongTinUser.avatar} alt="user avatar" />
+                <h1 className='user-name'>{thongTinUser.ten}</h1>
+                <div className="user-email">{thongTinUser.email}</div>
+                <button type="button" className="btn btn-danger" onClick={() => setIsLogoutPopup(true)}>Đăng xuất</button>
               </div>
-              <p style={{ color: "red", fontSize: 14 }}>Bạn có muốn đăng xuất không!</p>
+              <PopupNote className="xoa_popub" showInfoPopup={isLogoutPopup} trigger={isLogoutPopup} setTrigger={setIsLogoutPopup} >
+                <div
+                  style={{
+                    minHeight: '200px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: 22
+                  }}>
+                  <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
+                    <p style={{ color: 'gray', flex: 0.9 }}> Đăng xuất </p>
+                    <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsLogoutPopup(false)}>x</Button>
+                  </div>
+                  <p style={{ color: "red", fontSize: 14 }}>Bạn có muốn đăng xuất không!</p>
 
-              <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsLogoutPopup(false)}>No</Button>
-                <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleDangXuat()}>Yes</Button>
+                  <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                    <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsLogoutPopup(false)}>No</Button>
+                    <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleDangXuat()}>Yes</Button>
+                  </div>
+                </div>
+              </PopupNote>
+              <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#bangdieukhien">
+                <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#bangdieukhien">
+                  <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/design.png')} alt="use" />
+                  Bảng điều khiển
+                </ListGroup.Item>
+                <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#thongtintour">
+                  <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
+                  Quản lý Tour
+                </ListGroup.Item>
+                <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#thongke'>
+                  <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
+                  Quản lý thống kê
+                </ListGroup.Item>
+                <ListGroup.Item onClick={() => handleShowTaiKhoan()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#taikhoan'>
+                  <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
+                  Quản lý tài khoản
+                </ListGroup.Item>
+
+              </ListGroup>
+              {/* Danh sách tour được cập nhật gần đây */}
+              <div>
+                <p style={{ color: 'white' }}>tours cập nhật gần đây  </p>
+                <hr style={{ color: 'white' }}></hr>
+                <div>
+
+                </div>
               </div>
+              {/* Popup for action đổi mật khẩu */}
+              <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
+                <h5>Đổi mật khẩu</h5>
+                <Form className='group-control' noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
+                  <Form.Group id='form-group' className="mb-3" controlId="formBasicEmail">
+                    <Form.Label className='label-login'>Old Password</Form.Label>
+                    <Form.Control
+                      name='email'
+                      value={values.email}
+                      onChange={e => handleChange(e)}
+                      type="email" placeholder="Enter old password" required />
+
+                  </Form.Group>
+                  <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
+                    <Form.Label className='label-login'>New Password</Form.Label>
+                    <Form.Control
+                      name='password'
+                      value={values.password}
+                      onChange={e => handleChange(e)}
+                      type="password" placeholder="Password" required />
+                    <Form.Control.Feedback type="invalid">
+                      Please provide a password
+                    </Form.Control.Feedback>
+
+                  </Form.Group>
+                  <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Check
+                      className='label-login' type="checkbox" label="Check me out" />
+                  </Form.Group>
+                  <Button variant="primary" type="submit">
+                    Cập nhật
+                  </Button>
+                </Form>
+              </Popup>
             </div>
-          </PopupNote>
-        </div>
-        <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#bangdieukhien">
-          <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#bangdieukhien">
-            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/design.png')} alt="use" />
-            Bảng điều khiển
-          </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowActionThemTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#thongtintour">
-            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
-            Thông tin Tour
-          </ListGroup.Item>
-          <ListGroup.Item onClick={() => handShowThongKe()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive', display: 'flex', flexDirection: 'row' }} action href='#thongke'>
-            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/Combined.png')} alt="use" />
-            Thống kê
-          </ListGroup.Item>
-          <ListGroup.Item onClick={() => handleShowTaiKhoan()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href='#taikhoan'>
-            <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/setting.png')} alt="use" />
-            Quản lý tài khoản
-          </ListGroup.Item>
-
-        </ListGroup>
-        {/* Danh sách tour được cập nhật gần đây */}
-        <div>
-          <p style={{ color: 'white' }}>tours cập nhật gần đây  </p>
-          <hr style={{ color: 'white' }}></hr>
-          <div>
-
-          </div>
-        </div>
-        {/* Popup for action đổi mật khẩu */}
-        <Popup className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup}>
-          <h5>Đổi mật khẩu</h5>
-          <Form className='group-control' noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
-            <Form.Group id='form-group' className="mb-3" controlId="formBasicEmail">
-              <Form.Label className='label-login'>Old Password</Form.Label>
-              <Form.Control
-                name='email'
-                value={values.email}
-                onChange={e => handleChange(e)}
-                type="email" placeholder="Enter old password" required />
-
-            </Form.Group>
-            <Form.Group id='form-group' className="mb-3" controlId="formBasicPassword">
-              <Form.Label className='label-login'>New Password</Form.Label>
-              <Form.Control
-                name='password'
-                value={values.password}
-                onChange={e => handleChange(e)}
-                type="password" placeholder="Password" required />
-              <Form.Control.Feedback type="invalid">
-                Please provide a password
-              </Form.Control.Feedback>
-
-            </Form.Group>
-            <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check
-                className='label-login' type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Cập nhật
-            </Button>
-          </Form>
-        </Popup>
-      </div>
+          </div> : ""
+      }
       {/* right content in Bảng điều khiển */}
       {isLoading ? (
         <div className='loading_view'>

@@ -13,4 +13,7 @@ public interface DatTourService {
     List<KhachHangTour> getChecked() throws ExecutionException, InterruptedException;
 
     boolean check(String tourId, String userId) throws ExecutionException, InterruptedException;
+    boolean adminCheck(KhachHangTour khachHangTour) throws ExecutionException, InterruptedException ;
+    List<KhachHangTour> findKhTourByTourIdAndUserId(String tourId, String userId) throws ExecutionException, InterruptedException;
+
 }

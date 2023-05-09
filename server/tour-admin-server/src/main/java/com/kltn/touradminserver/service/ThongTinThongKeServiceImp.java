@@ -70,7 +70,20 @@ public class ThongTinThongKeServiceImp implements ThongTinThongKeService{
 
         return thongTinThongKes;
     }
-
+    @Override
+    public ThongTinThongKe getTttkByThangNamAndTourId(String tourId) throws ExecutionException, InterruptedException {
+        CollectionReference collectionReference = dbFireStore.collection("thongTinThongKe");
+        Query query = collectionReference.whereEqualTo("tourId", tourId);
+        QuerySnapshot querySnapshot = query.get().get();
+        Date new_date = new Date();
+        for (QueryDocumentSnapshot tttk : querySnapshot.getDocuments()) {
+            ThongTinThongKe new_tttk = tttk.toObject(ThongTinThongKe.class);
+            if (new_tttk.getThangNam().getMonth() == new_date.getMonth() && new_tttk.getThangNam().getYear() == new_date.getYear()) {
+                return  new_tttk;
+            }
+        }
+        return null;
+    }
     @Override
     public ThongTinThongKe getThongTinThongKeByIdTour(String thongTinId) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = dbFireStore.collection("thongTinThongKe").document(thongTinId);

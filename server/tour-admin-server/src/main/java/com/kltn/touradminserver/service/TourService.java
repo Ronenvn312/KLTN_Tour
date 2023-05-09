@@ -8,7 +8,7 @@ import com.kltn.touradminserver.entity.Tour;
 
 
 public interface TourService {
-    String insertTour(Tour tour) throws InterruptedException, ExecutionException;
+    Tour insertTour(Tour tour) throws InterruptedException, ExecutionException;
 
     Tour getTour(String document_id) throws InterruptedException, ExecutionException;
 

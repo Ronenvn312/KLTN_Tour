@@ -18,17 +18,17 @@ export default function TourContent() {
     const [showInfoPopup, setshowInfoPopup] = useState(false)
     const [showLocatePopup, setshowLocatePopup] = useState(false)
     const [showPopupTuongTac, setShowPopupTuongTac] = useState(false)
+    const [tourId, setTourId] = useState()
+    const [tourName, setTourName] = useState("")
     const [tuongTac, setTuongTac] = useState({
-        "document_id": "obWMJ9pcrGiz8f6TYGVd",
-        "tourId": "EzdyimgA7g3pEub8yo1r",
+        "tourId": "",
         "userDaThich": [
-            "ok"
         ],
         "userDaDat": [],
-        "userLenKeHoach": [
-            "ok"
-        ]
+        "userLenKeHoach": []
     })
+    const [isListDatTourPopup, setIsListDatTourPopup] = useState(false)
+    const [listDatTour, setListDatTour] = useState([])
     const navigate = useNavigate()
     const [resultData, setResultData] = useState([]);
     const [tourAlter, setTourAlter] = useState(null)
@@ -37,24 +37,59 @@ export default function TourContent() {
     const [searchResult, setSearchResult] = useState([])
     const [searchValue, setSearchValue] = useState()
     // const { setTourChecked } = useContext(AppContext)
-    const handleGetAllTuongTac = async (tourId) => {
+    const handleGetAllTuongTac = async (item) => {
+        setTourId(item.document_id)
+        setTourName(item.tenTour)
         const result = await axios.get(`http://localhost:8080/tuongtac/findAll`, {
             params: {
-                "tourId": tourId
+                "tourId": item.document_id
             }
         })
 
-        if (result != null) {
-            setTuongTac(result)
-            console.log(tuongTac)
+        if (result.data != null) {
+            setTuongTac(result.data)
+            // console.log(result)
         } else {
             console.log("Không thể tìm thấy tương tác này!")
         }
         hanleShowPopupTuongTac()
     }
+    const getListDatTour = async (item, userId) => {
+        const result = await axios.get(`http://localhost:8080/datTour/find`, {
+            params: {
+                "tourId": item.tourId,
+                "userId": userId
+            }
+        })
+
+        if (result.data != null) {
+            setListDatTour(result.data)
+            console.log(result)
+        } else {
+            console.log("Không thể tìm thấy danh sách đã đặt này!")
+        }
+    }
+    const handleShowListDatTour = async (item, userId) => {
+        getListDatTour(item, userId)
+        handleShowDatTourPopup()
+    }
+    const handleShowDatTourPopup = () => {
+        setIsListDatTourPopup(!isListDatTourPopup)
+    }
     const hanleShowPopupTuongTac = () => {
         setShowPopupTuongTac(!showPopupTuongTac)
     }
+    const handleCheckedDonDatTour = async (item) => {
+        const result = await axios.put(`http://localhost:8080/datTour/adminCheck`, item)
+        if (result.data) {
+            console.log(result)
+            item.status = result
+            getListDatTour(tuongTac, item.nguoiDungId)
+        } else {
+            console.log("Không thể Check!")
+        }
+    }
+    // Kết thúc các chức năng với đơn đặt tour
     const handleResultData = async () => {
         const result = await axios.get('http://localhost:8080/tour/findAlls')
         if (result) {
@@ -76,8 +111,8 @@ export default function TourContent() {
         setIsDeletePopup(!isDeletePopup)
 
     }
-    const handleDeleteTour = async () => {
-        await tourcheckeds.forEach((tour) => {
+    const handleDeleteTour = () => {
+        tourcheckeds.forEach((tour) => {
             axios.delete(`http://localhost:8080/tour/delete`, {
                 params: {
                     document_id: tour.document_id
@@ -111,7 +146,7 @@ export default function TourContent() {
             }
         })
         setSearchValue(e.target.value)
-        if (result != null) {
+        if (result.data != null) {
             // console.log(result.data)
             setSearchResult(result.data)
         }
@@ -123,7 +158,7 @@ export default function TourContent() {
 
     useEffect(() => {
         handleResultData();
-    }, [tourAlter])
+    }, [tourAlter, tuongTac, listDatTour])
     return (
         <div className='tour-content'>
 
@@ -202,26 +237,130 @@ export default function TourContent() {
                                         <td>
                                             <p>id: {item.document_id}</p>
                                             <p>{item.tenTour}</p>
-                                            <Button style={{ marginRight: 20 }} variant='info' onClick={() => handleGetAllTuongTac(item.document_id)}>Danh Sách tương tác</Button>
-                                            <PopupNote className="xoa_popub" showInfoPopup={showPopupTuongTac} trigger={showPopupTuongTac} setTrigger={setShowPopupTuongTac} >
-                                                <div
-                                                    style={{
-                                                        minHeight: '200px',
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        justifyContent: 'center',
-                                                        fontSize: 22
-                                                    }}>
-                                                    <h1>Danh sách tương tác</h1>
-                                                    <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
-                                                        <p style={{ color: 'gray', flex: 0.9 }}> Thông tin tuongTac {tuongTac.tourId} </p>
-                                                        <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setShowPopupTuongTac(false)}>x</Button>
-                                                    </div>
-                                                    <div>
+                                            <Button style={{ marginRight: 20 }} variant='info' onClick={() => handleGetAllTuongTac(item)}>Danh Sách tương tác</Button>
+                                            <PopupTuongTac className="tuongtac_popup" tuongTac={tuongTac} tourId={item.document_id} showInfoPopup={showPopupTuongTac} trigger={showPopupTuongTac} setTrigger={setShowPopupTuongTac} >
+                                                <div className='tuong-tac-content'>
+                                                    <div style={{ display: "flex", flexDirection: 'row' }}>
+                                                        <h1 style={{ flex: 0.9, fontSize: 30 }}>Data tương tác</h1>
+                                                        <button style={{ flex: 0.1 }} className='btn-close' onClick={() => setShowPopupTuongTac(false)}></button>
 
                                                     </div>
+                                                    <p> ID : {tourId}</p>
+                                                    <p>  {tourName}</p>
+                                                    <div className='tuong-tac-body'>
+                                                        <Accordion defaultActiveKey="0" style={{ width: "100%", padding: 10 }}>
+                                                            <Accordion.Item eventKey="0">
+                                                                <Accordion.Header><p style={{ color: "black" }}>Lượt Thích:</p></Accordion.Header>
+                                                                <Accordion.Body>
+                                                                    <div className='danh-sach-thich'>
+                                                                        <ul>
+                                                                            {
+                                                                                tuongTac.userDaThich.map((item) => {
+                                                                                    return <li style={{ color: "black" }}>USER_ID: {item}</li>
+                                                                                })
+                                                                            }
+                                                                        </ul>
+
+                                                                    </div>
+                                                                </Accordion.Body>
+                                                            </Accordion.Item>
+                                                            <Accordion.Item eventKey="1">
+                                                                <Accordion.Header><p style={{ color: "black" }}>Lượt Đặt:</p></Accordion.Header>
+                                                                <Accordion.Body>
+                                                                    <div className='danh-sach-dat'>
+                                                                        <ul>
+                                                                            {
+                                                                                tuongTac.userDaDat.map((item) => {
+                                                                                    return <li style={{ flexDirection: 'row', display: "flex", justifyContent: "center", alignItems: 'center' }}>
+                                                                                        <p style={{ color: "black", flex: 0.7, justifyContent: "center", marginTop: 10 }}>
+                                                                                            USER_ID: {item}
+                                                                                        </p>
+                                                                                        <Button style={{ width: 140, flex: 0.3 }} variant='info' onClick={() => handleShowListDatTour(tuongTac, item)}>Xem các lần đặt</Button>
+                                                                                        <PopupTuongTac className="dsdat_popup" showInfoPopup={isListDatTourPopup} trigger={isListDatTourPopup} setTrigger={setIsListDatTourPopup} >
+                                                                                            <div className='tuong-tac-content'>
+                                                                                                <div style={{ display: "flex", flexDirection: 'row' }}>
+                                                                                                    <h1 style={{ flex: 0.9, fontSize: 30 }}>Data Đặt tour</h1>
+                                                                                                    <button style={{ flex: 0.1 }} className='btn-close' onClick={() => setIsListDatTourPopup(false)}></button>
+                                                                                                </div>
+                                                                                                <p> ID : {tourId}</p>
+                                                                                                <p>  {tourName}</p>
+                                                                                                <div className='tuong-tac-body'>
+                                                                                                    <ul style={{ width: "100%", borderRadius: 20, border: "2px solid", marginRight: 3, overflow: "auto" }}>
+                                                                                                        {
+                                                                                                            listDatTour.map((item) => {
+                                                                                                                return <li>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}> ID người dùng </label>
+                                                                                                                        <p> {item.nguoiDungId}</p>
+                                                                                                                    </div>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}> ID Tour</label>
+                                                                                                                        <p> {item.tourId}</p>
+                                                                                                                    </div>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}> Điện thoại</label>
+                                                                                                                        <p> {item.sdt}</p>
+                                                                                                                    </div>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}>  Người lớn</label>
+                                                                                                                        <p> {item.nguoiLon}</p>
+                                                                                                                    </div>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}> Trẻ em</label>
+                                                                                                                        <p> {item.treEm}</p>
+                                                                                                                    </div>
+                                                                                                                    <div style={{ display: 'flex', flexDirection: "row" }}>
+                                                                                                                        <label style={{ width: 100 }}>Ngày đi</label>
+                                                                                                                        <p> {item.ngayDi}</p>
+                                                                                                                    </div>
+                                                                                                                    {
+                                                                                                                        !item.status ?
+                                                                                                                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                                                                                                                <p style={{ marginTop: 10, color: "yellow", fontFamily: "-moz-initial" }}>Bạn có muốn xác nhận đã duyệt cho đơn đặt tour này? </p>
+                                                                                                                                <Button variant="success" style={{ width: 100, marginLeft: 10 }}
+                                                                                                                                    onClick={() => handleCheckedDonDatTour(item)}
+                                                                                                                                >
+                                                                                                                                    <img style={{ width: 30, height: 25 }} className='Logo-left' src={require('../../assets/validation/success_checked.png')} alt='' />
+                                                                                                                                </Button>
+                                                                                                                            </div> : <p style={{ marginTop: 10, color: "yellow", fontFamily: "-moz-initial" }}>Đã check! </p>
+
+                                                                                                                    }
+                                                                                                                </li>
+                                                                                                            })
+                                                                                                        }
+                                                                                                    </ul>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                        </PopupTuongTac>
+                                                                                    </li>
+                                                                                })
+                                                                            }
+                                                                        </ul>
+
+                                                                    </div>
+                                                                </Accordion.Body>
+                                                            </Accordion.Item>
+                                                            <Accordion.Item eventKey="2">
+                                                                <Accordion.Header><p style={{ color: "black" }}>Lượt Lên kê hoạch:</p></Accordion.Header>
+                                                                <Accordion.Body>
+                                                                    <div className='danh-sach-them'>
+                                                                        <ul>
+                                                                            {
+                                                                                tuongTac.userLenKeHoach.map((item) => {
+                                                                                    return <li style={{ color: "black" }}>USER_ID: {item}</li>
+                                                                                })
+                                                                            }
+                                                                        </ul>
+
+                                                                    </div>
+                                                                </Accordion.Body>
+                                                            </Accordion.Item>
+                                                        </Accordion>
+                                                    </div>
+
                                                 </div>
-                                            </PopupNote>
+                                            </PopupTuongTac>
                                         </td>
                                         <td>
                                             <div style={{ height: '250px', backgroundImage: `url(${item.hinhAnh[0]})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', padding: '10px' }} >

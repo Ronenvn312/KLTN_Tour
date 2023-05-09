@@ -12,4 +12,5 @@ public interface ThongTinThongKeService {
     public List<ThongTinThongKe> getTttkByThangNam(int thang, int nam) throws ExecutionException, InterruptedException;
     public ThongTinThongKe getThongTinThongKeByIdTour(String tourId) throws ExecutionException, InterruptedException;
     public List<ThongTinThongKeThangDTO> thongKeCacThangTrongNam(int nam) throws ExecutionException, InterruptedException;
-}
+    public ThongTinThongKe getTttkByThangNamAndTourId(String tourId) throws ExecutionException, InterruptedException ;
+    }

@@ -7,26 +7,26 @@ export default function TuongTacTour(props) {
         <div>
             <h1>Danh sách tương tác</h1>
             <p style={{ color: 'black' }}> Tour Id: {props.tuongTac.document_id}</p>
-            <Accordion defaultActiveKey="3">
-                <Accordion.Item eventKey="3">
+            <Accordion defaultActiveKey="0">
+                <Accordion.Item eventKey="0">
                     <Accordion.Header style={{ backgroundColor: 'gray' }}> Lượt thich:</Accordion.Header>
                     <Accordion.Body>
-                        {/* {
-                            tuongTac.userDaThich.map((item) => {
+                        {
+                            itemTT.userDaThich.map((item) => {
                                 return <div>
                                     <p>{item}</p>
                                 </div>
                             })
-                        } */}
+                        }
                     </Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="4">
+                <Accordion.Item eventKey="1">
                     <Accordion.Header>Thêm kế hoạch:</Accordion.Header>
                     <Accordion.Body>
 
                     </Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="5">
+                <Accordion.Item eventKey="2">
                     <Accordion.Header>Đặt tour:</Accordion.Header>
                     <Accordion.Body>
 

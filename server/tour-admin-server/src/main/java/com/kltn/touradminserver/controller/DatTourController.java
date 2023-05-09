@@ -49,4 +49,14 @@ public class DatTourController {
     public boolean check(@RequestParam String tourId, @RequestParam String userId) throws ExecutionException, InterruptedException {
         return datTourService.check(tourId, userId);
     }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping("/adminCheck")
+    public boolean adminCheck(@RequestBody KhachHangTour khachHangTour) throws ExecutionException, InterruptedException {
+        return datTourService.adminCheck(khachHangTour);
+    }
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}, allowedHeaders = "Requestor-Type", exposedHeaders = "X-Get-Header")
+    @GetMapping("/find")
+    public List<KhachHangTour> findAllByTourIdAndUserId(@RequestParam String tourId, @RequestParam String userId) throws ExecutionException, InterruptedException {
+        return datTourService.findKhTourByTourIdAndUserId(tourId, userId);
+    }
 }

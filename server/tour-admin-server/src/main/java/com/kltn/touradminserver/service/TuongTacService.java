@@ -20,4 +20,5 @@ public interface TuongTacService {
     String dropOutPlan(String tourId, String userId) throws ExecutionException, InterruptedException;
 
     boolean checkLike(String tourId, String userId) throws ExecutionException, InterruptedException;
+    TuongTac findAllByTourId(String tourId) throws ExecutionException, InterruptedException;
 }

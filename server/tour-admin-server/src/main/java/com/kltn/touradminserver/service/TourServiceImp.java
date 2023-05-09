@@ -30,17 +30,20 @@ public class TourServiceImp implements TourService {
     Query query = collectionReference.orderBy("tenTour");
 
     @Override
-    public String insertTour(Tour tour) throws InterruptedException, ExecutionException {
+    public Tour insertTour(Tour tour) throws InterruptedException, ExecutionException {
         DocumentReference documentReference = dbFireStore.collection("tour").document();
         ApiFuture<WriteResult> collectionApiFuture = documentReference.set(tour);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        DocumentSnapshot doc = future.get();
-        Tour new_tour;
-        if (doc.exists()) {
-            new_tour = doc.toObject(Tour.class);
-            return new_tour.toString();
-        }
-        return "Không thể thêm tour";
+       if (collectionApiFuture.get().getUpdateTime() != null){
+           ApiFuture<DocumentSnapshot> future = documentReference.get();
+           DocumentSnapshot doc = future.get();
+           if (doc.exists()) {
+               tour = doc.toObject(Tour.class);
+               return tour;
+           }else {
+               return null;
+           }
+       }
+        return null;
     }
 
     @Override

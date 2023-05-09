@@ -1,8 +1,13 @@
 package com.kltn.touradminserver.service;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.kltn.touradminserver.entity.KhachHangTour;
+import com.kltn.touradminserver.entity.Tour;
 import lombok.var;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +79,25 @@ public class DatTourServiceImp implements DatTourService {
                 check = false;
         }
         return check;
+    }
+    @Override
+    public boolean adminCheck(KhachHangTour khachHangTour) throws ExecutionException, InterruptedException {
+
+           if (khachHangTour.isStatus()) {
+               return false;
+           } else {
+               khachHangTour.setStatus(true);
+               ApiFuture<WriteResult> collectionApiFuture = dbFireStore.collection("khachHangTour").document(khachHangTour.getDocument_id())
+                       .set(khachHangTour);
+               return collectionApiFuture.get().getUpdateTime().toString() != "" ?true :false;
+           }
+    }
+    @Override
+    public List<KhachHangTour> findKhTourByTourIdAndUserId(String tourId, String userId) throws ExecutionException, InterruptedException {
+        List<KhachHangTour> list = dbFireStore.collection("khachHangTour").whereEqualTo("tourId", tourId).whereEqualTo("nguoiDungId", userId).get().get().getDocuments().parallelStream().map(tour -> {
+            final var tourDocument = tour.toObject(KhachHangTour.class);
+            return tourDocument;
+        }).collect(Collectors.toList());
+        return list;
     }
 }
