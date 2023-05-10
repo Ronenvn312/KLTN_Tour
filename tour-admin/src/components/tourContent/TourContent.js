@@ -39,7 +39,7 @@ export default function TourContent() {
     const [searchValue, setSearchValue] = useState()
     // Click tour sau khi search 
     const [tourSearch, setTourSearch] = useState({})
-    const [listHoatDong, setListHoatDong] = useState({})
+    const [listHoatDong, setListHoatDong] = useState([])
     const handleClickTourSearch = (item) => {
         setTourSearch(item)
         setShowPopupTour(!showPopupTour)
@@ -89,7 +89,6 @@ export default function TourContent() {
 
         if (result.data != null) {
             setListDatTour(result.data)
-            console.log(result)
         } else {
             console.log("Không thể tìm thấy danh sách đã đặt này!")
         }
@@ -233,7 +232,7 @@ export default function TourContent() {
                         {
                             searchValue != "" ?
                                 searchResult.map((item, index) => {
-                                    return <div key={index} onClick={() => handleClickTourSearch(item)} className='search-item'>
+                                    return <div key={item.document_id} onClick={() => handleClickTourSearch(item)} className='search-item'>
                                         <div style={{
                                             height: 100,
                                             width: 100,

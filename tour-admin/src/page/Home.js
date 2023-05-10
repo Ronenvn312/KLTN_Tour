@@ -55,8 +55,8 @@ function Home(props) {
                 <img style={{ width: 30, height: 30, marginRight: 10 }} src={require('./../assets/icon_thongbao.png')} />
                 About
               </Button>
-              <Button onClick={() => handShowThongBao()} variant="link" className='btn-about' style={{ color: 'white', flex: 0.5, width: '100%', display: 'flex' }}>
-                Docs
+              <Button href='https://github.com/Ronenvn312/KLTN_Tour' variant="link" className='btn-about' style={{ color: 'white', marginTop: -5, flex: 0.5, width: '100%', display: 'flex' }}>
+                Git
               </Button>
               <div className='right-widget-info-log'>
                 1
