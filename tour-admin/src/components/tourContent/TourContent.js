@@ -18,6 +18,7 @@ export default function TourContent() {
     const [showInfoPopup, setshowInfoPopup] = useState(false)
     const [showLocatePopup, setshowLocatePopup] = useState(false)
     const [showPopupTuongTac, setShowPopupTuongTac] = useState(false)
+    const [showPopupTour, setShowPopupTour] = useState(false)
     const [tourId, setTourId] = useState()
     const [tourName, setTourName] = useState("")
     const [tuongTac, setTuongTac] = useState({
@@ -36,6 +37,30 @@ export default function TourContent() {
     const [isDeletePopup, setIsDeletePopup] = useState(false)
     const [searchResult, setSearchResult] = useState([])
     const [searchValue, setSearchValue] = useState()
+    // Click tour sau khi search 
+    const [tourSearch, setTourSearch] = useState({})
+    const [listHoatDong, setListHoatDong] = useState({})
+    const handleClickTourSearch = (item) => {
+        setTourSearch(item)
+        setShowPopupTour(!showPopupTour)
+        handleResultHoatDongTour(item)
+    }
+    // get danh sách hoạt động của tour
+    const handleResultHoatDongTour = async (item) => {
+        const result = await axios.get(`http://localhost:8080/hoatdong/findbyTourId`, {
+            params: {
+                tourId: item.document_id
+            }
+        })
+        if (result != null) {
+            setListHoatDong(result.data)
+            console.log(result.data)
+        } else {
+            console.log("Loi get data")
+        }
+    }
+    // kết thúc search
+
     // const { setTourChecked } = useContext(AppContext)
     const handleGetAllTuongTac = async (item) => {
         setTourId(item.document_id)
@@ -165,7 +190,7 @@ export default function TourContent() {
 
     useEffect(() => {
         handleResultData();
-    }, [tourAlter, tuongTac, listDatTour])
+    }, [tourAlter, tuongTac, listDatTour, tourSearch, listHoatDong])
     return (
         <div className='tour-content'>
 
@@ -175,7 +200,7 @@ export default function TourContent() {
                     <h4 className='title_danhsach'>DANH SÁCH TOUR DU LỊCH</h4>
                     <Form style={{ width: '100%', height: 60 }} className='group-control'>
                         <Form.Group style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                     
+
                             <Button
                                 onClick={() => handShowPopupXoa()}
                                 type='button' variant="danger" className='btn_xoa' >
@@ -208,7 +233,7 @@ export default function TourContent() {
                         {
                             searchValue != "" ?
                                 searchResult.map((item, index) => {
-                                    return <div key={index} className='search-item'>
+                                    return <div key={index} onClick={() => handleClickTourSearch(item)} className='search-item'>
                                         <div style={{
                                             height: 100,
                                             width: 100,
@@ -219,6 +244,45 @@ export default function TourContent() {
                                         }} >
                                         </div>
                                         <p>{item.tenTour}</p>
+                                        <PopupTuongTac className="tour_popup" tourSearch={tourSearch} trigger={showPopupTour} setTrigger={setShowPopupTour} >
+                                            <div className='full-info-tour-content'>
+                                                <p>ID: {tourSearch.document_id}</p>
+                                                <p style={{ color: "black" }}>{tourSearch.tenTour}</p>
+                                                <p style={{ fontSize: 15 }}> Thông tin tour: </p>
+                                                <p style={{ fontSize: 14, color: 'black' }}>Vị trí : {tourSearch.viTri}</p>
+                                                <p style={{ fontSize: 14, color: 'black' }}>{tourSearch.thongTin}</p>
+                                                <p>Danh sách hoạt động trong tour: </p>
+                                                {
+                                                    listHoatDong.map((item, index) => {
+                                                        return <div key={item.document_id}>
+                                                            <p style={{ fontSize: 15 }}>{item.thoiGianHD}: {item.tieuDe}</p>
+                                                            <video style={{ width: 360, marginLeft: 50 }} src={item.doanPhim} controls>
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                            <div style={{ display: "flex", flexDirection: "column" }}>
+                                                                <div style={{
+                                                                    height: 180,
+                                                                    width: 360,
+                                                                    backgroundImage: `url(${item.hinhAnh[0]})`,
+                                                                    backgroundRepeat: 'no-repeat',
+                                                                    backgroundSize: 'cover',
+                                                                    marginLeft: 50
+                                                                    // padding: '10px'
+                                                                }} >
+                                                                </div>
+                                                                <p style={{ fontSize: 13, marginLeft: 60 }}> Ảnh {item.thoiGianHD}: {item.tieuDe}</p>
+                                                            </div>
+                                                            <p style={{ fontSize: 15 }}> Thông tin hoạt động: </p>
+                                                            <p style={{ fontSize: 14, color: 'black' }}>Vị trí : {item.viTri}</p>
+                                                            <p style={{ fontSize: 14, color: 'black' }}>{item.thongTin}</p>
+
+                                                        </div>
+                                                    })
+                                                }
+                                            </div>
+
+
+                                        </PopupTuongTac>
                                     </div>
                                 }) : ""
                         }

@@ -11,7 +11,7 @@
 
 .popup-tt-inner {
     width: 100%;
-    max-width: 1220px;
+    max-width: 1520px;
     height: 700px;
     border-radius: 20px;
     margin: auto;
@@ -87,4 +87,16 @@ ul li:last-child {
 ul li:hover {
     background-color: #3573c5c7;
     /* Change the background color on hover */
+}
+.full-info-tour-content {
+    color: black;
+    background-color: #76a1ddc5;
+    width: 100%;
+    min-height: 800px;
+    height: auto;
+    border-radius: 20px;
+    margin-left: -3px;
+    overflow: auto;
+    max-height: 800px;
+    padding: 5px;
 }
