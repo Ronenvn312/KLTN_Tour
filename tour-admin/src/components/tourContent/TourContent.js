@@ -123,6 +123,13 @@ export default function TourContent() {
         })
         setTourCheckeds([])
     }
+    // Check ALL tour
+    // const handleCheckAllTour = () => {
+    //     resultData.forEach((item) => {
+    //         tourcheckeds.push(item)
+    //     })
+    //     console.log(tourCheckeds)
+    // }
     //HandlClickDelete 
     // click check box
     const handClickCheckBox = (e, item) => {
@@ -168,6 +175,7 @@ export default function TourContent() {
                     <h4 className='title_danhsach'>DANH SÁCH TOUR DU LỊCH</h4>
                     <Form style={{ width: '100%', height: 60 }} className='group-control'>
                         <Form.Group style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                     
                             <Button
                                 onClick={() => handShowPopupXoa()}
                                 type='button' variant="danger" className='btn_xoa' >

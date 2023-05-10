@@ -74,7 +74,6 @@ function MapBox() {
       },
       (error) => {
         // error function
-        console.log(image)
         console.log(error);
       },
       () => {
@@ -105,7 +104,6 @@ function MapBox() {
       },
       (error) => {
         // error function
-        console.log(video)
         console.log(error);
       },
       () => {
@@ -137,7 +135,6 @@ function MapBox() {
       },
       (error) => {
         // error function
-        console.log(amThanh)
         console.log(error);
       },
       () => {
@@ -184,46 +181,30 @@ function MapBox() {
   const handleChangeTenTour = (e) => {
     let tenTour = e.target.value
     setTenTour(tenTour)
-    // console.log(tenTour)
   }
   const handleChangeSoNgay = (e) => {
     let soNgay = e.target.value
     setSoNgay(soNgay)
-    // console.log(soNgay)
   }
   const handleChangeThongTin = (e) => {
     let thongTin = e.target.value
     setThongTinCT(thongTin)
-    // console.log(thongTin)
   }
   const handleChangeDiaChi = (e) => {
     let diaChi = e.target.value
     setDiaChi(diaChi);
-    // console.log(diaChi)
+    onChangeGetDataSearch(diaChi)
   }
   const handleChangeHinhAnh = (e) => {
     let hinhAnh = e.target.value
     setHinhAnh(hinhAnh)
-    // console.log(hinhAnh)
   }
-  // const handleChangeCheckPhoBien = (e) => {
-  //   let isChecked = e.target.checked;
-  //   setPhoBien(isChecked)
-
-  //   // console.log(isChecked)
-  // }
-  // const handleChangeCheckXuHuong = (e) => {
-  //   let isChecked = e.target.checked;
-  //   setXuHuong(isChecked)
-
-  //   // console.log(isChecked)
-  // }
+ 
   const handleChangeCheckTheLoai = (e) => {
     let isChecked = e.target.checked;
     console.log(e.target.checked)
     if (isChecked) {
       theLoai.push(e.target.name)
-      console.log(theLoai)
     } else {
       for (let index = 0; index < theLoai.length; index++) {
         const element = theLoai[index];
@@ -231,7 +212,6 @@ function MapBox() {
           theLoai.splice(index, 1)
       }
     }
-    console.log(theLoai)
     setTheLoai(theLoai)
     handleSetTheLoai(theLoai)
   }
@@ -402,6 +382,11 @@ function MapBox() {
     handleSetTheLoai(item.theLoai)
     handleSetPhuongTien(item.phuongTien)
 
+    setViewState({
+      longitude: item.longitude,
+      latitude: item.latitude,
+      zoom: 11.5
+    })
     console.log(item)
     setTourClicked(item)
     setPopupInfo({
@@ -487,9 +472,22 @@ function MapBox() {
   }
   const handleChangeDiaChiHD = (e) => {
     setViTriHD(e.target.value)
+    onChangeGetDataSearchHD(e.target.value)
   }
-  const handleChangeHinhAnhHD = (e) => {
-    setHinhAnhHD(e.target.value)
+  //Search vị trí Hoạt động
+  const [listSearchHD, setListSearchHD] = useState([])
+  const onChangeGetDataSearchHD = async (address) => {
+    let arrNewAddress = []
+    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
+      .then(function (response) {
+        setListSearchHD(response.data.features)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      .then(() => {
+
+      })
   }
   // get danh sách hoạt động của tour
   const handleResultHoatDongTour = async (item) => {
@@ -500,7 +498,6 @@ function MapBox() {
     })
     if (result != null) {
       setListHoatDong(result.data)
-      console.log(result.data)
     } else {
       console.log("Loi get data")
     }
@@ -508,13 +505,16 @@ function MapBox() {
   // chọn hoạt động
   const [hoatDongChecked, setHoatDongChecked] = useState({})
   const handleClickHoatDong = (item) => {
-    console.log(item)
     setMaHD(item.id)
     setTieuDeHD(item.tieuDe)
     setViTriHD(item.viTri)
     setThongTinHD(item.thongTin)
     setThoiGianHD(item.thoiGianHD)
-
+    setViewState({
+      longitude: item.longitude,
+      latitude: item.latitude,
+      zoom: 11.5
+    })
     setUrlAmThanh(item.amThanh)
     if (item.amThanh) {
       setAmThanh(item.amThanh)
@@ -535,6 +535,11 @@ function MapBox() {
     }
     setLat(item.latitude)
     setLng(item.longitude)
+    setViewState({
+      longitude: item.longitude,
+      latitude: item.latitude,
+      zoom: 11.5
+    })
     setShowForm(false)
     setShowFormHoatDong(true)
     setHoatDongChecked(item)
@@ -550,7 +555,6 @@ function MapBox() {
   }
   // tạo hoạt động
   const handleClickCreateHoatDong = () => {
-    // console.log(item)
     setMaHD("")
     setTieuDeHD("")
     setViTriHD("")
@@ -628,9 +632,9 @@ function MapBox() {
     }
   }
   //Kết thúc cập nhật
-  const handDiaChiThanhToaDo = async () => {
+  const handDiaChiThanhToaDo = async (address) => {
     let arrNewAddress = []
-    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${diaChi}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
+    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
       .then(function (response) {
         console.log(response)
         arrNewAddress.push({
@@ -639,6 +643,11 @@ function MapBox() {
         })
         setLat(arrNewAddress[0].lat)
         setLng(arrNewAddress[0].lng)
+        setViewState({
+          longitude: response.data.features[0].center[0],
+          latitude: response.data.features[0].center[1],
+          zoom: 11.5
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -648,17 +657,13 @@ function MapBox() {
       })
     console.log(arrNewAddress)
   }
-  const handDiaChiHoatDongThanhToaDo = async () => {
+  //Search vị trí
+  const [listSearch, setListSearch] = useState([])
+  const onChangeGetDataSearch = async (address) => {
     let arrNewAddress = []
-    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${viTriHD}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
+    axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?limit=2&access_token=pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg`)
       .then(function (response) {
-        console.log(response)
-        arrNewAddress.push({
-          lng: response.data.features[0].center[0],
-          lat: response.data.features[0].center[1]
-        })
-        setLat(arrNewAddress[0].lat)
-        setLng(arrNewAddress[0].lng)
+        setListSearch(response.data.features)
       })
       .catch((error) => {
         console.log(error)
@@ -666,43 +671,49 @@ function MapBox() {
       .then(() => {
 
       })
-    console.log(arrNewAddress)
+  }
+  // chọn address sau khi search 
+  const hanDleClickItemSearch = (item) => {
+    setLng(item.center[0])
+    setLat(item.center[1])
+    setViewState({
+      longitude: item.center[0],
+      latitude: item.center[1],
+      zoom: 11.5
+    })
+    setListSearch([])
+    setListSearchHD([])
   }
   // const mapRef = React.useRef();
   const [viewState, setViewState] = React.useState({
     longitude: lng,
     latitude: lat,
-    zoom: 6.5
+    zoom: 11.5
   });
 
   //useEffect
   useEffect(() => {
     handleResultData()
-
+    setListSearch([])
+    setListSearchHD([])
   }, [tour, listHoatDong])
 
   return (
     <Map
       // onLoad={onMapLoad}
-      // {...viewState}
+      {...viewState}
       mapboxAccessToken='pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg'
-      style={{
-        width: '100%',
-        height: '100%'
-      }}
       onClick={(e) => {
         setLat(e.lngLat.wrap().lat)
         setLng(e.lngLat.wrap().lng)
+        setViewState({
+          longitude: e.lngLat.wrap().lng,
+          latitude: e.lngLat.wrap().lat,
+          zoom: 11.5
+        })
         console.log({ lng: e.lngLat.wrap().lng, lat: e.lngLat.wrap().lat })
-
-
       }}
-      // zoom={5}
-      initialViewState={{
-        longitude: lng,
-        latitude: lat,
-        zoom: 3.5
-      }}
+      onMove={evt => setViewState(evt.viewState)}
       mapStyle="mapbox://styles/mapbox/streets-v12"
 
     >
@@ -732,7 +743,7 @@ function MapBox() {
             {popupInfo.name}, {popupInfo.address} |{' '}
             <a
               target="_new"
-              href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.name}, ${popupInfo.address}`}
+              href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${popupInfo.name}`}
             >
               Wikipedia
             </a>
@@ -982,20 +993,23 @@ function MapBox() {
 
               <Form.Group style={{ width: "100%" }}>
                 <Form.Label className='label-login'>Địa chỉ :</Form.Label>
-                <AddressAutofill
-                  options={{
-                    language: 'vi',
-                    country: "us"
-                  }}
-                  accessToken="pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg">
-                  <Form.Control
-                    name='viTri'
-                    value={diaChi}
-                    onChange={e => handleChangeDiaChi(e)}
-                    autoComplete="strees-address"
-                    type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                  <Button style={{ marginTop: 10 }} onClick={() => handDiaChiThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
-                </AddressAutofill>
+                <Form.Control
+                  name='viTri'
+                  value={diaChi}
+                  onChange={e => handleChangeDiaChi(e)}
+                  autoComplete="strees-address"
+                  type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
+                <Button style={{ marginTop: 10 }} onClick={() => handDiaChiThanhToaDo(diaChi)} type="button" variant="info">Tìm kiếm</Button>{' '}
+                <div className="search-result-address">
+                  {
+                    listSearch.map((item, index) => {
+                      return <div key={index} onClick={() => hanDleClickItemSearch(item)} className='search-address'>
+                        <p>{item.place_name}</p>
+                      </div>
+                    })
+                  }
+                </div>
+
 
               </Form.Group>
               <Form.Label className='label-locate'>vị trí trên bản đồ: </Form.Label>
@@ -1059,7 +1073,8 @@ function MapBox() {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          fontSize: 22
+                          fontSize: 18,
+                          margin: 20
                         }}>
                         <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
                           <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
@@ -1074,6 +1089,7 @@ function MapBox() {
                         </div>
                       </div>
                     </PopupNote>
+                    
                     <PopupNote className="xoa_popub" showInfoPopup={isUpdatePopup} trigger={isUpdatePopup} setTrigger={setIsUpdatePopup} >
                       <div
                         style={{
@@ -1082,7 +1098,8 @@ function MapBox() {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          fontSize: 22
+                          fontSize: 18,
+                          margin: 20
                         }}>
                         <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
                           <p style={{ color: 'gray', flex: 0.9 }}> Update Data </p>
@@ -1154,21 +1171,23 @@ function MapBox() {
               </Form.Group>
               <Form.Group style={{ height: '80px', width: "100%" }}>
                 <Form.Label style={{ height: '15px' }} className='label-login'>Địa chỉ :</Form.Label>
-                <AddressAutofill
-                  options={{
-                    language: 'vi',
-                    country: "vn"
-                  }}
-                  accessToken="pk.eyJ1IjoiZGF0bmd1eWVuMzEyMzEyIiwiYSI6ImNsZXZkbXVzYTA1bWwzcm80cmNqMDNxejAifQ.k1FIb4suetF82k91bnkRvg">
-                  <Form.Control
-                    style={{ height: '30px' }}
-                    name='email'
-                    value={viTriHD}
-                    onChange={e => handleChangeDiaChiHD(e)}
-                    autoComplete="strees-address"
-                    type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
-                  <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiHoatDongThanhToaDo()} type="button" variant="info">Tìm kiếm</Button>{' '}
-                </AddressAutofill>
+                <Form.Control
+                  style={{ height: '30px' }}
+                  name='email'
+                  value={viTriHD}
+                  onChange={e => handleChangeDiaChiHD(e)}
+                  autoComplete="strees-address"
+                  type="text" placeholder="VD: 01 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 70000" required />
+                <Button style={{ height: '34px', paddingTop: 4, marginTop: 3 }} onClick={() => handDiaChiThanhToaDo(viTriHD)} type="button" variant="info">Tìm kiếm</Button>{' '}
+                <div className="search-address-hd">
+                  {
+                    listSearchHD.map((item, index) => {
+                      return <div key={index} onClick={() => hanDleClickItemSearch(item)} className='search-address'>
+                        <p>{item.place_name}</p>
+                      </div>
+                    })
+                  }
+                </div>
 
               </Form.Group>
               <Form.Group style={{ marginTop: 10, width: "100%", display: "flex", flexDirection: "row" }}>
@@ -1251,15 +1270,16 @@ function MapBox() {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          fontSize: 22
+                          fontSize: 18,
+                          margin: 20
                         }}>
                         <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
-                          <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
+                          <p style={{ color: 'gray', flex: 0.9 }}> Update Data </p>
                           <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsUpdateHoatDongPopup(false)}>x</Button>
                         </div>
-                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ bị xóa khỏi dữ liệu</p>
-                        <p style={{ color: "gray" }}>Mã tour: {hoatDongChecked.id}</p>
-                        <p style={{ color: "gray" }}>Tên tour: {hoatDongChecked.tieuDe}</p>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin hoạt động sẽ bị thay đổi trong dữ liệu</p>
+                        <p style={{ color: "gray" }}>Mã Hoạt động: {hoatDongChecked.id}</p>
+                        <p style={{ color: "gray" }}>Tên Hoạt động: {hoatDongChecked.tieuDe}</p>
                         <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
                           <Button style={{ marginRight: 20, width: 140 }} variant='outline-secondary' onClick={() => setIsUpdateHoatDongPopup(false)}>Cancel</Button>
                           <Button style={{ marginRight: 20, width: 140 }} variant='danger' onClick={() => handleUpdateHoatDong()}>Start update</Button>
@@ -1275,13 +1295,14 @@ function MapBox() {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          fontSize: 22
+                          fontSize: 18,
+                          margin: 20
                         }}>
                         <div style={{ width: "100%", flexDirection: "row", display: "flex", justifyContent: "center" }}>
                           <p style={{ color: 'gray', flex: 0.9 }}> Delete Data </p>
                           <Button variant="danger" style={{ fontSize: 16 }} onClick={() => setIsDeleteHoatDongPopup(false)}>x</Button>
                         </div>
-                        <p style={{ color: "red", fontSize: 14 }}>Thông tin tour sẽ bị xóa khỏi dữ liệu</p>
+                        <p style={{ color: "red", fontSize: 14 }}>Thông tin hoạt động sẽ bị xóa khỏi dữ liệu</p>
                         <p style={{ color: "gray" }}>Mã tour: {hoatDongChecked.id}</p>
                         <p style={{ color: "gray" }}>Tên tour: {hoatDongChecked.tieuDe}</p>
                         <div style={{ marginTop: 30, display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>

@@ -434,7 +434,7 @@ export default function ScreenTaiKhoan(props) {
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
-                    <Accordion.Item eventKey="2">
+                    {/* <Accordion.Item eventKey="2">
                         <Accordion.Header>Danh sách tài khoản người dùng</Accordion.Header>
                         <Accordion.Body>
                             <div className='cap-nhat-mat-khau-view'>
@@ -463,7 +463,7 @@ export default function ScreenTaiKhoan(props) {
                                 </div>
                             </div>
                         </Accordion.Body>
-                    </Accordion.Item>
+                    </Accordion.Item> */}
                 </Accordion>
                 <div className='thong-tin-nguoi-dung'>
                     {/* Begin thông tin người dùng */}
