@@ -50,7 +50,9 @@
     text-align: center;
     align-items: center;
     border-right: 2px solid;
-    background-color: #463762ad;
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/bgrImage.png?alt=media&token=6359b0c1-fb72-485e-bdd1-3068b31a496f');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .right-contain {
@@ -80,7 +82,7 @@
 }
 
 .user-email {
-    color: white;
+    color: black;
 }
 
 .user-avatar {

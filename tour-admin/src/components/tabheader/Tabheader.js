@@ -139,7 +139,7 @@ export const Tabheader = (props) => {
                   </div>
                 </div>
               </PopupNote>
-              <ListGroup style={{ background: 'none' }} className='action-menu' defaultActiveKey="#bangdieukhien">
+              <ListGroup style={{ background: '#B3E5FC' }} className='action-menu' defaultActiveKey="#bangdieukhien">
                 <ListGroup.Item onClick={() => handShowAllTour()} style={{ background: 'none', fontWeight: 'bold', fontFamily: 'cursive' }} action href="#bangdieukhien">
                   <img className='icon-tab' style={{ width: 30, height: 30, marginRight: 10 }} src={require('../../assets/tab_left/design.png')} alt="use" />
                   Bảng điều khiển

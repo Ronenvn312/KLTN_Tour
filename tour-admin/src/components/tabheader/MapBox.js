@@ -681,6 +681,8 @@ function MapBox() {
       latitude: item.center[1],
       zoom: 11.5
     })
+    setDiaChi(item.place_name)
+    setViTriHD(item.place_name)
     setListSearch([])
     setListSearchHD([])
   }

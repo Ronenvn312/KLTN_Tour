@@ -20,9 +20,9 @@
   flex: 1;
   justify-content: flex-start;
   /* background-image: url('../../assets/bgr.png'); */
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/bgr-content.jpeg?alt=media&token=0f6e77c2-a8bf-4a75-94c1-844fa76acf3b');
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: #463762ad;
   /* box-shadow: 10px 10px 5px 5px black inset; */
 }
 
@@ -73,7 +73,7 @@
   border-radius: 30px;
   color: wheat;
 }
- 
+
 .table {
   width: 100%;
   background-color: #50555c;
@@ -88,6 +88,7 @@
   font-weight: 'bold';
   color: #fff;
 }
+
 .thead_table tr .col_anh {
   font-size: 13px;
   text-align: center;
@@ -95,6 +96,7 @@
   font-weight: 'bold';
   color: #fff;
 }
+
 .thead_table tr .col_thong_tin {
   font-size: 13px;
   text-align: center;
@@ -102,12 +104,14 @@
   font-weight: 'bold';
   color: #fff;
 }
+
 .thead_table tr .col_info {
   font-size: 13px;
   text-align: center;
   font-weight: 'bold';
   color: #fff;
 }
+
 .thead_table tr .col_stt {
   background-color: rgb(243, 241, 141);
   font-size: 13px;
@@ -195,22 +199,22 @@
   border: 1px solid black;
   border-radius: 20px;
 }
+
 .search-item:hover {
   background: #50555c83;
 }
+
 .image-item {
   padding-left: 10px;
   width: 100px;
   height: 100px;
- 
+
 }
+
 .search-item p {
   font-size: 20px;
   font-weight: bold;
   padding-left: 10px;
   color: white;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.full-info-tour {
-  width: 1200px;
 }

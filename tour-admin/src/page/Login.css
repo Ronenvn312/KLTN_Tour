@@ -24,7 +24,7 @@
     justify-content: center;
     text-align: center;
     min-height: 100vh;
-    background-image: url('../assets/hoian.jpg');
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/bgrImage.png?alt=media&token=6359b0c1-fb72-485e-bdd1-3068b31a496f');
     background-repeat: no-repeat;
     background-size: cover;
 }

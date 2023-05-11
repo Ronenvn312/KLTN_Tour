@@ -48,6 +48,7 @@ function Home(props) {
               <button variant="info" className='btn-menu' onClick={() => onClickMenuBar()}>
                 <img className='img-wel' src={menu} alt='wel' />
               </button>
+              <img className='img-logo' src={'https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/logo.png?alt=media&token=567974a7-6821-409f-8dcd-7be45456e881'} alt='wel' />
               <h3 style={{ paddingTop: 10 }} className='title-page'>Dream Trip</h3>
             </div>
             <div className="right-widget">

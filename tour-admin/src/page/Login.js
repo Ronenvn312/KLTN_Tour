@@ -181,7 +181,7 @@ function Login() {
               </Form.Group>
               <Form.Group id='form-group' className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check
-                  className='label-login' type="checkbox" label="Check me out" />
+                  className='label-login' type="checkbox" label="Ghi nhớ thông tin đăng nhập" />
               </Form.Group>
               <Button variant="primary" type="submit" >
                 Đăng nhập
