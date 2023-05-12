@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast';
 import axios from 'axios'
+import { logginTaiKhoan } from '../util/ApiRouter'
 function Login() {
   const navigate = useNavigate()
   // const [values, setValues] = useState({ email: "", password: "" })
@@ -44,7 +45,7 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.get(`http://localhost:8080/taikhoan/logginUser`, {
+    axios.get(logginTaiKhoan, {
       params: {
         userName: email,
         password: password

@@ -4,6 +4,7 @@ import './screenThongKe.css'
 import Chart from './ChartThongKe/Chart'
 import PieChartExample from './ChartThongKe/PieChartExample.JS'
 import axios from 'axios';
+import { findByNam, findThongKeTheoThang } from '../../util/ApiRouter';
 export default function ScreenThongKe() {
  
     const dsTour = localStorage.getItem("dsTour")
@@ -55,7 +56,7 @@ export default function ScreenThongKe() {
         let sum = 0;
         let sumLuotDat = 0;
         let sumLuotThich = 0;
-        const result = await axios.get(`http://localhost:8080/thongKe/find`, {
+        const result = await axios.get(findThongKeTheoThang, {
             params: {
                 thang: selectedThang,
                 nam: selectedNam
@@ -80,7 +81,7 @@ export default function ScreenThongKe() {
         handleThongKeCacThang()
     }
     const handleThongKeCacThang = async () => {
-        const result = await axios.get(`http://localhost:8080/thongKe/findByNam`, {
+        const result = await axios.get(findByNam, {
             params: {
                 nam: selectedNam
             }

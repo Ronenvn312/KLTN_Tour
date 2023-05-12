@@ -6,6 +6,7 @@ import { getDownloadURL } from 'firebase/storage'
 import { firebase } from '../../util/config';
 import axios from 'axios';
 import PopupNote from '../Popup/PopupNote';
+import { logginTaiKhoan, updateMK, updateUser } from '../../util/ApiRouter';
 
 export default function ScreenTaiKhoan(props) {
     const [image, setImage] = useState(null);
@@ -151,7 +152,7 @@ export default function ScreenTaiKhoan(props) {
             "sdt": sdt,
             "avatar": url
         })
-        const result = await axios.put(`http://localhost:8080/admin/update`, user)
+        const result = await axios.put(updateUser, user)
         if (result.data) {
             console.log(result.data)
             console.log(user)
@@ -164,7 +165,7 @@ export default function ScreenTaiKhoan(props) {
     // handle update Password
     const handleUpdatePassword = async (event) => {
         event.preventDefault();
-        const res = await axios.get(`http://localhost:8080/taikhoan/logginUser`, {
+        const res = await axios.get(logginTaiKhoan, {
             params: {
                 userName: email,
                 password: oldPassword
@@ -173,7 +174,7 @@ export default function ScreenTaiKhoan(props) {
         if (res.data && oldPassword != newPassword) {
             res.data.password = newPassword
             console.log(res.data)
-            axios.put('http://localhost:8080/taikhoan/updateMK', res.data)
+            axios.put(updateMK, res.data)
                 .then((result) => {
                     console.log(result.data)
                     setIsUpdateMatKhauPopup(false)

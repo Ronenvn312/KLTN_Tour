@@ -15,6 +15,7 @@ import { firebase } from '../../util/config';
 import * as turf from '@turf/turf';
 import PopupNote from "../Popup/PopupNote";
 import { Accordion } from "react-bootstrap";
+import { deleteHoatDong, deleteTour, findAllTour, findAllsHDByTourId, insertHoatDong, insertTour, updateHoatDong, updateTour } from "../../util/ApiRouter";
 
 // A circle of 5 mile radius of the Empire State Building
 const GEOFENCE = turf.circle([-74.0122106, 40.7467898], 5, { units: 'miles' });
@@ -242,7 +243,7 @@ function MapBox() {
   // THAO TÁC VỚI  TOUR
   const [listTour, setListTour] = useState([])
   const handleResultData = async () => {
-    const result = await axios.get('http://localhost:8080/tour/findAlls')
+    const result = await axios.get(findAllTour)
     if (result) {
       localStorage.setItem("dsTour", JSON.stringify(result.data))
       setListTour(result.data)
@@ -269,7 +270,7 @@ function MapBox() {
       "latitude": lat
     })
     console.log("successful")
-    const result = await axios.post(`http://localhost:8080/tour/insert`, tourinsert)
+    const result = await axios.post(insertTour, tourinsert)
     console.log(result)
   }
   //handle Click Cập nhật tour
@@ -293,7 +294,7 @@ function MapBox() {
       "latitude": 10.772420997560602
     })
     console.log(tourupdate)
-    const result = await axios.put(`http://localhost:8080/tour/update`, tourupdate)
+    const result = await axios.put(updateTour, tourupdate)
     if (result) {
       console.log(result)
       handleResultData()
@@ -305,7 +306,7 @@ function MapBox() {
   }
   // xóa tour
   const deleteTourById = (item) => {
-    axios.delete(`http://localhost:8080/tour/delete`, {
+    axios.delete(deleteTour, {
       params: {
         document_id: item.document_id
       }
@@ -491,7 +492,7 @@ function MapBox() {
   }
   // get danh sách hoạt động của tour
   const handleResultHoatDongTour = async (item) => {
-    const result = await axios.get(`http://localhost:8080/hoatdong/findbyTourId`, {
+    const result = await axios.get(findAllsHDByTourId, {
       params: {
         tourId: item.document_id
       }
@@ -570,7 +571,7 @@ function MapBox() {
     setUrlAmThanh("https://firebasestorage.googleapis.com/v0/b/tourapp-d8ea8.appspot.com/o/mp3s%2Fsound.mp3?alt=media&token=cbb310b2-b3f6-49ae-9d95-3b5785393ccc")
   }
   const deleteHoatDongById = async (item) => {
-    const result = await axios.delete(`http://localhost:8080/hoatdong/delete`, {
+    const result = await axios.delete(deleteHoatDong , {
       params: {
         document_id: item.id
       }
@@ -597,7 +598,7 @@ function MapBox() {
       "latitude": lat
     })
     console.log("successful")
-    const result = await axios.post(`http://localhost:8080/hoatdong/insert`, new_hoatDong)
+    const result = await axios.post(insertHoatDong, new_hoatDong)
     console.log(result)
     handleResultHoatDongTour(tourClicked)
     setShowFormHoatDong(!showFormHoatDong)
@@ -621,7 +622,7 @@ function MapBox() {
       "latitude": lat
     })
     console.log(new_hoatDong)
-    const result = await axios.put(`http://localhost:8080/hoatdong/update`, new_hoatDong)
+    const result = await axios.put(updateHoatDong, new_hoatDong)
     if (result) {
       console.log(result)
       handleResultHoatDongTour(tourClicked)

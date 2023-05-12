@@ -7,13 +7,11 @@ import axios from 'axios'
 import PopupInfo from '../Popup/PopupInfo';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
-import FormThem from '../tabheader/FormThem';
 import { AppContext } from '../../context/AppContext';
 import PopupNote from '../Popup/PopupNote';
 import PopupTuongTac from '../Popup/PopupTuongTac';
 import { Accordion } from 'react-bootstrap';
-import TuongTacTour from '../tuongTacTour/TuongTacTour';
-
+import { checkDatTour, deleteTour, findAllTour, findAllTuongTac, findAllsHDByTourId, findDatTour, searchsTour } from '../../util/ApiRouter';
 export default function TourContent() {
     const [showInfoPopup, setshowInfoPopup] = useState(false)
     const [showLocatePopup, setshowLocatePopup] = useState(false)
@@ -47,7 +45,7 @@ export default function TourContent() {
     }
     // get danh sách hoạt động của tour
     const handleResultHoatDongTour = async (item) => {
-        const result = await axios.get(`http://localhost:8080/hoatdong/findbyTourId`, {
+        const result = await axios.get(findAllsHDByTourId, {
             params: {
                 tourId: item.document_id
             }
@@ -65,7 +63,7 @@ export default function TourContent() {
     const handleGetAllTuongTac = async (item) => {
         setTourId(item.document_id)
         setTourName(item.tenTour)
-        const result = await axios.get(`http://localhost:8080/tuongtac/findAll`, {
+        const result = await axios.get(findAllTuongTac, {
             params: {
                 "tourId": item.document_id
             }
@@ -80,7 +78,7 @@ export default function TourContent() {
         hanleShowPopupTuongTac()
     }
     const getListDatTour = async (item, userId) => {
-        const result = await axios.get(`http://localhost:8080/datTour/find`, {
+        const result = await axios.get(findDatTour, {
             params: {
                 "tourId": item.tourId,
                 "userId": userId
@@ -104,7 +102,7 @@ export default function TourContent() {
         setShowPopupTuongTac(!showPopupTuongTac)
     }
     const handleCheckedDonDatTour = async (item) => {
-        const result = await axios.put(`http://localhost:8080/datTour/adminCheck`, item)
+        const result = await axios.put(checkDatTour, item)
         if (result.data) {
             console.log(result)
             item.status = result
@@ -115,7 +113,7 @@ export default function TourContent() {
     }
     // Kết thúc các chức năng với đơn đặt tour
     const handleResultData = async () => {
-        const result = await axios.get('http://localhost:8080/tour/findAlls')
+        const result = await axios.get(findAllTour)
         if (result) {
             localStorage.setItem("dsTour", JSON.stringify(result.data))
             setResultData(result.data)
@@ -124,20 +122,14 @@ export default function TourContent() {
             console.log("không thể load data")
         }
     }
-    const handShowPopupThem = () => {
-        if (tourcheckeds.length == 1) {
-            localStorage.setItem("tourChecked", JSON.stringify(tourcheckeds[0]))
-            setshowInfoPopup(!showInfoPopup)
-        }
-
-    }
+   
     const handShowPopupXoa = () => {
         setIsDeletePopup(!isDeletePopup)
 
     }
     const handleDeleteTour = () => {
         tourcheckeds.forEach((tour) => {
-            axios.delete(`http://localhost:8080/tour/delete`, {
+            axios.delete(deleteTour, {
                 params: {
                     document_id: tour.document_id
                 }
@@ -171,7 +163,7 @@ export default function TourContent() {
     }
     // onChange value search tour
     const handleSearchTour = async (e) => {
-        const result = await axios.get(`http://localhost:8080/tour/searchs`, {
+        const result = await axios.get(searchsTour, {
             params: {
                 tourName: e.target.value
             }
@@ -464,9 +456,6 @@ export default function TourContent() {
                     </div>
                 </div>
             </div>
-            <PopupInfo className="infor_popub" showInfoPopup={showInfoPopup} trigger={showInfoPopup} setTrigger={setshowInfoPopup} >
-                <FormThem tourChecked={tourAlter} />
-            </PopupInfo>
 
             {
                 tourcheckeds.length > 0 ?

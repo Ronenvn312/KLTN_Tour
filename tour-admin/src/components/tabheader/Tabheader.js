@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { useLocation, useNavigate, Outlet, Link } from 'react-router-dom';
-import Alert from '../dashboard/Alert';
+import { useNavigate } from 'react-router-dom';
 import bro from '../../assets/bro.png'
-import logo from '../../assets/logo.png'
 import './Tabheader.css'
 import ScreenThongKe from '../ScreenThongKe/ScreenThongKe';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -15,6 +13,7 @@ import MapBox from './MapBox';
 import ScreenTaiKhoan from '../ScreenTaiKhoan/ScreenTaiKhoan';
 import axios from 'axios';
 import PopupNote from '../Popup/PopupNote';
+import { findNguoiDungByEmail } from '../../util/ApiRouter';
 export const Tabheader = (props) => {
 
   const navigate = useNavigate();
@@ -69,7 +68,7 @@ export const Tabheader = (props) => {
   // handle thong tin user
   const handleThongTinUser = async () => {
     console.log(email)
-    const result = await axios.get(`http://localhost:8080/admin/findByEmail`, {
+    const result = await axios.get(findNguoiDungByEmail, {
       params: {
         email: email.userName,
       }
