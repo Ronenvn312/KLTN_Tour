@@ -32,7 +32,7 @@ export default function EditProfile({ navigation }) {
     const save = () => {
         if (ten.length > 0 && dc.length > 0 && /(0[3|5|7|8|9])+([0-9]{8})\b/g.test(sdt)) {
             const info = {
-                document_id: userId,
+                document_id: id,
                 sdt: sdt,
                 ten: ten,
                 diaChi: dc,
@@ -55,6 +55,7 @@ export default function EditProfile({ navigation }) {
             setStatus(false)
         }
     }
+    console.log(ten+sdt+dc)
 
     return (
         <HideKeyboard>
@@ -70,11 +71,11 @@ export default function EditProfile({ navigation }) {
                     <Image style={{ width: width * 0.3, height: width * 0.3, borderRadius: 30, marginLeft: '3%', alignSelf: 'center' }} source={require('../assets/duck.png')} />
                 </View>
                 <View style={{ flex: 4 }}>
-                    <TextInput style={styles.txtInput} placeholder='Họ và tên' onChangeText={txt => setTen(txt)} />
-                    <TextInput style={styles.txtInput} placeholder='Số điện thoại' onChangeText={txt => setSDT(txt)} />
-                    <TextInput style={styles.txtInput} placeholder='Địa chỉ' onChangeText={txt => setDC(txt)} />
+                    <TextInput style={styles.txtInput} placeholder='Họ và tên' onEndEditing={(text) => setTen(text.nativeEvent.text)} defaultValue={ten}/>
+                    <TextInput style={styles.txtInput} placeholder='Số điện thoại' keyboardType='number-pad' onEndEditing={(text) => setSDT(text.nativeEvent.text)} defaultValue={sdt}/>
+                    <TextInput style={styles.txtInput} placeholder='Địa chỉ' onEndEditing={(text) => setDC(text.nativeEvent.text)} defaultValue={dc}/>
 
-                    <Text style={{ left: "15%", color: status ? saved ? blue : 'white' : 'red' }}>{message}</Text>
+                    <Text style={{ left: "15%", color: status ? saved ? "blue" : 'white' : 'red' }}>{message}</Text>
 
                     <View style={{ flex: 3, justifyContent: 'center' }}>
                         <TouchableOpacity style={styles.tou_edit} onPress={save}>

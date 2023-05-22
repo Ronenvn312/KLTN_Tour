@@ -2,7 +2,6 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, StatusBar } from 'reac
 import { useState, useEffect } from 'react';
 import { logOut } from '../redux/actions/UserAction'
 import { useDispatch, useSelector } from 'react-redux';
-import auth from '@react-native-firebase/auth';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -77,6 +76,10 @@ export default function Account({ navigation }) {
                     <Image style={{ height: 30, width: 35, alignSelf: 'center' }} source={require('../assets/payment.png')} />
                     <Text style={{ fontSize: 22, alignSelf: 'center', marginLeft: '3%' }}>Phương thức thanh toán</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.tou} onPress={() => navigation.navigate('ChangePW')}>
+                    <Image style={{ height: 30, width: 31, alignSelf: 'center' }} source={require('../assets/changePW.png')} />
+                    <Text style={{ fontSize: 22, alignSelf: 'center', marginLeft: '3%' }}>Đổi mật khẩu</Text>
+                </TouchableOpacity>
 
                 <View style={{ flex: 4, marginLeft: '10%' }} />
 
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
     tou: {
-        flex: 1,
+        flex: 1.5,
         flexDirection: 'row',
         borderBottomColor: '#f8f8f8',
         borderBottomWidth: 3,
