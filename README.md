@@ -1,5 +1,4 @@
 # KLTN_Tour
-url web: https://tourapp-d8ea8.firebaseapp.com/
 Loggin web: 
 - userName: nguoidung12@gmail.com
 - password: Aa12345678
